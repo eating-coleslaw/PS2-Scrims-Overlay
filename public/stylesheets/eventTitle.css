@@ -1,0 +1,31 @@
+.eventTitle {
+    position: relative;
+    left: calc(50% - 100px);
+    width: 200px;
+    text-align: center;
+    text-transform:  uppercase;
+    /* font-size: 12px; */
+    font-size: 14px;
+    line-height: 14px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    letter-spacing: 5px;
+    font-style: oblique;
+    font-family: "Noto Sans", "Segoe UI", sans-serif;
+    font-weight: 700;
+    mix-blend-mode: luminosity;
+    color: rgb(20, 20, 20);
+}
+
+#eventName {
+    width: 100%;
+    padding: 3px;
+    display: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-left: 1px solid transparent;
+    color: rgb(47, 47, 47);
+    border: 2px solid rgb(47, 47, 47);
+    border-radius: 3px;
+    background-color: rgba(255, 216, 58, 1);
+}

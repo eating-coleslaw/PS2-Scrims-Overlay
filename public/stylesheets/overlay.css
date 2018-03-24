@@ -1,0 +1,149 @@
+body {
+    font-family: "Input Mono", Consolas, monospace;
+    font-size: large;
+    font-weight: 600;
+    background-color: transparent;
+}
+
+.overlayGridContainer {
+    display: grid;
+    grid-template-columns: 40% 20% 40%;
+    /* grid-template-rows:  30px 90px; */
+    grid-gap: 0px;
+}
+
+.team1header {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: rgba(39, 39, 39, 0.95);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.team2header {
+    grid-column: 3;
+    grid-row: 1;
+    background-color: rgba(39, 39, 39, 0.95);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.team1players {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.team2players {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.playersContainer {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 25px 25px 25px;
+    font-size: medium;
+    font-weight: 500;
+    background-color: rgba(39, 39, 39, 0.25);
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#T1P1, #T2P1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#T1P2, #T2P2 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#T1P3, #T2P3 {
+
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#T1P4, #T2P4 {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#T1P5, #T2P5 {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+#T1P6, #T2P6 {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.playerText {
+    vertical-align: middle;
+    padding-left: 3px;
+    padding-top: 3px;
+}
+
+.playerName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+}
+
+.playerScore {
+    max-width: 20%;
+    text-align: right;
+}
+
+.overlayTitle {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: left;
+    padding-top: 3px;
+    padding-left: 10px;
+    background-color: rgba(39, 39, 39, 0.95);
+    color: white;
+    display:inline-block;
+    /* border-left: 3px solid rgb(30, 153, 252); */
+    /* border-right: 3px solid rgb(255, 108, 112); */
+}
+
+.matchTimer {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: large;
+    vertical-align: middle;
+    text-align: right;
+    background-color:transparent;
+    display: inline-block;
+    color: white;
+    padding-right: 10px;
+    padding-top: 3px;
+}
+
+.factionVS {
+    color: rgb(106, 76, 224);
+  }
+  
+  .factionNC {
+    color: rgb(30, 153, 252)
+  }
+  
+  .factionTR {
+    color: rgb(255, 108, 112);
+  }
+
+  .team1header.factionVS, .team2header.factionVS {
+      border: 3px solid rgb(106, 76, 224);
+  }
+
+  .team1header.factionNC, .team2header.factionNC {
+    border: 3px solid rgb(30, 153, 252);
+  }
+
+  .team1header.factionTR, .team2header.factionTR {
+      border: 3px solid rgb(255, 108, 112);
+  }

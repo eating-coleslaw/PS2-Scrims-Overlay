@@ -1,0 +1,931 @@
+
+/* TEXT COLORS */
+.faction1 {
+    /* color: rgb(106, 76, 224); */
+  /* color: rgb(112, 80, 237); */
+  color: rgb(141, 112, 255) !important;
+}
+
+ .faction2 {
+    color: rgb(30, 153, 252) !important;
+}
+
+.faction3 {
+    color: rgb(255, 108, 112) !important;
+  }
+
+.faction1dark {
+    color: rgb(46, 33, 96) !important;
+}
+
+.faction2dark {
+    color: rgb(7, 37, 61) !important;
+}
+
+.faction3dark {
+    color: rgb(64, 27, 28) !important;
+}
+
+.faction1highlight {
+    color: rgb(202, 188, 255) !important;
+    /* color: rgb(184, 233, 227); */
+}
+
+.faction2highlight {
+    /* color: rgb(182, 221, 253); */
+    color: rgb(255, 247, 175) !important;
+}
+
+.faction3highlight {
+    /* color: rgb(255, 210, 211); */
+    color: rgb(229, 217, 212) !important;
+}
+
+.faction1flavor {
+    color: rgb(184, 233, 227) !important;
+}
+
+.faction2flavor {
+    /* color: rgb(255, 247, 175); */
+    color: rgb(255, 247, 200) !important;
+}
+
+.faction3flavor {
+    color: rgb(64, 27, 28) !important;
+}
+
+
+/* KILLFEED COLORS */
+.faction1killtext {
+    /* color: rgb(184, 233, 227); */
+    color: rgb(141, 112, 255) !important;
+    text-shadow: 0px 0px 1px rgb(46, 33, 96) !important;
+    /* text-shadow: 0px 0px 1px rgb(184, 233, 227); */
+}
+
+.faction2killtext {
+    /* color: rgb(255, 247, 175); */
+    color: rgb(30, 153, 252) !important;
+    text-shadow: 0px 0px 1px rgb(7, 37, 61) !important;
+    /* text-shadow: 0px 0px 1px rgb(255, 247, 175); */
+}
+
+.faction3killtext {
+    /* color: rgba(229, 217, 212, 0.95); */
+    /* color: rgb(255, 210, 211); */
+    color: rgb(255, 108, 112) !important;
+    /* color: rgb(255, 108, 112);  */
+    text-shadow: 0px 0px 1px rgb(64, 27, 28) !important;
+    /* text-shadow: 0px 0px 1px rgb(255, 210, 211); */
+}
+
+
+/* BORDER COLORS */
+.faction1border {
+    border-color: rgb(112, 80, 237) !important;
+}
+.faction1DarkBorder {
+    border-color: rgb(46, 33, 96) !important;
+}
+
+.faction2border {
+   border-color: rgb(30, 153, 252) !important;
+}
+.faction2DarkBorder {
+   border-color: rgb(7, 37, 61) !important;
+}
+
+.faction3border {
+    border-color: rgb(255, 108, 112) !important;
+}
+.faction3DarkBorder {
+    border-color: rgb(64, 27, 28) !important;
+}
+
+
+/* TIMER BORDER COLORS */
+.faction1DarkBorderLeft {
+    border-left-color: rgb(46, 33, 96) !important;
+}
+.faction1DarkBorderRight {
+    border-right-color: rgb(46, 33, 96) !important;
+}
+
+.faction2DarkBorderLeft {
+    border-left-color: rgb(7, 37, 61) !important;
+}
+.faction2DarkBorderRight {
+    border-right-color: rgb(7, 37, 61) !important;
+}
+
+.faction3DarkBorderLeft {
+    border-left-color: rgb(64, 27, 28) !important;
+}
+.faction3DarkBorderRight {
+    border-right-color: rgb(64, 27, 28) !important;
+}
+
+
+/* BACKGROUND COLORS */
+.faction1background {
+    background-color: rgb(112, 80, 237) !important;
+}
+.faction1DarkBackground {
+    background-color: rgb(46, 33, 96) !important;
+}
+
+.faction2background {
+    background-color: rgb(30, 153, 252) !important;
+}
+.faction2DarkBackground {
+    background-color: rgb(7, 37, 61) !important;
+}
+
+.faction3background {
+    background-color: rgb(255, 108, 112) !important;
+}
+.faction3DarkBackground {
+    background-color: rgb(64, 27, 28) !important;
+}
+
+
+
+
+/*______________*/
+/* EVERYTHING ELSE */
+
+.scoreboard {
+    /* background-color: rgba(36, 36, 36, 0.95); */
+    border-radius: 1px;
+    color: rgb(245, 245, 255);
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    text-align: center;
+    /* transition: color 0.5s cubic-bezier(.86,0,.07,1); */
+}
+
+.outfitScoresContainer {
+    /* grid-column: 1; */
+    display: inline-block;
+    /* background-color: rgb(47, 47, 47); */
+    /* border: 2px solid rgb(177, 177, 177); */
+    /* border-top: 1px solid rgb(69, 69, 69); */
+    /* border-right: 2px solid rgba(36, 36, 36, 0.95); */
+    box-sizing: inherit;
+    border-radius: 1px;
+    /* background-color: transparent; */
+    height: 31px;
+    transition: height 0.5s cubic-bezier(.86,0,.07,1);
+    /* height: 32px; */
+}
+
+.outfitScoresRow {
+    display: inline-block;
+    /* height: 22px; */
+    /* height: 20px; */
+    /* height: calc(100% - 8px); */
+    height: 26px;
+    border-top-width: 2px;
+    border-top-style: solid;
+    /* box-shadow: -2px 1px 3px rgba(47, 47, 47, 0.75); */
+    /* background-color: rgb(131, 131, 131); */
+    border-top-color: rgb(20, 20, 20);
+    /* border-top-color:  rgb(74, 231, 173); */
+    transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    border-bottom: 1px solid rgb(26, 26, 26) !important;
+    box-sizing: inherit;
+    background-color: rgb(35, 35, 35);
+    /* color: rgb(47, 47, 47); */
+    /* border-top: 2px solid transparent; */
+}
+
+.outfitAlias {
+    text-align: left;
+    display: inline-block;
+    /* width: 80px; */
+    width: 60px;
+    font-weight: 500;
+    /* background-color: rgb(47, 47, 47); */
+    /* background-color: rgb(35, 35, 35); */
+    /* transition: color 0.5s cubic-bezier(.86,0,.07,1); */
+    transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    box-sizing: inherit;
+    transition-delay: 0.5s;
+    color: rgb(35, 35, 35);
+    /* color: rgba(35, 35, 35, 0); */
+}
+
+.outfitScore {
+    display: inline-block;
+    /* width: 60px; */
+    min-width: 60px;
+    /* background-color: rgb(47, 47, 47); */
+    /* background-color:rgb(35, 35, 35); */
+    /* transition: all 0.5s cubic-bezier(.86,0,.07,1); */
+    box-sizing: inherit;
+    /* color: rgb(245, 245, 255); */
+    color: rgb(35, 35, 35);
+    /* transition-delay: 1s; */
+    /* color: rgba(35, 35, 35, 0); */
+}
+
+.inactiveWhiteText {
+    color: rgb(35, 35, 35, 0.2);
+    /* transition: color 0.5s cubic-bezier(.86,0,.07,1); */
+    transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    transition-delay: 1s;
+}
+
+.activeWhiteText {
+    color: rgb(245, 245, 255);
+    /* transition: color 0.5s cubic-bezier(.86,0,.07,1); */
+    transition: color 1s cubic-bezier(.68,-0.55,.27,1.55);
+    transition-delay: 1s;
+}
+
+#T1Board {
+    /* background-color: rgb(69, 69, 69); */
+    /* background-color: rgb(35, 35, 35); */
+    /* transition: all 0.5s cubic-bezier(.86,0,.07,1); */
+    box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
+    border-left: 1px solid rgb(26, 26, 26) !important;
+    /* border-bottom-left-radius: 1px; */
+    /* border-top-left-radius: 1px; */
+    /* width: 156px; */
+}
+#T2Board {
+    /* background-color: rgb(69, 69, 69); */
+    /* background-color: rgb(35, 35, 35); */
+    /* transition: all 0.5s cubic-bezier(.86,0,.07,1); */
+    box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
+    border-right: 1px solid rgb(26, 26, 26) !important;
+    /* border-bottom-right-radius: 1px; */
+    /* border-top-right-radius: 1px; */
+    /* width: 156px; */
+}
+
+.eventTitle {
+    position: relative;
+    left: calc(50% - 100px);
+    width: 200px;
+    text-align: center;
+    text-transform:  uppercase;
+    font-size: 12px;
+    line-height: 12px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    letter-spacing: 5px;
+    font-style: oblique;
+    font-family: "Noto Sans", "Segoe UI", sans-serif;
+    font-weight: 700;
+}
+
+#eventName {
+    width: 100%;
+    padding: 3px;
+    display: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-left: 1px solid transparent;
+    color: rgb(47, 47, 47);
+    border: 2px solid rgb(47, 47, 47);
+    border-radius: 3px;
+    background-color: rgba(255, 216, 58, 1);
+}
+
+.timerContainer {
+    /* text-align: center; */
+    display: inline-block;
+    background-color: rgb(35, 35, 35);
+    /* background-color: black; */
+    transition: height 1s, width 1s ease-in-out;
+    vertical-align: top;
+    height: 31px;
+    box-sizing: inherit;
+    border-left-color: rgb(255, 216, 58);
+    border-right-color: rgb(255, 216, 58);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom: 2px solid rgb(26, 26, 26);
+    border-top: 2px solid rgb(26, 26, 26);
+    color: rgb(245, 245, 255);
+}
+
+#timer {
+    /* display: inline-block; */
+    /* width: 100% */
+    text-align: center;
+    vertical-align: top;
+    /* border-right-color:  rgb(20, 20, 20); */
+    height: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: inherit;
+    /* height: 29px; */
+    /* height: 30px; */
+    /* background-color: rgb(47, 47, 47); */
+    /* background-color: rgb(35, 35, 35); */
+    /* font-size: larger; */
+    /* font-size: 24px; */
+    /* font-size: 26px; */
+    font-size: 27px;
+    /* border-bottom: 1px solid rgb(131, 131, 131); */
+    /* border-top: 1px solid rgb(131, 131, 131); */
+    transition: color 1s, font-size 1s, padding 2s cubic-bezier(.86,0,.07,1);
+    /* line-height: 1.2; */
+    line-height: 0.95;
+}
+
+#T1Score {
+    /* margin-bottom: 2px; */
+    /* border-bottom: 2px solid transparent !important; */
+    text-align: right;
+    padding-right: 3px;
+    /* color: white; */
+    /* transition: all 0.5s cubic-bezier(.86,0,.07,1); */
+    /* color: rgb(245, 245, 255); */
+    /* transition-delay: 1s; */
+    /* border-right: 10px solid transparent; */
+}
+
+#T2Score {
+    /* margin-bottom: 2px; */
+    /* border-bottom: 2px solid transparent !important; */
+    text-align: left;
+    padding-left: 3px;
+    /* color: white; */
+    /* transition: all 0.5s cubic-bezier(.86,0,.07,1); */
+    /* color: rgb(245, 245, 255); */
+    /* transition-delay: 1s; */
+    /* border-left: 10px solid transparent; */
+}
+
+.wedge {
+    border-bottom: 5px solid transparent !important;
+    /* border-bottom: 7px solid transparent !important; */
+    display: inline;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    box-sizing: inherit;
+
+}
+
+#T1Wedge {
+    border-right-width: 10px;
+    border-right-style: solid;
+    /* border-bottom-right-radius: 1px; */
+    border-right-color: rgb(20, 20, 20);
+    /* transition: border 0.5s cubic-bezier(.86,0,.07,1); */
+    /* border-right-color: rgb(74, 231, 173); */
+    /* border-bottom: 5px solid transparent !important; */
+    /* display: inline; */
+}
+
+#T2Wedge {
+    border-left-width: 10px;
+    border-left-style: solid;
+    /* border-bottom: 5px solid transparent !important; */
+    /* border-bottom-left-radius: 1px; */
+    border-left-color: rgb(20, 20, 20);
+    /* transition: border 0.5s cubic-bezier(.86,0,.07,1); */
+    /* border-left-color: rgb(74, 231, 173); */
+    /* display: inline; */
+}
+
+#outfitT1 {
+    padding-left: 3px;
+    border-bottom-left-radius: 1px;
+}
+
+#outfitT2 {
+    text-align: right;
+    padding-right: 3px;
+    border-bottom-right-radius: 1px;
+}
+
+.factionLabel {
+    font-size: 8.5px;
+    display: inline-block;
+    line-height: 1;
+    height: 19px;
+    /* font-weight: 400; */
+    /* font-style: italic; */
+    padding-top: 3px;
+    text-align: center;
+    vertical-align: top;
+    width: 0px;
+    position: relative;
+    box-sizing: inherit;
+}
+
+#T1Faction {
+    border-bottom-left-radius: 1px;
+    /* text-align: right; */
+    /* padding-left: 2px; */
+    /* padding-right: 1px; */
+    left: -8px;
+}
+
+#T2Faction {
+    border-bottom-right-radius: 1px;
+    left: 2px;
+    /* text-align: left; */
+    /* padding-left: 1px; */
+    /* padding-right: 2px; */
+    /* left: -5px; */
+}
+
+
+#T1Faction-V1 {
+    border-bottom-left-radius: 1px;
+    /* text-align: right; */
+    padding-left: 2px;
+    padding-right: 1px;
+}
+
+#T2Faction-V1 {
+    border-bottom-right-radius: 1px;
+    /* text-align: left; */
+    padding-left: 1px;
+    padding-right: 2px;
+}
+
+.killfeed {
+    display: inline-block;
+    width: 350px;
+    box-sizing: inherit;
+    /* outline-style: solid; */
+    /* outline-color: rgba(37, 37, 37, 0.95); */
+    text-shadow:0px 0px 1px rgba(37, 37, 37, 0.95);
+    /* width: 415px; */
+    /* font-weight: 400; */
+   
+    height: 0px;
+    text-align: left;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 11px;
+    white-space: nowrap;
+    position: relative;
+    top: -20px;
+    /* height: 100px; */
+    z-index: -1;
+    /* background-image: linear-gradient( to bottom, rgba(69, 69, 69, 0.5) 15px, rgba(69, 69, 69, 0) 100%); */
+    /* transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55); */
+    /* transition-delay: 2s; */
+    /* width: 395px; */
+    margin-left: 9px;
+    margin-right: 7px;
+    /* display: block; */
+}
+
+.killfeed.killfeedInactive {
+    /* height: 35px !important; */
+    height: 25px;
+    /* display: none; */
+}
+
+.killfeed.killfeedActive {
+    /* height: 100px !important; */
+    /* height: 85px; */
+    /* height: inherit; */
+    /* display: block; */
+    background-image: linear-gradient( to bottom, rgba(37, 37, 37, 0.9) 15px, rgba(37, 37, 37, 0.9) 100%);
+    /* background-image: linear-gradient( to bottom, rgba(69, 69, 69, 0.8) 15px, rgba(69, 69, 69, 0.8) 90%, rgba(69, 69, 69, 0) 100%); */
+    /* background-image: linear-gradient( to bottom, rgba(69, 69, 69, 0.5) 15px, rgba(69, 69, 69, 0) 100%); */
+    /* background-image: linear-gradient( to bottom, rgba(69, 69, 69, 0.5) 15px, rgba(69, 69, 69, 0) 100%); */
+    transition: height 0.75s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transition-delay: 1.5s;
+    border-left: 2px solid rgb(255, 216, 58);
+    border-right: 2px solid rgb(255, 216, 58);
+    border-bottom: 3px solid transparent;
+}
+
+#killfeedContainer::after {
+    display: block;
+    box-sizing: inherit;
+    width: 30px;
+    position: relative;
+    left: calc(50% - 15px);
+    bottom: -12px;
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+    content: "";
+    border-top: 5px double rgb(255, 216, 58);
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+}
+
+
+#killfeedContainer {
+    min-height: 25px;
+    height: 25px;
+    box-sizing: border-box;
+    /* overflow-y: hidden; */
+}
+
+
+.killfeedHeader {
+    font-weight: 400;
+    font-size: 10px;
+    color: rgba(69, 69, 69);
+    display: none;
+}
+
+.killfeedBody {
+    position: absolute;
+    top: 20px;
+    overflow-y: hidden;
+    box-sizing: border-box;
+}
+
+/* .killfeedBody tr {
+    display: block;
+    transition: all 1s ease-out;
+    height: 13px;
+    transition-delay: 1s;
+    overflow: visible;
+    /* transition-delay: 2s;
+} */
+
+.killfeedBody tr:nth-child(1) {
+    font-weight: 500;
+}
+
+.killfeedBody tr:nth-child(3) {
+    /* opacity: 0.8; */
+    /* color: rgba(37, 37, 37, 0.65); */
+    /* color: rgb(245, 245, 255); */
+    /* transition: height 2s ease-in-out; */
+    transition: all 0.75s cubic-bezier(.46,.03,.52,.96);
+}
+
+.killfeedBody tr:nth-child(4) {
+    /* opacity: 0.5; */
+    /* color: rgba(37, 37, 37, 0.3); */
+    /* transition: height 0.5s ease-in-out; */
+    transition: all 2s ease-in-out;
+}
+
+.killfeedBody tr:nth-child(5) {
+    /* opacity: 0.1; */
+    /* color: rgba(37, 37, 37, 0.3); */
+    transition: all 0.5s ease-in-out;
+}
+
+.killfeedCell {
+    /* font-size: 10px; */
+    /* font-weight: 500; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    display: inline-block;
+    padding-right: 10px;
+}
+
+
+.killfeedCell.killfeedPlayer1, .killfeedCell.killfeedPlayer2, .killfeedCell.killfeedPlayer3 {
+    /* font-size: 12px; */
+    /* font-weight: 500; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 124px;
+}
+
+.killfeedCell.killfeedPlayer {
+    /* font-size: 12px; */
+    /* font-weight: 500; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 115px;
+}
+
+/*
+.killfeedCell.killfeedPlayer:before {
+    /* display: inline; */
+    /*width: 8px;
+    background-color: black;
+    border: 2px solid red;
+    border-radius: 1px;
+}*/
+
+/*
+.killfeedCell.killfeedPlayer1:before, .killfeedCell.killfeedPlayer2:before, .killfeedCell.killfeedPlayer3:before {
+    display: inline-block;
+    width: 8px;
+} */
+
+
+.killfeedCell.killfeedWeapon {
+    width: 80px;
+}
+
+.killfeedCell.killfeedPoints {
+    width: 20px;
+    text-align: right;
+}
+
+#killfeed {
+    max-height: 85px;
+}
+
+#killfeedCap {
+    display: block;
+    width: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 5px double rgb(255, 216, 58);
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+}
+
+
+.killfeedCell.killfeedPlayer::before {
+    display: inline-block;
+    background-color: rgb(20, 20, 20);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(255, 216, 58);
+    border-radius: 4px;
+    height: 4px;
+    width: 4px;
+    vertical-align: middle;
+    /* margin-bottom: 2px; */
+    content: "";
+    margin-right: 2px;
+}
+
+.killfeedCell.killfeedPlayer.faction1killtext::before {
+    background-color: rgb(141, 112, 255);
+    border-color: rgb(42, 224, 200);
+    /* border-style: dotted; */
+}
+.killfeedCell.killfeedPlayer.faction2killtext::before {
+    /* background-color: rgb(255, 247, 175);
+    border-color: rgb(7, 37, 61); */
+    border-style: none !important;
+    background-color: rgb(30, 153, 252);
+    outline: 1px dashed rgb(255, 247, 175) !important;
+    margin-right: 3px;
+    margin-left: 1px;
+    outline: 1px
+}
+.killfeedCell.killfeedPlayer.faction3killtext::before {
+    background-color: rgb(255, 108, 112);
+    border-color: rgb(64, 27, 28);
+    border-style: double;
+    border-width: 2px;
+    width: 2px;
+    height: 2px;
+}
+
+body {
+    /* font-family: "Input Mono", Consolas, monospace; */
+    font-family: "Roboto Mono", "Input Mono", Consolas, monospace;
+    font-size: large;
+    font-weight: 600;
+    background-color: transparent;
+    /* background-image: url('../images/planetside2_x64 2017-11-10 02-14-39.png'); */
+    background-position: center center;
+    background-image:url('../images/20161114214846_1.jpg');
+    margin: 0px 10px 10px 10px;
+    box-sizing: border-box;
+}
+
+
+
+
+
+/* LEGACY CLASSES */
+
+#stats {
+    text-align: center;
+}
+
+.inline {
+    display: inline;
+}
+
+.pad {
+    padding-right: 20px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.inlinePad {
+    /* padding: 20px; */
+    display: inline-block;
+    text-align: left;
+    width: 35%;
+    padding-right: 3px;
+}
+
+
+#name {
+    text-align: left;
+}
+
+/* #outfitScore {
+    border-top: 1px solid #272727;
+    border-bottom: 1px solid #272727;
+} */
+
+/*
+.adminForm {
+/*border: 1px solid #000;
+} */
+
+#adminPanel {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.right {
+    float: right;
+}
+
+/*
+.tableDiv {
+    height: 450px;
+    overflow-y: auto;
+} */
+
+#apiErrors {
+    text-align: left;
+    color: red;
+    font-style: italic;
+}
+
+/* Footer related styles (For credits)
+Slight hack (ends main page x pixels above, then puts footer there)
+-------------------------------------------------- */
+/* html {
+position: relative;
+}
+body { /* The page needs a margin to allow the footer to exist
+margin-bottom: 60px;
+
+} */
+
+/*
+.footer {
+position: absolute;
+bottom: 0;
+width: 100%;
+text-align: center;
+/* Set the fixed footer height (update body too)
+height: 60px;
+} */
+
+
+/*Chirtle's Stuff*/
+
+
+
+.overlayGridContainer {
+    display: grid;
+    grid-template-columns: 40% 20% 40%;
+    /* grid-template-rows:  30px 90px; */
+    grid-gap: 0px;
+}
+
+.team1header {
+    grid-column: 1;
+    grid-row: 1;
+    background-color: rgb(47, 47, 47);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.team2header {
+    grid-column: 3;
+    grid-row: 1;
+    background-color: rgb(47, 47, 47);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.team1players {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.team2players {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.playersContainer {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 25px 25px 25px;
+    font-size: medium;
+    font-weight: 500;
+    background-color: rgb(47, 47, 47);
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#T1P1, #T2P1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#T1P2, #T2P2 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#T1P3, #T2P3 {
+
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#T1P4, #T2P4 {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#T1P5, #T2P5 {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+#T1P6, #T2P6 {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.playerText {
+    vertical-align: middle;
+    padding-left: 3px;
+    padding-top: 3px;
+}
+
+.playerName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+}
+
+.playerScore {
+    max-width: 20%;
+    text-align: right;
+}
+
+.overlayTitle {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: left;
+    padding-top: 3px;
+    padding-left: 10px;
+    background-color: rgb(47, 47, 47);
+    color: white;
+    display:inline-block;
+    /* border-left: 3px solid rgb(30, 153, 252); */
+    /* border-right: 3px solid rgb(255, 108, 112); */
+}
+
+.matchTimer {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: large;
+    vertical-align: middle;
+    text-align: right;
+    background-color:transparent;
+    display: inline-block;
+    color: white;
+    padding-right: 10px;
+    padding-top: 3px;
+}
+
+.factionVS {
+    color: rgb(106, 76, 224);
+  }
+
+  .factionNC {
+    color: rgb(30, 153, 252)
+  }
+
+  .factionTR {
+    color: rgb(255, 108, 112);
+  }
+
+  .team1header.factionVS, .team2header.factionVS {
+      border: 3px solid rgb(106, 76, 224);
+  }
+
+  .team1header.factionNC, .team2header.factionNC {
+    border: 3px solid rgb(30, 153, 252);
+  }
+
+  .team1header.factionTR, .team2header.factionTR {
+      border: 3px solid rgb(255, 108, 112);
+  }
