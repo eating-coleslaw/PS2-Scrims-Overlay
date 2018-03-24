@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" style="min-height: 98.5%;">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Scrim Tracker for Planetside 2">
+    <meta name="author" content="DylanNZ">
+    <title>PS2 Scrim Tracker</title>
+    <link rel="icon" href="../favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    {{!--
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> --}}
+    {{!-- <link href="../stylesheets/overlaySimple.css" rel="stylesheet"> --}}
+    <link href="../stylesheets/factions.css" rel="stylesheet">
+    <link href="../stylesheets/scoreboard.css" rel="stylesheet">
+    <link href="../stylesheets/players.css" rel="stylesheet">
+    <link href="../stylesheets/killfeed.css" rel="stylesheet">
+    <link href="../stylesheets/eventTitle.css" rel="stylesheet">
+    <link href="../stylesheets/core.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata|Noto+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:500|Share+Tech+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,300i,400,400i,500,500i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i" rel="stylesheet"> 
+</head>
+
+<body role="document">
+    <h1 class="eventTitle">J0KE INTERNALS</h1>
+   <div class="teamPlayersContainer teamOne" id="T1Players"></div>
+    <div class="teamPlayersContainer teamTwo" id="T2Players"></div>
+    <div class="scoreboard"><div class="outfitScoresContainer"><div id="T1Board" class="outfitScoresRow"><div id="outfitT1" class="outfitAlias"></div><div id="T1Score" class="outfitScore"></div><div id="T1Wedge" class="wedge"></div><div id="T1Faction" class="factionLabel"></div></div><div class="timerContainer"><div id="timer">15:00</div></div><div id="T2Board" class="outfitScoresRow"><div id="T2Faction" class="factionLabel"></div><div id="T2Wedge" class="wedge"></div><div id="T2Score" class="outfitScore"></div><div id="outfitT2" class="outfitAlias"></div></div></div>
+    <div class="killfeed" id="killfeedContainer">
+        <table><tbody id="killfeed" class="killfeedBody"></tbody> </table>
+        <div id="killfeedCap"></div>
+    </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> {{!--
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> --}}
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/main.js"></script> {{!--
+    <script src="../js/format.js"></script> --}}
+</body>
+
+</html>

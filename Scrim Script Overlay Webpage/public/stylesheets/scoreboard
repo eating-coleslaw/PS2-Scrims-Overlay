@@ -1,0 +1,441 @@
+.scoreboard {
+    border-radius: 1px;
+    color: rgb(245, 245, 255);
+    /* max-width: 450px; */
+    max-width: 475px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.outfitScoresContainer {
+    display: inline-block;
+    box-sizing: inherit;
+    border-radius: 1px;
+    /* height: 31px; */
+    -moz-transition: height 0.5s cubic-bezier(.86,0,.07,1);
+    -webkit-transition: height 0.5s cubic-bezier(.86,0,.07,1);
+    transition: height 0.5s cubic-bezier(.86,0,.07,1);
+    color: rgb(35, 35, 35);
+}
+
+.outfitScoresRow {
+    display: inline-block;
+    /* height: 26px; */
+    height: 35px;
+    border-top-width: 2px;
+    border-top-style: solid;
+    border-top-color: var(--faction-primary-color, rgb(20, 20, 20));
+    -moz-transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    -webkit-transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    border-bottom: 1px solid rgb(26, 26, 26) !important;
+    box-sizing: inherit;
+    background-color: rgb(35, 35, 35);
+    /* font-size: 22px; */
+    font-size: 24px;
+}
+
+#T1Board {
+    box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
+    border-left: 1px solid rgb(26, 26, 26) !important;
+    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
+   /* background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
+    background: -o-linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%); */
+    background: linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
+}
+#T2Board {
+    box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
+    border-right: 1px solid rgb(26, 26, 26) !important;
+    background: -webkit-linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
+    /*background: -moz-linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
+    background: -o-linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%); */
+    background: linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
+}
+
+.outfitScore {
+    display: inline-block;
+    min-width: 80px;
+    box-sizing: inherit;
+}
+
+#T1Score {
+    text-align: right;
+    padding-right: 5px;
+}
+
+#T2Score {
+    text-align: left;
+    padding-left: 5px;
+}
+
+.outfitAlias {
+    text-align: left;
+    display: inline-block;
+    width: 70px;
+    font-weight: 500;
+    box-sizing: inherit;
+    color: var(--faction-flavor-color, rgb(35, 35, 35));
+    -moz-transition: 1s color cubic-bezier(.68,-0.55,.27,1.55);
+    -moz-transition-delay: 1.5s;
+    -webkit-transition: 1s color cubic-bezier(.68,-0.55,.27,1.55);
+    -webkit-transition-delay: 1.5s;
+    transition: 1s color cubic-bezier(.68,-0.55,.27,1.55);
+    transition-delay: 1.5s;
+    -moz-animation: flashTextShadow;
+    -moz-animation-duration: 1.75s;
+    -moz-animation-delay: 1.75s;
+    -webkit-animation: flashTextShadow;
+    -webkit-animation-duration: 1.75s;
+    -webkit-animation-delay: 1.75s;
+    animation: flashTextShadow;
+    animation-duration: 1.75s;
+    animation-delay: 1.75s;
+}
+
+#outfitT1 {
+    padding-left: 3px;
+    border-bottom-left-radius: 1px;
+}
+
+#outfitT2 {
+    text-align: right;
+    padding-right: 3px;
+    border-bottom-right-radius: 1px;
+}
+
+.wedge {
+    border-bottom: 5px solid transparent !important;
+    display: inline;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    -moz-transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    -webkit-transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    transition: border 0.5s cubic-bezier(.86,0,.07,1);
+    box-sizing: inherit;
+
+}
+
+#T1Wedge {
+    border-right-width: 10px;
+    border-right-style: solid;
+    border-right-color: var(--faction-primary-color, rgb(20, 20, 20));
+}
+
+#T2Wedge {
+    border-left-width: 10px;
+    border-left-style: solid;
+    border-left-color: var(--faction-primary-color, rgb(20, 20, 20));
+}
+
+.factionLabel {
+    /* font-size: 8.5px; */
+    font-size: 10px;
+    display: inline-block;
+    line-height: 1;
+    height: 19px;
+    /* padding-top: 3px; */
+    padding-top: 8px;
+    text-align: center;
+    vertical-align: top;
+    width: 0px;
+    position: relative;
+    box-sizing: inherit;
+    color: rgb(20, 20, 20);
+    -moz-transition-delay: 0.5s;
+    -moz-transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    -webkit-transition-delay: 0.5s;
+    -webkit-transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    transition-delay: 0.5s;
+    transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+#T1Faction {
+    border-bottom-left-radius: 1px;
+    /* left: -8px; */
+    left: -8.5px;
+    color: var(--faction-flavor-color, rgb(245, 245, 255));
+}
+
+#T2Faction {
+    border-bottom-right-radius: 1px;
+    left: 2px;
+    color: var(--faction-flavor-color, rgb(245, 245, 255));
+}
+
+
+.inactiveWhiteText {
+    color: rgb(35, 35, 35, 0.2);
+    -moz-transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    -moz-transition-delay: 0.5s;
+    -webkit-transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    -webkit-transition-delay: 0.5s;
+    transition: color 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+    transition-delay: 0.5s;
+}
+
+.activeWhiteText {
+    color: rgb(245, 245, 255);
+    -moz-transition: color 0.75s cubic-bezier(.68,-0.55,.27,1.55);
+    -moz-transition-delay: 0.5s;
+    -webkit-transition: color 0.75s cubic-bezier(.68,-0.55,.27,1.55);
+    -webkit-transition-delay: 0.5s;
+    transition: color 0.75s cubic-bezier(.68,-0.55,.27,1.55);
+    transition-delay: 0.5s;
+}
+
+
+/* TIMER STUFF */
+.timerContainer {
+    display: inline-block;
+    background-color: rgb(35, 35, 35);
+    -moz-transition: height 1s, width 1s ease-in-out;
+    -webkit-transition: height 1s, width 1s ease-in-out;
+    transition: height 1s, width 1s ease-in-out;
+    vertical-align: top;
+    /* height: 31px; */
+    /* height: calc(100% + 6px); */
+    height: 39.5px;
+    box-sizing: inherit;
+    border-left-color: rgb(255, 216, 58);
+    border-right-color: rgb(255, 216, 58);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom: 2px solid rgb(26, 26, 26);
+    border-top: 2px solid rgb(26, 26, 26);
+    color: rgb(245, 245, 255);
+    background: linear-gradient(180deg, rgba(20, 20, 20, 1) 0%, rgba(20, 20, 20, 0.9) 10%, rgba(35, 35, 35, 0.9) 100%);
+}
+
+#timer {
+    text-align: center;
+    vertical-align: top;
+    /* height: 100%; */
+    padding-left: 5px;
+    padding-right: 5px;
+    box-sizing: inherit;
+    /* font-size: 27px; */
+    /* font-size: 34px; */
+    font-size: 38px;
+    -moz-transition: color 1s, font-size 1s, padding 2s cubic-bezier(.86,0,.07,1);
+    -webkit-transition: color 1s, font-size 1s, padding 2s cubic-bezier(.86,0,.07,1);
+    transition: color 1s, font-size 1s, padding 2s cubic-bezier(.86,0,.07,1);
+    line-height: 0.95;
+}
+
+
+
+
+
+
+
+@-webkit-keyframes fadeToAliasText {
+    from {
+        opacity: 0;
+        color:  rgb(35, 35, 35);
+    }
+    to {
+        opacity: 1;
+        color: var(--faction-flavor-color);
+    }
+}
+@-moz-keyframes fadeToAliasText {
+    from {
+        opacity: 0;
+        color:  rgb(35, 35, 35);
+    }
+    to {
+        opacity: 1;
+        color: var(--faction-flavor-color);
+    }
+}
+@keyframes fadeToAliasText {
+    from {
+        opacity: 0;
+        color:  rgb(35, 35, 35);
+    }
+    to {
+        opacity: 1;
+        color: var(--faction-flavor-color);
+    }
+}
+
+
+@-webkit-keyframes fadeToAliasFaction1 {
+    from {
+         opacity: 0;
+         color: rgba(202, 188, 255, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgba(202, 188, 255, 1);
+    }
+}
+@-moz-keyframes fadeToAliasFaction1 {
+    from {
+         opacity: 0;
+         color: rgba(202, 188, 255, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgba(202, 188, 255, 1);
+    }
+}
+@keyframes fadeToAliasFaction1 {
+    from {
+         opacity: 0;
+         color: rgba(202, 188, 255, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgba(202, 188, 255, 1);
+    }
+}
+
+
+@-webkit-keyframes fadeToAliasFaction2 {
+    from {
+        opacity: 0;
+        color: rgba(255, 247, 175, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgba(255, 247, 175, 1);
+    }
+}
+@-moz-keyframes fadeToAliasFaction2 {
+    from {
+        opacity: 0;
+        color: rgba(255, 247, 175, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgba(255, 247, 175, 1);
+    }
+}
+@keyframes fadeToAliasFaction2 {
+    from {
+        opacity: 0;
+        color: rgba(255, 247, 175, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgba(255, 247, 175, 1);
+    }
+}
+
+
+@-webkit-keyframes fadeToAliasFaction3 {
+    from {
+         opacity: 0;
+         color: rgba(229, 217, 212, 0);
+    }
+    
+    to {
+        opacity: 1;
+        color: rgba(229, 217, 212, 1);
+    }
+}
+@-moz-keyframes fadeToAliasFaction3 {
+    from {
+         opacity: 0;
+         color: rgba(229, 217, 212, 0);
+    }
+    
+    to {
+        opacity: 1;
+        color: rgba(229, 217, 212, 1);
+    }
+}
+@keyframes fadeToAliasFaction3 {
+    from {
+         opacity: 0;
+         color: rgba(229, 217, 212, 0);
+    }
+    
+    to {
+        opacity: 1;
+        color: rgba(229, 217, 212, 1);
+    }
+}
+
+
+@-webkit-keyframes fadeInFromGray {
+    from {
+            opacity: 0;
+            color: rgba(20, 20, 20, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgb(245, 245, 255);
+    }
+}
+@-moz-keyframes fadeInFromGray {
+    from {
+            opacity: 0;
+            color: rgba(20, 20, 20, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgb(245, 245, 255);
+    }
+}
+@keyframes fadeInFromGray {
+    from {
+            opacity: 0;
+            color: rgba(20, 20, 20, 0);
+    }
+
+    to {
+        opacity: 1;
+        color: rgb(245, 245, 255);
+    }
+}
+
+
+
+@-webkit-keyframes flashTextShadow {
+    from {
+        text-shadow: 0px 0px 0px rgb(245, 245, 255);
+    }
+    50% {
+        text-shadow: 0px 0px 3px rgba(245, 245, 255, 0.75);
+    }
+    to {
+        text-shadow: 0px 0px 0px rgba(245, 245, 255, 0);
+    }
+}
+@-moz-keyframes flashTextShadow {
+    from {
+        text-shadow: 0px 0px 0px rgb(245, 245, 255);
+    }
+    50% {
+        text-shadow: 0px 0px 3px rgba(245, 245, 255, 0.75);
+    }
+    to {
+        text-shadow: 0px 0px 0px rgba(245, 245, 255, 0);
+    }
+}
+
+@keyframes flashTextShadow {
+    from {
+        text-shadow: 0px 0px 0px rgb(245, 245, 255);
+    }
+    50% {
+        text-shadow: 0px 0px 3px rgba(245, 245, 255, 0.75);
+    }
+    to {
+        text-shadow: 0px 0px 0px rgba(245, 245, 255, 0);
+    }
+}
