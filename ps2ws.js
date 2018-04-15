@@ -13,7 +13,7 @@ let  teamOneObject,
      captures = 0,
      roundTracker = 0,
      timeCounter = 0,
-     matchLength; // = 900; //900
+     matchLength = 150; // = 900; //900
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -348,6 +348,7 @@ function startUp(oneObj, twoObj, secsInt) {
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
         matchLength = secsInt;
+        console.log('Initializing match with match length ' + matchLength + 'seconds');
         createStream();
         overlay.startKillfeed();
         app.send('refresh', '');
@@ -362,7 +363,6 @@ function newRound() {
     console.log('=====================================================================================================================================');
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
-    matchLength = secsInt;
     createStream();
     overlay.startKillfeed();
     app.send('refresh', '');

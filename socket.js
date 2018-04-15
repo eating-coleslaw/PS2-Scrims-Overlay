@@ -28,7 +28,7 @@ module.exports = {
                 if (event.auth === password.KEY) {
                     if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
                         if (running !== true) {
-                            app.start(event.teamOne, event.teamTwo).then(function () {
+                            app.start(event.teamOne, event.teamTwo, event.rndSecs).then(function () {
                                 console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
                             }).catch(function (err) {
                                 console.error("Failed to start match between " + event.teamOne + ' ' + event.teamTwo);

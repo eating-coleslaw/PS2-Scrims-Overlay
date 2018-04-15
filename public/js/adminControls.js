@@ -225,6 +225,7 @@ function checkAPI() {
 function getRoundLength() {
     var roundSeconds = $("#RndSecs").val();
     roundSeconds = parseInt(roundSeconds, 10);
+    console.log('roundLength is ' + roundSeconds + ' seconds');
     if ( roundSeconds > 0 ) { return roundSeconds;}
     else { return 900; }
 }
