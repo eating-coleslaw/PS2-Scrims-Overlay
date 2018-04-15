@@ -1,6 +1,8 @@
 /**
  * Created by Dylan on 15-Apr-16.
+ * Updated by Chirtle in 2017-2018.
  */
+
 var socket = io();
 socket.on('connect', function() {
 
@@ -75,7 +77,6 @@ socket.on('connect', function() {
         }
         $('<tr><td class="killfeedRowContainer"><div class="killfeedWinner killfeedPlayer killfeedCell faction' + event.winner_faction + '">' + event.winner + '</div>' +//event.winner_faction + '">' + event.winner + '</td>' +
             '<div class="killfeedPoints killfeedCell ">' + pointsString + '</div>' +
-            // '<div class="killfeedCell killfeedWeapon">' + event.weapon + '</div>' + '<div class="killfeedCell killfeedPoints">' + event.points + '</div>' +
             '<div class="killfeedWeapon killfeedCell">' + event.weapon + '</div>' +
             '<div class="killfeedLoser killfeedPlayer killfeedCell faction' + event.loser_faction + '">' + event.loser + '</div>' +//event.loser_faction + '">' + event.loser + '</td>' +
            '</td></tr>') .prependTo($('#killfeed'));
@@ -87,10 +88,8 @@ socket.on('connect', function() {
         var killRows = killTable.getElementsByTagName('tr');
         if (killRows.length > 4) {
             killTable.deleteRow(4);
-           // document.getElementById('killfeedContainer').height = '85px !important';
        } else {
            return;
-            // $('#killfeedContainer').height((25 + ((killRows.length) * 20)) + 'px !important');
        }
 
        if (event.weapon == 'Base Capture') {
@@ -104,7 +103,6 @@ socket.on('connect', function() {
 
     socket.on('score', function (event) {
         console.log(event);
-        // $('#T1Players').empty(); $('#T2Players').empty();
         $('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
         
         var m = event.teamOne.members;
@@ -118,10 +116,6 @@ socket.on('connect', function() {
                         '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
                         '<div class="playerStatsScore" id="' + m[keys].name + 'score">' + m[keys].netScore + '</div>'+
                         '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div>' + '</div>').appendTo($('#T1Players'));
-                    // $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
-                    //     '<div class="playerStatsName ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
-                    //     '<div class="playerStatsScore" id="' + m[keys].name + 'score">' + m[keys].netScore + '</div>'+
-                    //     '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div>' + '</div>').appendTo($('#T1Players'));
                 } else {
                     var scoreEl = document.getElementById(m[keys].name + 'score');
                     scoreEl.textContent = m[keys].netScore;
@@ -147,10 +141,6 @@ socket.on('connect', function() {
                         '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div></div>' +
                         '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class">' + 
                         '</div>').appendTo($('#T2Players'));
-                    // $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
-                    //     '<div class="playerStatsScore" id="' + m[keys].name + 'score">' + m[keys].netScore + '</div>' +
-                    //     '<div class="playerStatsName ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'name">' + m[keys].name + '</div>'+
-                    //     '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div></div>').appendTo($('#T2Players'));
                 } else {
                     var scoreEl = document.getElementById(m[keys].name + 'score');
                     scoreEl.textContent = m[keys].netScore;
@@ -167,17 +157,13 @@ socket.on('connect', function() {
 
 
 function updatePlayerClasses(event) {
-    // var winnerNameID = event.winner + "name";
     var winnerID = event.winner + "class";
-    // var loserNameID = event.loser + "name";
     var loserID = event.loser + "class";
    
    if (!($('#'+winnerID).length == 0)) {
-    //    document.getElementById(winnerNameID).className = "playerStatsName " + getClassFromLoadoutID(event.winner_class_id);
        document.getElementById(winnerID).className = "playerClass " + getClassFromLoadoutID(event.winner_class_id);
    }
    if (!($('#'+loserID).length == 0)) {
-    // document.getElementById(loserNameID).className = "playerStatsName " + getClassFromLoadoutID(event.loser_class_id);
     document.getElementById(loserID).className = "playerClass " + getClassFromLoadoutID(event.loser_class_id);
    }
 }
@@ -193,7 +179,6 @@ function getFactionLabel(teamObject) {
 
 
 function playRespawning(eventLoserName) {
-    // if (!eventLoserName) {return;}
     var loserID = eventLoserName + 'respawn';
    
     var respawn = document.getElementById(loserID);
@@ -202,8 +187,6 @@ function playRespawning(eventLoserName) {
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
 
-    /*var teamOnePlayers = document.getElementById("T1Players")
-    var shrinkDirection = teamOnePlayers.getElementById(eventLoserName) === null ? 'shrinkRight' : 'shrinkLeft';*/
     var shrinkDirection = $('#T1Players #'+ eventLoserName) ? 'shrinkRight' : 'shrinkLeft';
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
@@ -230,25 +213,6 @@ function getLoadoutIdMappings(loadoutID) {
 
 function getClassFromLoadoutID(loadoutID) {
     return getLoadoutIdMappings(loadoutID);
-   // var classMap = getLoadoutIdMapping();
-    //return classMap[loadoutID];
 }
-
-//     document.querySelector(loserID).className = "playerStatsContainer";
-//     window.requestAnimationFrame(function(time) {
-//         window.requestAnimationFrame(function(time) {
-//             document.querySelector(loserID).className = "playerStatsContainer playerRespawningBar";
-//         });
-//     });
-// }
-
-
-// const format = require('./format.js');
-// var boardsToClean = document.getElementsByClassName("scoreboard");
-// for (var n = 0; n < boardsToClean.length; n++) {
-//     var  node = boardsToClean[n];
-//     // format.clean(node);
-//     node.style.color = pink;
-// };
 
 socket.emit('backchat', { obj: 'New Connection' });
