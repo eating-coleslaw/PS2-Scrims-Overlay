@@ -81,7 +81,7 @@ app.use(function(err, req, res) {
     });
 });
 
-async function start(one, two) {
+async function start(one, two, secs) {
     let oneObj = await teams.fetchTeamData(one).catch(function (err) {
         console.log("Error fetching data for team one: " + one);
         console.error(err);
@@ -94,7 +94,7 @@ async function start(one, two) {
         // Failure means match should not go ahead so return (exit function)
         return 0;
     });
-    ps2ws.startUp(oneObj, twoObj);
+    ps2ws.startUp(oneObj, twoObj, secs);
 }
 
 module.exports = app;

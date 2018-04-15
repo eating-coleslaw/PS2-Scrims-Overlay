@@ -10,10 +10,12 @@ function submitForm (button)
         track.prop('disabled', true);
         var tagOne = $("#T1Tag").val();
         var tagTwo = $("#T2Tag").val();
+        var rndSecs = getRoundLength();
         var pw = $('#pwStart').val();
         var obj = {
             teamOne : tagOne,
             teamTwo : tagTwo,
+            rndSecs : rndSecs,
             auth: pw
         };
         socket.emit('start', { obj: obj});
@@ -218,6 +220,13 @@ function checkAPI() {
             }
         }
     });
+}
+
+function getRoundLength() {
+    var roundSeconds = $("#RndSecs").val();
+    roundSeconds = parseInt(roundSeconds, 10);
+    if ( roundSeconds > 0 ) { return roundSeconds;}
+    else { return 900; }
 }
 
 window.onload = checkAPI();

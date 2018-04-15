@@ -13,7 +13,7 @@ let  teamOneObject,
      captures = 0,
      roundTracker = 0,
      timeCounter = 0,
-     matchLength = 900; //900
+     matchLength; // = 900; //900
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -340,13 +340,14 @@ function stopTheMatch() {
     timeCounter = 0;
 }
 
-function startUp(oneObj, twoObj) {
+function startUp(oneObj, twoObj, secsInt) {
     // Initialising items determines whether a match can go ahead as it pulls from the API each time so requires the API to be functional
     items.initialise().then(function() {
         console.log('=====================================================================================================================================');
         team.setTeams(oneObj, twoObj);
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
+        matchLength = secsInt;
         createStream();
         overlay.startKillfeed();
         app.send('refresh', '');
@@ -361,6 +362,7 @@ function newRound() {
     console.log('=====================================================================================================================================');
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
+    matchLength = secsInt;
     createStream();
     overlay.startKillfeed();
     app.send('refresh', '');

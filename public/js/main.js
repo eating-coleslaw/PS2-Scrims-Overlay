@@ -196,9 +196,6 @@ function playRespawning(eventLoserName) {
     });
 }
 
-
-
-
 function getLoadoutIdMappings(loadoutID) {
     var classMap = [];
    classMap[0] = 'unknown';
