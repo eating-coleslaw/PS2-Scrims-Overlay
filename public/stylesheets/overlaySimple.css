@@ -1,30 +1,22 @@
 
 /* TEXT COLORS */
 .faction1 {
-    /* color: rgb(106, 76, 224); */
-  /* color: rgb(112, 80, 237); */
-  /* color: rgb(141, 112, 255) !important; */
-  /* --faction-primary-color: rgb(141, 112, 255); */
-  --faction-primary-color: rgb(112, 80, 237);
-  --faction-dark-color: rgb(46, 33, 96);
-  --faction-dark-trans-color: rgba(46, 33, 96, 0.8);
-  --faction-light-color: rgb(202, 188, 255);
-  --faction-flavor-color: rgb(184, 233, 227);
+    --faction-primary-color: rgb(112, 80, 237);
+    --faction-dark-color: rgb(46, 33, 96);
+    --faction-dark-trans-color: rgba(46, 33, 96, 0.8);
+    --faction-light-color: rgb(202, 188, 255);
+    --faction-flavor-color: rgb(184, 233, 227);
 }
 
  .faction2 {
-    /* color: rgb(30, 153, 252) !important; */
     --faction-primary-color: rgb(30, 153, 252);
     --faction-dark-color: rgb(7, 37, 61);
     --faction-dark-trans-color: rgba(7, 37, 61, 0.8);
-    /* --faction-light-color: rgb(255, 247, 175); */
     --faction-light-color: rgb(182, 221, 253);
     --faction-flavor-color: rgb(255, 247, 175);
-    /* --faction-flavor-color: rgb(255, 247, 200); */
 }
 
 .faction3 {
-    /* color: rgb(255, 108, 112) !important; */
     --faction-primary-color: rgb(255, 108, 112);
     --faction-dark-color: rgb(64, 27, 28);
     --faction-dark-trans-color: rgba(64, 27, 28, 0.8);
@@ -46,16 +38,13 @@
 
 .faction1highlight {
     color: rgb(202, 188, 255) !important;
-    /* color: rgb(184, 233, 227); */
 }
 
 .faction2highlight {
-    /* color: rgb(182, 221, 253); */
     color: rgb(255, 247, 175) !important;
 }
 
 .faction3highlight {
-    /* color: rgb(255, 210, 211); */
     color: rgb(229, 217, 212) !important;
 }
 
@@ -64,7 +53,6 @@
 }
 
 .faction2flavor {
-    /* color: rgb(255, 247, 175); */
     color: rgb(255, 247, 200) !important;
 }
 
@@ -75,26 +63,18 @@
 
 /* KILLFEED COLORS */
 .faction1killtext {
-    /* color: rgb(184, 233, 227); */
     color: rgb(141, 112, 255) !important;
     text-shadow: 0px 0px 1px rgb(46, 33, 96) !important;
-    /* text-shadow: 0px 0px 1px rgb(184, 233, 227); */
 }
 
 .faction2killtext {
-    /* color: rgb(255, 247, 175); */
     color: rgb(30, 153, 252) !important;
     text-shadow: 0px 0px 1px rgb(7, 37, 61) !important;
-    /* text-shadow: 0px 0px 1px rgb(255, 247, 175); */
 }
 
 .faction3killtext {
-    /* color: rgba(229, 217, 212, 0.95); */
-    /* color: rgb(255, 210, 211); */
     color: rgb(255, 108, 112) !important;
-    /* color: rgb(255, 108, 112);  */
     text-shadow: 0px 0px 1px rgb(64, 27, 28) !important;
-    /* text-shadow: 0px 0px 1px rgb(255, 210, 211); */
 }
 
 
@@ -175,7 +155,6 @@
 .scoreboard {
     border-radius: 1px;
     color: rgb(245, 245, 255);
-    /* max-width: 450px; */
     max-width: 475px;
     margin-left: auto;
     margin-right: auto;
@@ -187,7 +166,6 @@
     display: inline-block;
     box-sizing: inherit;
     border-radius: 1px;
-    /* height: 31px; */
     -moz-transition: height 0.5s cubic-bezier(.86,0,.07,1);
     -webkit-transition: height 0.5s cubic-bezier(.86,0,.07,1);
     transition: height 0.5s cubic-bezier(.86,0,.07,1);
@@ -196,7 +174,6 @@
 
 .outfitScoresRow {
     display: inline-block;
-    /* height: 26px; */
     height: 35px;
     border-top-width: 2px;
     border-top-style: solid;
@@ -207,7 +184,6 @@
     border-bottom: 1px solid rgb(26, 26, 26) !important;
     box-sizing: inherit;
     background-color: rgb(35, 35, 35);
-    /* font-size: 22px; */
     font-size: 24px;
 }
 
@@ -443,16 +419,12 @@
     box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
     border-left: 1px solid rgb(26, 26, 26) !important;
     background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
-   /* background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
-    background: -o-linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%); */
     background: linear-gradient(-10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
 }
 #T2Board {
     box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
     border-right: 1px solid rgb(26, 26, 26) !important;
     background: -webkit-linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
-    /*background: -moz-linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
-    background: -o-linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%); */
     background: linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
 }
 
@@ -462,7 +434,6 @@
     width: 200px;
     text-align: center;
     text-transform:  uppercase;
-    /* font-size: 12px; */
     font-size: 14px;
     line-height: 14px;
     margin-top: 2px;
@@ -495,8 +466,6 @@
     -webkit-transition: height 1s, width 1s ease-in-out;
     transition: height 1s, width 1s ease-in-out;
     vertical-align: top;
-    /* height: 31px; */
-    /* height: calc(100% + 6px); */
     height: 39.5px;
     box-sizing: inherit;
     border-left-color: rgb(255, 216, 58);
@@ -514,12 +483,9 @@
 #timer {
     text-align: center;
     vertical-align: top;
-    /* height: 100%; */
     padding-left: 5px;
     padding-right: 5px;
     box-sizing: inherit;
-    /* font-size: 27px; */
-    /* font-size: 34px; */
     font-size: 38px;
     -moz-transition: color 1s, font-size 1s, padding 2s cubic-bezier(.86,0,.07,1);
     -webkit-transition: color 1s, font-size 1s, padding 2s cubic-bezier(.86,0,.07,1);
@@ -573,12 +539,10 @@
 }
 
 .factionLabel {
-    /* font-size: 8.5px; */
     font-size: 10px;
     display: inline-block;
     line-height: 1;
     height: 19px;
-    /* padding-top: 3px; */
     padding-top: 8px;
     text-align: center;
     vertical-align: top;
@@ -596,7 +560,6 @@
 
 #T1Faction {
     border-bottom-left-radius: 1px;
-    /* left: -8px; */
     left: -8.5px;
     color: var(--faction-flavor-color, rgb(245, 245, 255));
 }
@@ -645,12 +608,9 @@
 
 .killfeed {
     display: inline-block;
-    /* width: 345px; */
-    /* width: 375px; */
     width: 400px;
     box-sizing: inherit;
     position: relative;
-    /* top: -25px; */
     top: -15px;
     text-shadow:0px 0px 1px rgba(37, 37, 37, 0.95);
     line-height: 1.2;
@@ -669,9 +629,6 @@
     height: 25px;
 }
 
-.killfeed.killfeedActive {
-}
-
 #killfeedContainer::after {
     display: none;
     box-sizing: inherit;
@@ -685,11 +642,6 @@
     border-right: 3px solid transparent;
 }
 
-
-#killfeedContainer {
-}
-
-
 .killfeedHeader {
     font-weight: 400;
     font-size: 10px;
@@ -701,8 +653,6 @@
     overflow-y: hidden;
     box-sizing: inherit;
     box-sizing: border-box;
-    /* max-width: 345px; */
-    /* max-width: 375px; */
     max-width: 394px;
 }
 
@@ -711,24 +661,17 @@
     text-align: center;
     grid-gap: 7px;
     box-sizing: border-box;
-    /* grid-template-columns: 1fr 25px 1fr 1fr; */
     grid-template-columns: 1fr 35px 1fr 1fr;
     padding: 0px 5px  0px 5px;
-    /* max-width: calc(345px - 8px); */
     max-width: calc(375px - 8px);
     -moz-animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 5s 1 normal forwards eventFadeOut;
     -webkit-animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 5s 1 normal forwards eventFadeOut;
     animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 5s 1 normal forwards eventFadeOut;
-    /* font-size: 14px; */
 }
 
 .killfeedRowContainer {
     padding-top: 3px;
 }
-/* 
-#killfeed tr:first-child {
-    padding-top: 10px;
-} */
 
 @keyframes eventFadeIn {
     from {
@@ -872,14 +815,11 @@
 }
 
 body {
-    /* font-family: "Input Mono", Consolas, monospace; */
     font-family: "Roboto Mono", "Input Mono", Consolas, monospace;
     font-size: large;
     font-weight: 600;
     background-color: transparent;
     background-position: center center;
-    /* background-image:url('../images/20161114214846_1.jpg'); */
-    /* background-image: url("../images/icon_skull_yellow.png"); */
     margin: 0px 10px 10px 10px;
     box-sizing: border-box;
 }
@@ -891,15 +831,11 @@ body {
     text-align: center;
     box-sizing: inherit;
     white-space: nowrap;
-    /* width: calc(25% - 60px); */
     min-width: 280px;
     max-width: calc(25% - 70px);
-    /* max-width: 280px; */
     color: var(--faction-light-color, rgb(245, 245, 255));
     font-weight: 500;
-    /* font-size: 16px; */
     font-size: 18px;
-    /* font-size: small; */
 }
 
 .teamPlayersContainer.teamOne {
@@ -908,12 +844,6 @@ body {
 
 .teamPlayersContainer.teamTwo {
     float: right;
-}
-
-#T1Players {
-}
-
-#T2Players {
 }
 
 .playerStatsContainer {
@@ -969,7 +899,6 @@ body {
 
 #T1Players .playerStatsName:before, #T2Players .playerStatsName:after {
     background: var(--class-icon-background, url('../images/even_borders/Icon_white_unknown_32.png'));
-    /* background: url("../images/even_borders/Icon_white_combatMedic_32.png"); */
     content: "";
     background-size: 12px;
     display: inline-block;
@@ -982,7 +911,6 @@ body {
     mix-blend-mode: overlay;
     box-sizing: inherit;
     filter: brightness(1.7);
-    /* filter: brightness(2); */
 }
 
 #T1Players .playerStatsName:before{
@@ -1026,7 +954,6 @@ body {
 .playerStatsScore {
     display: inline-block;
     text-align: right;
-    /* width: 60px; */
     width: 70px;
     box-sizing: border-box;
 }
@@ -1039,13 +966,11 @@ body {
     background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    /* background: -o-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%); */
 }
 #T2Players > .playerStatsContainer {
     background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    /* background: -o-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%); */
 }
 
 
@@ -1073,16 +998,6 @@ img .darkenIconFilter {
     filter: brightness(0) drop-shadow(0px 0px 1px var(--faction-dark-trans-color));
 }
 
-.iconPlayerClass.iconClassHeavy {
-    /* border-radius: 7px; */
-}
-.iconPlayerClass.iconClassMedic {
-    /* border-radius: 1px; */
-}
-.iconPlayerClass.iconClassMax {
-    /* border-radius: 1px 1px 10px 10px; */
-}
-
 .iconPlayerClass.iconClassLA {
     background-image: url('../images/Icon_white_lightAssault_32.png');
     background-size: 17px;
@@ -1093,7 +1008,6 @@ img .darkenIconFilter {
 
 .iconPlayerClass.iconClassUnknown {
     background-image: url('../images/icon_LA_no_outline.png');
-    /* background-image: url('../images/even_borders/Icon_white_unknown_32.png'); */
     background-size: 17px;
     display: inline-block;
     background-repeat: no-repeat;

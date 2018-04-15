@@ -1,19 +1,14 @@
 .teamPlayersContainer {
     display: grid;
-    /* grid-template-columns: 1fr; */
     grid-gap: 2px;
     text-align: center;
     box-sizing: inherit;
     white-space: nowrap;
-    /* width: calc(25% - 60px); */
     min-width: 280px;
     max-width: calc(25% - 70px - 30px);
-    /* max-width: 280px; */
     color: var(--faction-light-color, rgb(245, 245, 255));
     font-weight: 500;
-    /* font-size: 16px; */
     font-size: 18px;
-    /* font-size: small; */
 }
 
 #T1Players {
@@ -31,7 +26,6 @@
 .teamPlayersContainer.teamTwo {
     float: right;
 }
-
 
 .playerStatsContainer {
     text-align: left;
@@ -59,22 +53,6 @@
     padding-left: 3px;
 }
 
-
-/* #T1Players .playerStatsContainer:first-of-type {
-    border-top-right-radius: 5px;
-}
-
-#T1Players .playerStatsContainer:last-of-type {
-    border-bottom-left-radius: 5px;
-}
-
-#T2Players .playerStatsContainer:first-of-type {
-    border-top-left-radius: 5px;
-}
-
-#T2Players .playerStatsContainer:last-of-type {
-    border-bottom-right-radius: 5px;
-} */
 #T1Players .playerStatsContainer:nth-child(2) {
     border-top-right-radius: 5px;
 }
@@ -100,94 +78,49 @@
 
 .playerClass {
     background-image: url('../images/even_borders/Icon_white_unknown_no_border_32.png');
-    /* background: url("../images/even_borders/Icon_white_combatMedic_32.png"); */
     background-size: cover;
     display: inline-block;
     background-position: center center;
     background-repeat: no-repeat;
     height: 20px;
     width: 20px;
-    /* margin-bottom: 2px; */
     margin: auto;
-    /* vertical-align: middle; */
-    /* mix-blend-mode: overlay; */
     filter: drop-shadow(0px 0px 2px var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)));
     opacity: 0.9;
-    /* mix-blend-mode: luminosity; */
     box-sizing: inherit;
-    /* filter: brightness(1.7); */
-    /* filter: brightness(2); */
 }
-
-/*
-#T1Players .playerStatsName:before, #T2Players .playerStatsName:after {
-    background: var(--class-icon-background, url('../images/even_borders/Icon_white_unknown_32.png'));
-    /* background: url("../images/even_borders/Icon_white_combatMedic_32.png");
-    content: "";
-    background-size: 12px;
-    display: inline-block;
-    background-position: center center;
-    background-repeat: no-repeat;
-    height: 12px;
-    width: 18px;
-    margin-bottom: 2px;
-    vertical-align: middle;
-    mix-blend-mode: overlay;
-    box-sizing: inherit;
-    filter: brightness(1.7);
-    /* filter: brightness(2);
-}
-*/
-
-/*
-#T1Players .playerStatsName:before{
-    margin-right: 3px;
-}
-
-#T2Players .playerStatsName:after {
-    margin-left: 3px;
-}
-*/
 
 .medic {
-    /* --class-icon-background: url("../images/even_borders/Icon_white_combatMedic_32.png"); */
     background-image: url("../images/even_borders/Icon_white_combatMedic_32.png") !important;
 }
 
 .la {
-    /* --class-icon-background: url('../images/Icon_white_lightAssault_32.png'); */
     background-image: url('../images/Icon_white_lightAssault_32.png') !important;
 }
 
 .infil {
-    /* --class-icon-background: url('../images/Icon_white_infiltrator_32.png'); */
     background-image: url('../images/Icon_white_infiltrator_32.png') !important;
 }
 
 .heavy {
-    /* --class-icon-background: url('../images/even_borders/Icon_white_heavyAssault_32.png'); */
     background-image: url('../images/even_borders/Icon_white_heavyAssault_32.png') !important;
 }
 
 .engy {
-    /* --class-icon-background: url('../images/Icon_white_engineer_32.png'); */
     background-image: url('../images/Icon_white_engineer_32.png') !important;
 }
 
 .max {
-    /* --class-icon-background: url('../images/Icon_white_max_32.png'); */
     background-image: url('../images/Icon_white_max_32.png') !important;
 }
 
 .unknown {
-    /* --class-icon-background: url('../images/even_borders/Icon_white_unknown_32.png'); */
     background-image: url('../images/even_borders/Icon_white_unknown_32.png') !important;
 }
 
 .playerStatsScore {
     display: inline-block;
     text-align: right;
-    /* width: 60px; */
     width: 70px;
     box-sizing: border-box;
 }
@@ -200,13 +133,11 @@
     background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    /* background: -o-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%); */
 }
 #T2Players > .playerStatsContainer {
     background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
     background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    /* background: -o-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%); */
 }
 
 
@@ -234,16 +165,6 @@ img .darkenIconFilter {
     filter: brightness(0) drop-shadow(0px 0px 1px var(--faction-dark-trans-color));
 }
 
-.iconPlayerClass.iconClassHeavy {
-    /* border-radius: 7px; */
-}
-.iconPlayerClass.iconClassMedic {
-    /* border-radius: 1px; */
-}
-.iconPlayerClass.iconClassMax {
-    /* border-radius: 1px 1px 10px 10px; */
-}
-
 .iconPlayerClass.iconClassLA {
     background-image: url('../images/Icon_white_lightAssault_32.png');
     background-size: 17px;
@@ -254,7 +175,6 @@ img .darkenIconFilter {
 
 .iconPlayerClass.iconClassUnknown {
     background-image: url('../images/icon_LA_no_outline.png');
-    /* background-image: url('../images/even_borders/Icon_white_unknown_32.png'); */
     background-size: 17px;
     display: inline-block;
     background-repeat: no-repeat;

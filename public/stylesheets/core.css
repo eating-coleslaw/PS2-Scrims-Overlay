@@ -1,12 +1,10 @@
 body {
-    /* font-family: "Input Mono", Consolas, monospace; */
     font-family: "Roboto Mono", "Input Mono", Consolas, monospace;
     font-size: large;
     font-weight: 600;
     background-color: transparent;
     background-position: center center;
     /* background-image:url('../images/20161114214846_1.jpg'); */
-    /* background-image: url("../images/icon_skull_yellow.png"); */
     margin: 0px 10px 10px 10px;
     box-sizing: border-box;
 }

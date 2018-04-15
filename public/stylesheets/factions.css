@@ -1,9 +1,5 @@
 /* TEXT COLORS */
 .faction1 {
-    /* color: rgb(106, 76, 224); */
-  /* color: rgb(112, 80, 237); */
-  /* color: rgb(141, 112, 255) !important; */
-  /* --faction-primary-color: rgb(141, 112, 255); */
   --faction-primary-color: rgb(112, 80, 237);
   --faction-dark-color: rgb(46, 33, 96);
   --faction-dark-trans-color: rgba(46, 33, 96, 0.8);
@@ -12,18 +8,14 @@
 }
 
  .faction2 {
-    /* color: rgb(30, 153, 252) !important; */
     --faction-primary-color: rgb(30, 153, 252);
     --faction-dark-color: rgb(7, 37, 61);
     --faction-dark-trans-color: rgba(7, 37, 61, 0.8);
-    /* --faction-light-color: rgb(255, 247, 175); */
     --faction-light-color: rgb(182, 221, 253);
     --faction-flavor-color: rgb(255, 247, 175);
-    /* --faction-flavor-color: rgb(255, 247, 200); */
 }
 
 .faction3 {
-    /* color: rgb(255, 108, 112) !important; */
     --faction-primary-color: rgb(255, 108, 112);
     --faction-dark-color: rgb(64, 27, 28);
     --faction-dark-trans-color: rgba(64, 27, 28, 0.8);
@@ -45,16 +37,13 @@
 
 .faction1highlight {
     color: rgb(202, 188, 255) !important;
-    /* color: rgb(184, 233, 227); */
 }
 
 .faction2highlight {
-    /* color: rgb(182, 221, 253); */
     color: rgb(255, 247, 175) !important;
 }
 
 .faction3highlight {
-    /* color: rgb(255, 210, 211); */
     color: rgb(229, 217, 212) !important;
 }
 
@@ -63,7 +52,6 @@
 }
 
 .faction2flavor {
-    /* color: rgb(255, 247, 175); */
     color: rgb(255, 247, 200) !important;
 }
 
@@ -74,26 +62,18 @@
 
 /* KILLFEED COLORS */
 .faction1killtext {
-    /* color: rgb(184, 233, 227); */
     color: rgb(141, 112, 255) !important;
     text-shadow: 0px 0px 1px rgb(46, 33, 96) !important;
-    /* text-shadow: 0px 0px 1px rgb(184, 233, 227); */
 }
 
 .faction2killtext {
-    /* color: rgb(255, 247, 175); */
     color: rgb(30, 153, 252) !important;
     text-shadow: 0px 0px 1px rgb(7, 37, 61) !important;
-    /* text-shadow: 0px 0px 1px rgb(255, 247, 175); */
 }
 
 .faction3killtext {
-    /* color: rgba(229, 217, 212, 0.95); */
-    /* color: rgb(255, 210, 211); */
     color: rgb(255, 108, 112) !important;
-    /* color: rgb(255, 108, 112);  */
     text-shadow: 0px 0px 1px rgb(64, 27, 28) !important;
-    /* text-shadow: 0px 0px 1px rgb(255, 210, 211); */
 }
 
 

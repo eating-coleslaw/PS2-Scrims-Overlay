@@ -1,11 +1,8 @@
 .killfeed {
     display: inline-block;
-    /* width: 345px; */
-    /* width: 375px; */
     width: 400px;
     box-sizing: inherit;
     position: relative;
-    /* top: -25px; */
     top: -15px;
     text-shadow:0px 0px 1px rgba(37, 37, 37, 0.95);
     line-height: 1.2;
@@ -24,9 +21,6 @@
     height: 25px;
 }
 
-.killfeed.killfeedActive {
-}
-
 #killfeedContainer::after {
     display: none;
     box-sizing: inherit;
@@ -40,15 +34,6 @@
     border-right: 3px solid transparent;
 }
 
-
-#killfeedContainer {
-}
-
-/* 
-#killfeed tr:first-child {
-    padding-top: 10px;
-} */
-
 .killfeedHeader {
     font-weight: 400;
     font-size: 10px;
@@ -60,8 +45,6 @@
     overflow-y: hidden;
     box-sizing: inherit;
     box-sizing: border-box;
-    /* max-width: 345px; */
-    /* max-width: 375px; */
     max-width: 394px;
 }
 
@@ -70,15 +53,12 @@
     text-align: center;
     grid-gap: 7px;
     box-sizing: border-box;
-    /* grid-template-columns: 1fr 25px 1fr 1fr; */
     grid-template-columns: 1fr 35px 1fr 1fr;
     padding: 0px 5px  0px 5px;
-    /* max-width: calc(345px - 8px); */
     max-width: calc(375px - 8px);
     -moz-animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 8s 1 normal forwards eventFadeOut;
     -webkit-animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 8s 1 normal forwards eventFadeOut;
     animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 8s 1 normal forwards eventFadeOut;
-    /* font-size: 14px; */
 }
 
 .killfeedRowContainer {
