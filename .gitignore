@@ -23,3 +23,6 @@ overlay/killfeed.txt
 
 #match logs
 match/*.txt
+
+#GIMP files
+*.xcf
