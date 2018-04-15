@@ -18,8 +18,10 @@ module.exports = {
             sock.on('backchat', function () {
                 const t1 = team.getT1(),
                       t2 = team.getT2();
+                   title = ps2ws.getTitle();
                 send('teams', { teamOne: t1, teamTwo: t2});
                 send('score', { teamOne: t1, teamTwo: t2 });
+                send('title', title);
             });
 
             sock.on('start', function (data) {
@@ -28,8 +30,10 @@ module.exports = {
                 if (event.auth === password.KEY) {
                     if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
                         if (running !== true) {
-                            app.start(event.teamOne, event.teamTwo, event.rndSecs).then(function () {
+                            app.start(event.teamOne, event.teamTwo, event.rndSecs, event.title).then(function () {
+                                console.log('Event started: ' + event.title);
                                 console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
+                                send('title', event.title);
                             }).catch(function (err) {
                                 console.error("Failed to start match between " + event.teamOne + ' ' + event.teamTwo);
                                 console.error(err);

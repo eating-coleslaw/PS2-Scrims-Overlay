@@ -4,10 +4,20 @@
  */
 
 var socket = io();
+
 socket.on('connect', function() {
+
+    socket.on('title', function(title) {
+        console.log(title);
+        $('#eventTitle').html(title);
+    });
 
     socket.on('teams', function (data) {
         console.log(data);
+        
+        //$('#eventTitle').html(data.title);
+        //console.log('Event Title: ' + title);
+        
         if (data.teamOne.name !== "") {
             var T1 = data.teamOne.alias
             var T2 = data.teamTwo.alias
@@ -57,14 +67,15 @@ socket.on('connect', function() {
     });
 
     socket.on ('time', function(data) {
-        console.log(data);
+        //console.log(data);
         $('#timer').html(data.minutes + ':' + data.seconds);
     });
 
     socket.on('refresh', function () {
+        console.log('refreshed');
         window.location.reload();
     });
-    
+
     socket.on('killfeed', function (event) {
         console.log(event);
         var pointsString = "";
@@ -168,7 +179,6 @@ function updatePlayerClasses(event) {
    }
 }
 
-
 function getFactionLabel(teamObject) {
    var factions = new Array();
    factions[1] = "V<BR>S";
@@ -176,7 +186,6 @@ function getFactionLabel(teamObject) {
    factions[3] = "T<BR>R";
    return factions[teamObject.faction];
 };
-
 
 function playRespawning(eventLoserName) {
     var loserID = eventLoserName + 'respawn';

@@ -11,11 +11,13 @@ function submitForm (button)
         var tagOne = $("#T1Tag").val();
         var tagTwo = $("#T2Tag").val();
         var rndSecs = getRoundLength();
+        var title = $("#Title").val();
         var pw = $('#pwStart').val();
         var obj = {
             teamOne : tagOne,
             teamTwo : tagTwo,
             rndSecs : rndSecs,
+            title : title,
             auth: pw
         };
         socket.emit('start', { obj: obj});

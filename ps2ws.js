@@ -13,7 +13,8 @@ let  teamOneObject,
      captures = 0,
      roundTracker = 0,
      timeCounter = 0,
-     matchLength = 150; // = 900; //900
+     matchLength = 900,
+     eventTitle;
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -311,6 +312,7 @@ function subscribe(ws) {
     ws.send('{"service":"event","action":"subscribe","worlds":["1","10","13","17","19","25"],"eventNames":["FacilityControl"]}');
     //start timer
     startTimer(ws);
+
     console.log('Subscribed to facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
 }
 
@@ -340,7 +342,7 @@ function stopTheMatch() {
     timeCounter = 0;
 }
 
-function startUp(oneObj, twoObj, secsInt) {
+function startUp(oneObj, twoObj, secsInt, title) {
     // Initialising items determines whether a match can go ahead as it pulls from the API each time so requires the API to be functional
     items.initialise().then(function() {
         console.log('=====================================================================================================================================');
@@ -348,10 +350,12 @@ function startUp(oneObj, twoObj, secsInt) {
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
         matchLength = secsInt;
-        console.log('Initializing match with match length ' + matchLength + 'seconds');
+        eventTitle = title ? title : 'PS2 IvI Scrims';
         createStream();
         overlay.startKillfeed();
         app.send('refresh', '');
+        app.send('title', String(eventTitle));
+        console.log('startUp title: ' + eventTitle);
         socket.setRunning(true);
     }).catch(function (err) {
         console.error('Items did not initialise!!');
@@ -366,7 +370,12 @@ function newRound() {
     createStream();
     overlay.startKillfeed();
     app.send('refresh', '');
+    app.send('title', getTitle());
     socket.setRunning(true);
+}
+
+function getTitle() {
+    return eventTitle;
 }
 
 exports.getPointMaps          = getPointMaps;
@@ -376,3 +385,4 @@ exports.getRound              = getRound;
 exports.stopTheMatch          = stopTheMatch;
 exports.startUp               = startUp;
 exports.newRound              = newRound;
+exports.getTitle              = getTitle;
