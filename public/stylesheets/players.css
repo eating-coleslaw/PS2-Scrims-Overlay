@@ -91,7 +91,7 @@
 }
 
 .medic {
-    background-image: url("../images/even_borders/Icon_white_combatMedic_32.png") !important;
+    background-image: url('../images/Icon_white_combatMedic_32.png') !important;
 }
 
 .la {
@@ -103,7 +103,7 @@
 }
 
 .heavy {
-    background-image: url('../images/even_borders/Icon_white_heavyAssault_32.png') !important;
+    background-image: url('../images/Icon_white_heavyAssault_32.png') !important;
 }
 
 .engy {
@@ -115,7 +115,7 @@
 }
 
 .unknown {
-    background-image: url('../images/even_borders/Icon_white_unknown_32.png') !important;
+    background-image: url('../images/Icon_white_unknown_32.png') !important;
 }
 
 .playerStatsScore {
