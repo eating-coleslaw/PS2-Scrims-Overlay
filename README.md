@@ -1,5 +1,6 @@
 # PS2 Scrims Script
 
+![Overlay Example](https://i.imgur.com/qPJZbIN.png)
 _Disclaimer: 90% of this code was created by **Dylan C** (DylanNZ), **Jared H** (MonoNZ) and **Richard H** (Dalordish). I'm only responsible for the updated point rules and the streaming overlay._
 
 ## Running A Match
