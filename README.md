@@ -75,7 +75,8 @@ After a previous round has ended - or if you stopped the round using Stop Match 
 
 4. Click ``OK`` to save the source, then make sure it's visible and positioned above your Planetside 2 source. 
 
-   _The Properties for your BrowserSource should look something like this_ ![BrowserSource Properties](https://i.imgur.com/P9TFin3.png)
+   _The Properties for your BrowserSource should look something like this_   
+   ![BrowserSource Properties](https://i.imgur.com/P9TFin3.png)
 
 
 ## Credits
