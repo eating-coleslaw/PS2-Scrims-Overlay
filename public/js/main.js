@@ -211,7 +211,7 @@ function playRespawning(eventLoserName) {
 function getLoadoutIdMappings(loadoutID) {
     var classMap = [];
     classMap[0] = 'unknown';
-    classMap[1] ='infil'; classMap[8] = 'infil'; classMap[15] = 'infil';
+    classMap[1] = 'infil'; classMap[8] = 'infil'; classMap[15] = 'infil';
     classMap[3] = 'la'; classMap[10] = 'la'; classMap[17] = 'la';
     classMap[4] = 'medic'; classMap[11] = 'medic'; classMap[18] = 'medic';
     classMap[5] = 'engy'; classMap[12] = 'engy'; classMap[19] ='engy';

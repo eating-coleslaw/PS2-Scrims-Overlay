@@ -67,6 +67,29 @@ function individualPointUpdate(event) {
     pointMap.name = 'Custom';
 }
 
+const reviveExpGainIDs = ['7','53'];
+const damageAssistExpGainIDs = ['2','371','372',]; //TO-DO: 3, 5, 22, 30, 102?
+const utilityAssistExpGainIDs = ['550','551','552','553','554','556',]; //TO-DO: 582?
+
+function getExperienceGainMap() {
+    var experienceGainMap = {
+        'revive': reviveExpGainIDs,
+        'damageAssist': damageAssistExpGainIDs,
+        'utilityAssist': utilityAssistExpGainIDs
+    }
+    return experienceGainMap;
+}
+    
+    // for (i = 0; i < reviveExpGainIDs.length; i++) {
+    //     experienceGainMap[reviveExpGainIDs[i]] = { "action": 'revive' };
+    // }
+    // for (i = 0; i < damageAssistExpGainIDs.length; i++) {
+    //     experienceGainMap[damageAssistExpGainIDs[i]] = { "action": 'damageAssist' };
+    // }
+    // for (i = 0; i < utilityAssistExpGainIDs.length; i++) {
+    //     experienceGainMap[utilityAssistExpGainIDs[i]] = { "action": 'utilityAssist' };
+    // }
+
 function getRound() { return roundTracker; }
 
 function killfeedPlayer(obj) {
@@ -110,8 +133,7 @@ function dealWithTheData(raw) {
     if (data.event_name === "Death") {
         itsPlayerData(data);
     } else {
-       return;
-        // itsFacilityData(data);
+        itsFacilityData(data);
     }
 }
 
@@ -386,3 +408,4 @@ exports.stopTheMatch          = stopTheMatch;
 exports.startUp               = startUp;
 exports.newRound              = newRound;
 exports.getTitle              = getTitle;
+exports.getExperienceGainMap   = getExperienceGainMap;
