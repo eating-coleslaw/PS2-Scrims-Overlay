@@ -72,12 +72,12 @@ socket.on('connect', function() {
     });
 
     socket.on('refresh', function () {
-        console.log('refreshed');
+        //console.log('refreshed');
         window.location.reload();
     });
 
     socket.on('killfeed', function (event) {
-        console.log(event);
+        //console.log(event);
         var pointsString = "";
         if (Number(event.points) > 0) { 
             pointsString = '+' + event.points;
@@ -108,9 +108,12 @@ socket.on('connect', function() {
         } else {
             playRespawning(event.loser, event.loser_loadout_id);
         }
-
-
     });
+
+    //TO-DO: Implement experience-based revives
+    socket.on('revive', function (event) {
+        console.log(event);
+    })
 
     socket.on('score', function (event) {
         console.log(event);
@@ -207,7 +210,7 @@ function playRespawning(eventLoserName) {
 
 function getLoadoutIdMappings(loadoutID) {
     var classMap = [];
-   classMap[0] = 'unknown';
+    classMap[0] = 'unknown';
     classMap[1] ='infil'; classMap[8] = 'infil'; classMap[15] = 'infil';
     classMap[3] = 'la'; classMap[10] = 'la'; classMap[17] = 'la';
     classMap[4] = 'medic'; classMap[11] = 'medic'; classMap[18] = 'medic';
