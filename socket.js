@@ -1,3 +1,4 @@
+/* socket.js */
 /**
  * Created by dylancross on 5/04/17.
  */
@@ -69,15 +70,6 @@ module.exports = {
                 if (event.auth === password.KEY) {
                     console.log('Admin entered Stop command, match stopping: ' + JSON.stringify(event));
                     ps2ws.stopTheMatch();
-                }
-            });
-
-            sock.on('adjust', function (data) {
-                send('redirect', '');
-                const event = data.obj;
-                if (event.auth === password.KEY) {
-                    console.log('Admin adjusted score: ' + JSON.stringify(event));
-                    team.adjustScore(event.t1, event.t2, event.reason);
                 }
             });
 

@@ -1,3 +1,4 @@
+/* main.js */
 /**
  * Created by Dylan on 15-Apr-16.
  * Updated by Chirtle in 2017-2018.
@@ -78,19 +79,11 @@ socket.on('connect', function() {
 
     socket.on('killfeed', function (event) {
         console.log(event);
-        var pointsString = "";
-        if (Number(event.points) > 0) { 
-            pointsString = '+' + event.points;
-        } else if (Number(event.points) < 0) { 
-            pointsString = event.points;
-        } else {
-            pointsString = '0';
-        }
-        $('<tr><td class="killfeedRowContainer"><div class="killfeedWinner killfeedPlayer killfeedCell faction' + event.winner_faction + '">' + event.winner + '</div>' +//event.winner_faction + '">' + event.winner + '</td>' +
-            '<div class="killfeedPoints killfeedCell ">' + pointsString + '</div>' +
+        $('<tr><td class="killfeedRowContainer"><div class="killfeedWinner killfeedPlayer killfeedCell faction' + event.winner_faction + '">' + event.winner + '</div>' +
             '<div class="killfeedWeapon killfeedCell">' + event.weapon + '</div>' +
-            '<div class="killfeedLoser killfeedPlayer killfeedCell faction' + event.loser_faction + '">' + event.loser + '</div>' +//event.loser_faction + '">' + event.loser + '</td>' +
-           '</td></tr>') .prependTo($('#killfeed'));
+            '<div class="killfeedLoser killfeedPlayer killfeedCell faction' + event.loser_faction + '">' + event.loser + '</div>' +
+            '</td></tr>') .prependTo($('#killfeed')
+        );
         
         updatePlayerClasses(event);
        
@@ -207,7 +200,7 @@ function playRespawning(eventLoserName) {
 
 function getLoadoutIdMappings(loadoutID) {
     var classMap = [];
-   classMap[0] = 'unknown';
+    classMap[0] = 'unknown';
     classMap[1] ='infil'; classMap[8] = 'infil'; classMap[15] = 'infil';
     classMap[3] = 'la'; classMap[10] = 'la'; classMap[17] = 'la';
     classMap[4] = 'medic'; classMap[11] = 'medic'; classMap[18] = 'medic';

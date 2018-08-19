@@ -1,3 +1,4 @@
+/* team.js */
 /**
  * Created by dylancross on 4/04/17.
  */
@@ -15,7 +16,10 @@ let t1 = {
     deaths : 0,
     baseCaps: 0,
     members : {},
-    memberArray : []
+    memberArray : [],
+    revives: 0,
+    dmgAssists: 0,
+    utilAssists: 0
 };
 
 let t2 = {
@@ -29,7 +33,10 @@ let t2 = {
     deaths : 0,
     baseCaps: 0,
     members : {},
-    memberArray : []
+    memberArray : [],
+    revives: 0,
+    dmgAssists: 0,
+    utilAssists: 0
 };
 
 function setTeams(one, two) {
@@ -42,6 +49,9 @@ function setTeams(one, two) {
     t1.kills = 0;
     t1.deaths = 0;
     t1.baseCaps = 0;
+    t1.revies = 0;
+    t1.dmgAssists = 0;
+    t1.utilAssists = 0;
     t1.memberArray = one.members;
     one.members.forEach(function(member) {
         t1.members[member.character_id] = {
@@ -50,7 +60,11 @@ function setTeams(one, two) {
             netScore: 0,
             kills: 0,
             deaths: 0,
-            ps2Class: 0
+            ps2Class: 0,
+            revives: 0,
+            dmgAssists: 0,
+            utilAssists: 0,
+            revivesTaken: 0
         };
     });
 
@@ -63,6 +77,9 @@ function setTeams(one, two) {
     t2.kills = 0;
     t2.deaths = 0;
     t2.baseCaps = 0;
+    t2.revies = 0;
+    t2.dmgAssists = 0;
+    t2.utilAssists = 0;
     t2.memberArray = two.members;
     two.members.forEach(function(member) {
         t2.members[member.character_id] = {
@@ -71,7 +88,11 @@ function setTeams(one, two) {
             netScore: 0,
             kills: 0,
             deaths: 0,
-            ps2Class: 0
+            ps2Class: 0,
+            revives: 0,
+            dmgAssists: 0,
+            utilAssists: 0,
+            revivesTaken: 0
         };
     });
 }
@@ -80,111 +101,82 @@ function getT1() { return t1; }
 
 function getT2() { return t2; }
 
-function oneIvITwo(one, two, points, item, oneClass, twoClass) {
-    t1.points += points;
-    t1.netScore += points;
+function oneIvITwo(one, two, oneClass, twoClass) {
     t1.kills++;
-    t1.members[one].points += points;
-    t1.members[one].netScore += points;
     t1.members[one].kills++;
     t1.members[one].ps2Class = oneClass;
 
     t2.deaths++;
-    t2.netScore -= points;
-    t2.members[two].netScore -= points;
     t2.members[two].deaths++;
     t2.members[two].ps2Class = twoClass;
 
-    // logging
-    console.log(t1.members[one].name + ' (' + t1.members[one].ps2Class + ') -->  ' + t2.members[two].name + ' (' + t2.members[two].ps2Class + ') for ' + points + ' points (' + item.name + ')');
     logScore();
 }
 
-function twoIvIOne(two, one, points, item, oneClass, twoClass) {
-    t2.points += points;
-    t2.netScore += points;
+function twoIvIOne(two, one, oneClass, twoClass) {
     t2.kills++;
-    t2.members[two].points += points;
-    t2.members[two].netScore += points;
     t2.members[two].kills++;
     t2.members[two].ps2Class = twoClass;
 
-    t1.netScore -= points;
     t1.deaths++;
-    t1.members[one].netScore -= points;
     t1.members[one].deaths++;
     t1.members[one].ps2Class = oneClass;
 
     // logging
-    console.log(t2.members[two].name + ' -->  ' + t1.members[one].name + ' for ' + points + ' points (' + item.name + ')');
-    logScore();
 }
 
-function oneSuicide(one, points, oneClass) {
-    t1.points += points;
-    t1.netScore += points;
+function oneSuicide(one, oneClass) {
     t1.deaths++;
-    t1.members[one].points += points;
-    t1.members[one].netScore += points;
     t1.members[one].deaths++;
     t1.members[one].ps2Class = oneClass;
 
-    // logging
-    console.log(t1.members[one].name + ' killed themselves ' + points);
     logScore();
 }
 
-function twoSuicide(two, points, twoClass) {
-    t2.points += points;
-    t2.netScore += points;
+function twoSuicide(two, twoClass) {
     t2.deaths++;
-    t2.members[two].points += points;
-    t2.members[two].netScore += points;
     t2.members[two].deaths++;
     t2.members[two].ps2Class = twoClass;
 
-    //logging
-    console.log(t2.members[two].name + ' killed themselves ' + points);
     logScore();
 }
 
-function oneTeamKill(killer, killed, points, killerClass, killedClass) {
-    t1.points += points;
-    t1.netScore += points;
+function oneTeamKill(killer, killed, killerClass, killedClass) {
     t1.deaths++;
-    t1.members[killer].points += points;
-    t1.members[killer].netScore += points;
     t1.members[killer].ps2Class = killerClass;
 
     t1.members[killed].deaths++;
     t1.members[killed].ps2Class = killedClass;
 
-    // logging
-    console.log(t1.members[killer].name + ' team killed ' + t1.members[killed].name + ' ' + points);
     logScore();
 }
 
-function twoTeamKill(killer, killed, points, killerClass, killedClass) {
-    t2.points += points;
-    t2.netScore += points;
+function twoTeamKill(killer, killed, killerClass, killedClass) {
     t2.deaths++;
-    t2.members[killer].points += points;
-    t2.members[killer].netScore += points;
     t2.members[killer].ps2Class = killerClass;
 
     t2.members[killed].deaths++;
     t2.members[killed].ps2Class = killedClass;
 
-    // logging
-    console.log(t2.members[killer].name + ' team killed ' + t2.members[killed].name + ' ' + points);
     logScore();
 }
 
+function oneRevive(medic, revived, medicClass) {
+    t1.revives++;
+    t1.members[medic].ps2Class = medicClass;
+
+    t1.members[revived].revivesTaken++;
+}
+
+function twoRevive(medic, revived, medicClass) {
+    t2.revives++;
+    t2.members[medic].ps2Class = medicClass;
+
+    t2.members[revived].revivesTaken++;
+}
+
 function oneBaseCap(points) {
-    t1.points += points;
-    t1.netScore += points;
     t1.baseCaps++;
-    t2.netScore -= points;
 
     // logging
     console.log(t1.name + ' captured the base +' + points);
@@ -192,60 +184,11 @@ function oneBaseCap(points) {
 }
 
 function twoBaseCap(points) {
-    t2.points += points;
-    t2.netScore += points;
     t2.baseCaps++;
-    t1.netScore -= points;
 
     // logging
     console.log(t2.name + ' captured the base +' + points);
     logScore();
-}
-
-// Adjust the scores, possibly due to sanctions imposed by an admin or other reasons...
-function adjustScore(team1, team2, reason) {
-    if (team1 !== '' && t1.outfit_id !== '') {
-        if (!isNaN(team1)) {
-            team1 = parseInt(team1);
-            t1.points += team1;
-            t1.netScore += team1;
-            t2.netScore -= team1;
-            // Check if team has already been sanctioned
-            if (t1.members.hasOwnProperty(reason)) {
-                t1.members[reason].points += team1;
-                t1.members[reason].netScore += team1;
-            } else {
-                t1.members[reason] = {
-                    name: reason,
-                    points: team1,
-                    netScore: team1,
-                    kills: 0,
-                    deaths: 0
-                };
-            }
-        }
-    }
-    if (team2 !== '' && t2.outfit_id !== '') {
-        if (!isNaN(team2)) {
-            team2 = parseInt(team2);
-            t2.points += team2;
-            t2.netScore += team2;
-            t1.netScore -= team2;
-            // Check if team has already been sanctioned
-            if (t2.members.hasOwnProperty(reason)) {
-                t2.members[reason].points += team2;
-                t2.members[reason].netScore += team2;
-            } else {
-                t2.members[reason] = {
-                    name: reason,
-                    points: team2,
-                    netScore: team2,
-                    kills: 0,
-                    deaths: 0
-                };
-            }
-        }
-    }
 }
 
 function logScore() {
@@ -268,4 +211,5 @@ exports.oneTeamKill = oneTeamKill;
 exports.twoTeamKill = twoTeamKill;
 exports.oneBaseCap  = oneBaseCap;
 exports.twoBaseCap  = twoBaseCap;
-exports.adjustScore = adjustScore;
+exports.oneRevive   = oneRevive;
+exports.twoRevive   = twoRevive;

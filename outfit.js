@@ -1,3 +1,5 @@
+/* outfit.js */
+
 /**
  * Created by Dylan on 03-Apr-16.
  */
@@ -23,19 +25,6 @@ function removeNameParts(name) {
     if (name === null || name == "") {name = fullName;}
     return name;
 }
-// function removeNameParts(name) {
-//     // remove start tag
-//     let idx = name.indexOf('x');
-//     if (idx > 0 && idx < 5) {
-//         name = name.substring(idx + 1, name.length);
-//     }
-//     // remove faction from end
-//     const end = name.length-2;
-//     if (name.indexOf('VS') === end || name.indexOf('NC') === end || name.indexOf('TR') === end) {
-//         name = name.substring(0, end);
-//     }
-//     return name;
-// }
 
 // add the character ids and the desired name as well as the actual characters name for reference later
 // commas on all curly brackets except for the last set

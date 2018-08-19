@@ -1,3 +1,4 @@
+/* ps2ws.js */
 //Created by Dylan on 03-Apr-16.
 // Modules
 const api_key   = require('./api_key.js'),
@@ -7,6 +8,7 @@ const api_key   = require('./api_key.js'),
       overlay     = require('./overlay.js'),
       team        = require('./team.js'),
       socket      = require('./socket.js');
+
 // Variables
 let  teamOneObject,
      teamTwoObject,
@@ -107,73 +109,74 @@ function killfeedFacilityT2(points) {
 function dealWithTheData(raw) {
     raw = raw.replace(': :', ':');
     const data = JSON.parse(raw).payload;
-    if (data.event_name === "Death") {
-        itsPlayerData(data);
-    } else {
-       return;
-        // itsFacilityData(data);
+    switch(data.event_name) {
+        case "Death":
+            itsPlayerData(data);
+            break;
+
+        case "FacilityControl":
+            itsFacilityData(data);
+            break;
+
+        case "GainExperience":
+            itsExperienceData(data);
+            break;
+        
+        default:
+            return;
     }
 }
 
 function itsPlayerData(data) {
     // deals with adding points to the correct player & team
-    //console.log(data);
     let item = items.lookupItem(data.attacker_weapon_id);
     let points = items.lookupPointsfromCategory(item.category_id);
-    if ((data.attacker_loadout_id === '7') || (data.attacker_loadout_id === '14') || (data.attacker_loadout_id === '21')) {
-        // Attacker using a max
-        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-            // Attacker used a max to kill a max
-            points = pointMap['12'].points;
-        } else {
-            // max v infantry
-            points = pointMap['11'].points;
+    
+    // Team 1 Killer
+    if (teamOneObject.members.hasOwnProperty(data.attacker_character_id)) {
+        
+        // One IVI Two
+        if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+            oneIvITwo(data, points, item);
         }
-    } else if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-        // defender used a max
-        points = pointMap['23'].points;
-    }
-    // Infantry v Infantry
-    if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("one IVI two");
-        oneIvITwo(data, points, item);
-    } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("Two IVI one");
-        twoIvIOne(data, points, item);
-    }
-    // Suicides (loadout id 7/14/21 means it was a max that suicided)
-    else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
-        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-            points = pointMap['13'].points;
-        } else {
-            points = pointMap['22'].points;
+        
+        //One Suicide
+        if (data.attacker_character_id === data.character_id) {
+            teamOneSuicide(data, points, item);
         }
-        //console.log("one suicide");
-        teamOneSuicide(data, points, item);
-    } else if ((data.attacker_character_id === data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
-        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-            points = pointMap['13'].points;
-        } else {
-            points = pointMap['22'].points;
+
+        // One TK
+        if (teamOneObject.members.hasOwnProperty(data.character_id)) {
+            teamOneTeamkill(data, pointMap['21'].points, item);
         }
-        //console.log("two suicide");
-        teamTwoSuicide(data, points, item);
     }
-    // Team Kills
-    else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("one tk");
-        teamOneTeamkill(data, pointMap['21'].points, item);
-    } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("two tk");
-        teamTwoTeamkill(data, pointMap['21'].points, item);
+
+    // Team 2 Killer
+    else if (teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) {
+        
+        // Two IVI One
+        if (teamOneObject.members.hasOwnProperty(data.character_id)) {
+            twoIvIOne(data, points, item);
+        }
+
+        // Two Suicide
+        if (data.attacker_character_id === data.character_id) {
+            teamTwoSuicide(data, points, item);
+        }
+        
+        // Two TK
+        if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+            teamTwoTeamkill(data, pointMap['21'].points, item);
+        }
     }
+
     overlay.updateScoreOverlay();
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
 }
 
 function oneIvITwo (data, points, item) {
-    team.oneIvITwo(data.attacker_character_id, data.character_id, points, item, data.attacker_loadout_id, data.attacker_loadout_id, data.character_loadout_id);
+    team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.attacker_loadout_id, data.character_loadout_id);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -187,7 +190,7 @@ function oneIvITwo (data, points, item) {
 }
 
 function twoIvIOne (data, points, item) {
-    team.twoIvIOne(data.attacker_character_id, data.character_id, points, item, data.attacker_loadout_id, data.character_loadout_id);
+    team.twoIvIOne(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -201,7 +204,7 @@ function twoIvIOne (data, points, item) {
 }
 
 function teamOneSuicide (data, points, item) {
-    team.oneSuicide(data.attacker_character_id, points, data.attacker_loadout_id);
+    team.oneSuicide(data.attacker_character_id, data.attacker_loadout_id);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -215,7 +218,7 @@ function teamOneSuicide (data, points, item) {
 }
 
 function teamTwoSuicide (data, points, item) {
-    team.twoSuicide(data.attacker_character_id, points, data.attacker_loadout_id);
+    team.twoSuicide(data.attacker_character_id, data.attacker_loadout_id);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -229,7 +232,7 @@ function teamTwoSuicide (data, points, item) {
 }
 
 function teamOneTeamkill (data, points, item) {
-    team.oneTeamKill(data.attacker_character_id, data.character_id, points, data.attacker_loadout_id, data.character_loadout_id);
+    team.oneTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -243,7 +246,7 @@ function teamOneTeamkill (data, points, item) {
 }
 
 function teamTwoTeamkill (data, points, item) {
-    team.twoTeamKill(data.attacker_character_id, data.character_id, points, data.attacker_loadout_id, data.character_loadout_id);
+    team.twoTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -254,6 +257,14 @@ function teamTwoTeamkill (data, points, item) {
         weapon: item.name,
         points: points,
     });
+}
+
+function teamOneRevive(data) {
+    team.oneRevive(data.character_id, data.other_id, data.loadout_id);
+}
+
+function teamTwoRevive(data) {
+    team.twoRevive(data.character_id, data.other_id, data.loadout_id);
 }
 
 function itsFacilityData(data) {
@@ -281,7 +292,11 @@ function itsFacilityData(data) {
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
     }
-    // Else it was a defense (no points awarded
+    // Else it was a defense (no points awarded)
+}
+
+function itsExperienceData(data) {
+
 }
 
 function createStream() {
@@ -299,17 +314,23 @@ function createStream() {
 }
 
 function subscribe(ws) {
+    let xpGainString = getExperienceIds(true, true, false, false, false);
+    
     //team1 subscribing
-    //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
     teamOneObject.memberArray.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
     });
+
     //team2 subscribing
     teamTwoObject.memberArray.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
     });
+
     //facility Subscribing - subscribes to all capture data
     ws.send('{"service":"event","action":"subscribe","worlds":["1","10","13","17","19","25"],"eventNames":["FacilityControl"]}');
+    
     //start timer
     startTimer(ws);
 
@@ -376,6 +397,81 @@ function newRound() {
 
 function getTitle() {
     return eventTitle;
+}
+
+/**
+ * Generates and returns a string of all experience gain IDs for the specified categories.
+ *
+ * @param {boolean} revives XP gains corresponding to medic revies
+ * @param {boolean} pointControls XP gains corresponding to contesting and capturing control points and objectives 
+ * @param {boolean} dmgAssists XP gains corresponding to kill assists via raw damage 
+ * @param {boolean} utilAssists XP gains corresponding to kill assists and other support actions, such as spotting,
+ *                              EMP/Flash/Conc assists, and medic heals
+ * @param {boolean} bannedTicks XP gains corresponding to banned actions, such as motion spotter assists
+ * @returns A string of the format '"GainExperience_experience_id_<xpID>","GainExperience_experience_id_<xpID>",...'
+ */
+function getExperienceIds(revives, pointControls, dmgAssists, utilAssists, bannedTicks) {
+    var xpGainString = '';
+    if (revives === true) {
+        xpGainString.concat(makeXpIdString(7));  // Revive (75xp)
+        xpGainString.concat(makeXpIdString(53)); // Squad Revive (100xp) 
+    }
+    if (pointControls === true) {
+        xpGainString.concat(makeXpIdString(15));  // Control Point - Defend (100xp)
+        xpGainString.concat(makeXpIdString(16));  // Control Point - Attack (100xp)
+        xpGainString.concat(makeXpIdString(272)); // Convert Capture Point (25xp)
+        xpGainString.concat(makeXpIdString(556)); // Objective Pulse Defend (50xp)
+        xpGainString.concat(makeXpIdString(557)); // Objective Pulse Capture (100xp)
+    }
+    if (dmgAssists === true) {
+        xpGainString.concat(makeXpIdString(2));    // Kill Player Assist (100xp)
+        xpGainString.concat(makeXpIdString(335));  // Savior Kill (Non MAX) (25xp)
+        xpGainString.concat(makeXpIdString(371));  // Kill Player Priority Assist (150xp)
+        xpGainString.concat(makeXpIdString(372));  // Kill Player High Priority Assist (300xp)
+        
+    }
+    if (utilAssists === true) {
+        xpGainString.concat(makeXpIdString(5));    // Heal Assis (5xp)
+        xpGainString.concat(makeXpIdString(438));  // Shield Repair (10xp)
+        xpGainString.concat(makeXpIdString(439));  // Squad Shield Repair (15xp)
+        xpGainString.concat(makeXpIdString(550));  // Concussion Grenade Assist (50xp)
+        xpGainString.concat(makeXpIdString(551));  // Concussion Grenade Squad Assist (75xp)
+        xpGainString.concat(makeXpIdString(552));  // EMP Grenade Assist (50xp)
+        xpGainString.concat(makeXpIdString(553));  // EMP Grenade Squad Assist (75xp)
+        xpGainString.concat(makeXpIdString(554));  // Flashbang Assist (50xp)
+        xpGainString.concat(makeXpIdString(555));  // Flashbang Squad Assist (75xp)
+        xpGainString.concat(makeXpIdString(1393)); // Hardlight Cover - Blocking Exp (placeholder until code is done) (50xp)
+        xpGainString.concat(makeXpIdString(1394)); // Draw Fire Award (25xp)
+    }
+
+    if (bannedTicks === true) {
+        xpGainString.concat(makeXpIdString(293));  // Motion Detect (10xp)
+        xpGainString.concat(makeXpIdString(294));  // Squad Motion Spot (15xp)
+        xpGainString.concat(makeXpIdString(593));  // Bounty Kill Bonus (250xp)
+        xpGainString.concat(makeXpIdString(594));  // Bounty Kill Cashed In (400xp)
+        xpGainString.concat(makeXpIdString(594));  // Bounty Kill Cashed In (400xp)
+        xpGainString.concat(makeXpIdString(595));  // Bounty Kill Streak (595xp)
+        xpGainString.concat(makeXpIdString(582));  // Kill Assist - Spitfire Turret (25xp)
+    }
+
+    return xpGainString;
+}
+
+const allXpIdsRevives = [
+    7,  // Revive (75xp)
+    53  // Squad Revive (100xp) 
+];
+
+const allXpIdsPointControls = [
+    15,  // Control Point - Defend (100xp)
+    16,  // Control Point - Attack (100xp)
+    272, // Convert Capture Point (25xp)
+    556, // Objective Pulse Defend (50xp)
+    557  // Objective Pulse Capture (100xp)
+];
+
+function makeXpIdString(xpID) {
+    return '"GainExperience_experience_id_' + xpID + '"'; 
 }
 
 exports.getPointMaps          = getPointMaps;
