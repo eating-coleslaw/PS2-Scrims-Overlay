@@ -122,7 +122,7 @@ function twoIvIOne(two, one, oneClass, twoClass) {
     t1.members[one].deaths++;
     t1.members[one].ps2Class = oneClass;
 
-    // logging
+    logScore();
 }
 
 function oneSuicide(one, oneClass) {

@@ -53,8 +53,8 @@
     text-align: center;
     grid-gap: 7px;
     box-sizing: border-box;
-    grid-template-columns: 1fr 35px 1fr 1fr;
-    padding: 0px 5px  0px 5px;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0px 5px 0px 5px;
     max-width: calc(375px - 8px);
     -moz-animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 8s 1 normal forwards eventFadeOut;
     -webkit-animation: 0.5s cubic-bezier(.17,.84,.44,1) 0s 1 normal forwards eventFadeIn, 1s cubic-bezier(.6,-0.28,.74,.05) 8s 1 normal forwards eventFadeOut;
@@ -93,18 +93,6 @@
     -webkit-filter: drop-shadow(0px 0px 2px rgba(20, 20, 20, 0.8));
     filter: drop-shadow(0px 0px 2px rgba(20, 20, 20, 0.8));
 }
-
-.killPoints {
-    text-align: right;
-}
-.killfeedCell.killfeedPoints {
-    width: 30px;
-    text-align: right !important;
-    -webkit-filter: drop-shadow(0px 0px 2px rgba(20, 20, 20, 0.8));
-    filter: drop-shadow(0px 0px 2px rgba(20, 20, 20, 0.8));
-}
-
-
 
 .killfeedCell.killfeedPlayer1, .killfeedCell.killfeedPlayer2, .killfeedCell.killfeedPlayer3 {
     overflow: hidden;

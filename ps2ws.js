@@ -259,14 +259,6 @@ function teamTwoTeamkill (data, points, item) {
     });
 }
 
-function teamOneRevive(data) {
-    team.oneRevive(data.character_id, data.other_id, data.loadout_id);
-}
-
-function teamTwoRevive(data) {
-    team.twoRevive(data.character_id, data.other_id, data.loadout_id);
-}
-
 function itsFacilityData(data) {
     //deals with adding points to the correct team
     if (data.new_faction_id !== data.old_faction_id) {
@@ -297,6 +289,33 @@ function itsFacilityData(data) {
 
 function itsExperienceData(data) {
 
+    if (teamOneObject.members.hasOwnProperty(data.character_id)) {
+        // Revive Data
+        if (allXpIdsRevives.includes(data.experience_id)) {
+            teamOneRevive(data);
+        }
+
+        else if (allXpIdsPointControls.includes(data.experience_id)) {
+        }
+    }
+
+    else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+        // Team 2 Revive
+        if (allXpIdsRevives.includes(data.experience_id)) {
+            teamTwoRevive(data);
+        }
+        
+        else if (allXpIdsPointControls.includes(data.experience_id)) {
+        }
+    }
+}
+
+function teamOneRevive(data) {
+    team.oneRevive(data.character_id, data.other_id, data.loadout_id);
+}
+
+function teamTwoRevive(data) {
+    team.twoRevive(data.character_id, data.other_id, data.loadout_id);
 }
 
 function createStream() {
@@ -314,7 +333,7 @@ function createStream() {
 }
 
 function subscribe(ws) {
-    let xpGainString = getExperienceIds(true, true, false, false, false);
+    let xpGainString = getExperienceIds(true, true, true, false, false, false);
     
     //team1 subscribing
     teamOneObject.memberArray.forEach(function (member) {
@@ -403,6 +422,7 @@ function getTitle() {
  * Generates and returns a string of all experience gain IDs for the specified categories.
  *
  * @param {boolean} revives XP gains corresponding to medic revies
+ * @param {boolean} spawns XP gains corresponding to respawning players
  * @param {boolean} pointControls XP gains corresponding to contesting and capturing control points and objectives 
  * @param {boolean} dmgAssists XP gains corresponding to kill assists via raw damage 
  * @param {boolean} utilAssists XP gains corresponding to kill assists and other support actions, such as spotting,
@@ -410,9 +430,13 @@ function getTitle() {
  * @param {boolean} bannedTicks XP gains corresponding to banned actions, such as motion spotter assists
  * @returns A string of the format '"GainExperience_experience_id_<xpID>","GainExperience_experience_id_<xpID>",...'
  */
-function getExperienceIds(revives, pointControls, dmgAssists, utilAssists, bannedTicks) {
+function getExperienceIds(revives, spawns, pointControls, dmgAssists, utilAssists, bannedTicks) {
     var xpGainString = '';
     if (revives === true) {
+        xpGainString.concat(makeXpIdString(7));  // Revive (75xp)
+        xpGainString.concat(makeXpIdString(53)); // Squad Revive (100xp) 
+    }
+    if (spawns === true) {
         xpGainString.concat(makeXpIdString(7));  // Revive (75xp)
         xpGainString.concat(makeXpIdString(53)); // Squad Revive (100xp) 
     }
@@ -461,6 +485,11 @@ const allXpIdsRevives = [
     7,  // Revive (75xp)
     53  // Squad Revive (100xp) 
 ];
+
+const allXpIdsSpawns = [
+    56,  //Squad Spawn (10)
+    223, //Sunderer Spawn Bonus (5xp)
+]
 
 const allXpIdsPointControls = [
     15,  // Control Point - Defend (100xp)
