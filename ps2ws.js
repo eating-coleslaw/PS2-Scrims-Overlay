@@ -111,14 +111,17 @@ function dealWithTheData(raw) {
     const data = JSON.parse(raw).payload;
     switch(data.event_name) {
         case "Death":
+            console.log("it's player data");
             itsPlayerData(data);
             break;
 
         case "FacilityControl":
+            // console.log("it's facility data"); 
             itsFacilityData(data);
             break;
 
         case "GainExperience":
+            console.log("it's experience data"); 
             itsExperienceData(data);
             break;
         
@@ -141,12 +144,12 @@ function itsPlayerData(data) {
         }
         
         //One Suicide
-        if (data.attacker_character_id === data.character_id) {
+        else if (data.attacker_character_id === data.character_id) {
             teamOneSuicide(data, points, item);
         }
 
         // One TK
-        if (teamOneObject.members.hasOwnProperty(data.character_id)) {
+        else if (teamOneObject.members.hasOwnProperty(data.character_id)) {
             teamOneTeamkill(data, pointMap['21'].points, item);
         }
     }
@@ -160,14 +163,18 @@ function itsPlayerData(data) {
         }
 
         // Two Suicide
-        if (data.attacker_character_id === data.character_id) {
+        else if (data.attacker_character_id === data.character_id) {
             teamTwoSuicide(data, points, item);
         }
         
         // Two TK
-        if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+        else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
             teamTwoTeamkill(data, pointMap['21'].points, item);
         }
+    }
+
+    else {
+        console.log("   --> Invalid Player Event <--");
     }
 
     overlay.updateScoreOverlay();
@@ -293,6 +300,7 @@ function itsExperienceData(data) {
         // Revive Data
         if (allXpIdsRevives.includes(data.experience_id)) {
             teamOneRevive(data);
+            console.log("Team 1 Revive");
         }
 
         else if (allXpIdsPointControls.includes(data.experience_id)) {
@@ -303,6 +311,7 @@ function itsExperienceData(data) {
         // Team 2 Revive
         if (allXpIdsRevives.includes(data.experience_id)) {
             teamTwoRevive(data);
+            console.log("Team 2 Revive");
         }
         
         else if (allXpIdsPointControls.includes(data.experience_id)) {
@@ -333,18 +342,19 @@ function createStream() {
 }
 
 function subscribe(ws) {
-    let xpGainString = getExperienceIds(true, true, true, false, false, false);
-    
+    var xpGainString = getExperienceIds(true, true, true, false, false, false);
+    ws.send('{"service":"event","action":"subscribe","characters":["all"],"eventNames":["Death",' + xpGainString + ']}');
+
     //team1 subscribing
     teamOneObject.memberArray.forEach(function (member) {
-        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-        ws.send('{"service":"event","action":"subscribe","characters["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death",' + xpGainString + ']}');
+        // ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
     });
 
     //team2 subscribing
     teamTwoObject.memberArray.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
-        ws.send('{"service":"event","action":"subscribe","characters["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
     });
 
     //facility Subscribing - subscribes to all capture data
@@ -390,7 +400,7 @@ function startUp(oneObj, twoObj, secsInt, title) {
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
         matchLength = secsInt;
-        eventTitle = title ? title : 'PS2 IvI Scrims';
+        eventTitle = title ? title : '#BanConcs'; //'PS2 IvI Scrims';
         createStream();
         overlay.startKillfeed();
         app.send('refresh', '');
@@ -433,71 +443,109 @@ function getTitle() {
 function getExperienceIds(revives, spawns, pointControls, dmgAssists, utilAssists, bannedTicks) {
     var xpGainString = '';
     if (revives === true) {
-        xpGainString.concat(makeXpIdString(7));  // Revive (75xp)
-        xpGainString.concat(makeXpIdString(53)); // Squad Revive (100xp) 
+        for (xpIdx = 0; xpIdx < allXpIdsRevives.length; xpIdx++) {
+            let xpID = allXpIdsRevives[xpIdx];
+            xpGainString = addXpIdToXpGainString(xpID, xpGainString);
+        }
     }
     if (spawns === true) {
-        xpGainString.concat(makeXpIdString(7));  // Revive (75xp)
-        xpGainString.concat(makeXpIdString(53)); // Squad Revive (100xp) 
     }
     if (pointControls === true) {
-        xpGainString.concat(makeXpIdString(15));  // Control Point - Defend (100xp)
-        xpGainString.concat(makeXpIdString(16));  // Control Point - Attack (100xp)
-        xpGainString.concat(makeXpIdString(272)); // Convert Capture Point (25xp)
-        xpGainString.concat(makeXpIdString(556)); // Objective Pulse Defend (50xp)
-        xpGainString.concat(makeXpIdString(557)); // Objective Pulse Capture (100xp)
+        xpGainString = addXpIdToXpGainString(15, xpGainString);  // Control Point - Defend (100xp)
+        xpGainString = addXpIdToXpGainString(16, xpGainString);  // Control Point - Attack (100xp)
+        xpGainString = addXpIdToXpGainString(272, xpGainString); // Convert Capture Point (25xp)
+        xpGainString = addXpIdToXpGainString(556, xpGainString); // Objective Pulse Defend (50xp)
+        xpGainString = addXpIdToXpGainString(557, xpGainString); // Objective Pulse Capture (100xp)
     }
     if (dmgAssists === true) {
-        xpGainString.concat(makeXpIdString(2));    // Kill Player Assist (100xp)
-        xpGainString.concat(makeXpIdString(335));  // Savior Kill (Non MAX) (25xp)
-        xpGainString.concat(makeXpIdString(371));  // Kill Player Priority Assist (150xp)
-        xpGainString.concat(makeXpIdString(372));  // Kill Player High Priority Assist (300xp)
+        xpGainString = addXpIdToXpGainString(2, xpGainString);    // Kill Player Assist (100xp)
+        xpGainString = addXpIdToXpGainString(335, xpGainString);  // Savior Kill (Non MAX) (25xp)
+        xpGainString = addXpIdToXpGainString(371, xpGainString);  // Kill Player Priority Assist (150xp)
+        xpGainString = addXpIdToXpGainString(372, xpGainString);  // Kill Player High Priority Assist (300xp)
         
     }
     if (utilAssists === true) {
-        xpGainString.concat(makeXpIdString(5));    // Heal Assis (5xp)
-        xpGainString.concat(makeXpIdString(438));  // Shield Repair (10xp)
-        xpGainString.concat(makeXpIdString(439));  // Squad Shield Repair (15xp)
-        xpGainString.concat(makeXpIdString(550));  // Concussion Grenade Assist (50xp)
-        xpGainString.concat(makeXpIdString(551));  // Concussion Grenade Squad Assist (75xp)
-        xpGainString.concat(makeXpIdString(552));  // EMP Grenade Assist (50xp)
-        xpGainString.concat(makeXpIdString(553));  // EMP Grenade Squad Assist (75xp)
-        xpGainString.concat(makeXpIdString(554));  // Flashbang Assist (50xp)
-        xpGainString.concat(makeXpIdString(555));  // Flashbang Squad Assist (75xp)
-        xpGainString.concat(makeXpIdString(1393)); // Hardlight Cover - Blocking Exp (placeholder until code is done) (50xp)
-        xpGainString.concat(makeXpIdString(1394)); // Draw Fire Award (25xp)
+        xpGainString = addXpIdToXpGainString(5, xpGainString);    // Heal Assis (5xp)
+        xpGainString = addXpIdToXpGainString(438, xpGainString);  // Shield Repair (10xp)
+        xpGainString = addXpIdToXpGainString(439, xpGainString);  // Squad Shield Repair (15xp)
+        xpGainString = addXpIdToXpGainString(550, xpGainString);  // Concussion Grenade Assist (50xp)
+        xpGainString = addXpIdToXpGainString(551, xpGainString);  // Concussion Grenade Squad Assist (75xp)
+        xpGainString = addXpIdToXpGainString(552, xpGainString);  // EMP Grenade Assist (50xp)
+        xpGainString = addXpIdToXpGainString(553, xpGainString);  // EMP Grenade Squad Assist (75xp)
+        xpGainString = addXpIdToXpGainString(554, xpGainString);  // Flashbang Assist (50xp)
+        xpGainString = addXpIdToXpGainString(555, xpGainString);  // Flashbang Squad Assist (75xp)
+        xpGainString = addXpIdToXpGainString(1393, xpGainString); // Hardlight Cover - Blocking Exp (placeholder until code is done) (50xp)
+        xpGainString = addXpIdToXpGainString(1394, xpGainString); // Draw Fire Award (25xp)
     }
-
     if (bannedTicks === true) {
-        xpGainString.concat(makeXpIdString(293));  // Motion Detect (10xp)
-        xpGainString.concat(makeXpIdString(294));  // Squad Motion Spot (15xp)
-        xpGainString.concat(makeXpIdString(593));  // Bounty Kill Bonus (250xp)
-        xpGainString.concat(makeXpIdString(594));  // Bounty Kill Cashed In (400xp)
-        xpGainString.concat(makeXpIdString(594));  // Bounty Kill Cashed In (400xp)
-        xpGainString.concat(makeXpIdString(595));  // Bounty Kill Streak (595xp)
-        xpGainString.concat(makeXpIdString(582));  // Kill Assist - Spitfire Turret (25xp)
+        xpGainString = addXpIdToXpGainString(293, xpGainString);  // Motion Detect (10xp)
+        xpGainString = addXpIdToXpGainString(294, xpGainString);  // Squad Motion Spot (15xp)
+        xpGainString = addXpIdToXpGainString(593, xpGainString);  // Bounty Kill Bonus (250xp)
+        xpGainString = addXpIdToXpGainString(594, xpGainString);  // Bounty Kill Cashed In (400xp)
+        xpGainString = addXpIdToXpGainString(594, xpGainString);  // Bounty Kill Cashed In (400xp)
+        xpGainString = addXpIdToXpGainString(595, xpGainString);  // Bounty Kill Streak (595xp)
+        xpGainString = addXpIdToXpGainString(582, xpGainString);  // Kill Assist - Spitfire Turret (25xp)
     }
 
+    console.log(xpGainString);
     return xpGainString;
 }
 
 const allXpIdsRevives = [
-    7,  // Revive (75xp)
-    53  // Squad Revive (100xp) 
+    7,      // Revive (75xp)
+    53      // Squad Revive (100xp) 
 ];
 
 const allXpIdsSpawns = [
-    56,  //Squad Spawn (10)
-    223, //Sunderer Spawn Bonus (5xp)
+    56,     // Squad Spawn (10xp)
+    223,    // Sunderer Spawn Bonus (5xp) - DOESN'T RETURN WHO SPAWNED
 ]
 
 const allXpIdsPointControls = [
-    15,  // Control Point - Defend (100xp)
-    16,  // Control Point - Attack (100xp)
-    272, // Convert Capture Point (25xp)
-    556, // Objective Pulse Defend (50xp)
-    557  // Objective Pulse Capture (100xp)
+    15,     // Control Point - Defend (100xp)
+    16,     // Control Point - Attack (100xp)
+    272,    // Convert Capture Point (25xp)
+    556,    // Objective Pulse Defend (50xp)
+    557     // Objective Pulse Capture (100xp)
 ];
+
+const allXpIdsDmgAssists = [
+    2,      // Kill Player Assist (100xp)
+    335,    // Savior Kill (Non MAX) (25xp)
+    371,    // Kill Player Priority Assist (150xp)
+    372     // Kill Player High Priority Assist (300xp)
+];
+
+const allXpIdsUtilAssists = [
+    5,      // Heal Assis (5xp)
+    438,    // Shield Repair (10xp)
+    439,    // Squad Shield Repair (15xp)
+    550,    // Concussion Grenade Assist (50xp)
+    551,    // Concussion Grenade Squad Assist (75xp)
+    552,    // EMP Grenade Assist (50xp)
+    553,    // EMP Grenade Squad Assist (75xp)
+    554,    // Flashbang Assist (50xp)
+    555,    // Flashbang Squad Assist (75xp)
+    1393,   // Hardlight Cover - Blocking Exp (placeholder until code is done) (50xp)
+    1394,   // Draw Fire Award (25xp)
+];
+
+const allXpIdsBannedTicks = [
+    293,    // Motion Detect (10xp)
+    294,    // Squad Motion Spot (15xp)
+    593,    // Bounty Kill Bonus (250xp)
+    594,    // Bounty Kill Cashed In (400xp)
+    594,    // Bounty Kill Cashed In (400xp)
+    595,    // Bounty Kill Streak (595xp)
+    582     // Kill Assist - Spitfire Turret (25xp)
+];
+
+function addXpIdToXpGainString(xpID, xpGainString) {
+    if (xpGainString === '' || xpGainString === null || xpGainString === undefined) {
+        return makeXpIdString(xpID);
+    }
+    return xpGainString.concat(',',makeXpIdString(xpID));
+}
 
 function makeXpIdString(xpID) {
     return '"GainExperience_experience_id_' + xpID + '"'; 

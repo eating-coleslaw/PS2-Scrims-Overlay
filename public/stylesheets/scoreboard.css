@@ -46,26 +46,10 @@
     background: linear-gradient(10deg, var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)) 0%, rgb(35, 35, 35) 100%);
 }
 
-.outfitScore {
-    display: inline-block;
-    min-width: 80px;
-    box-sizing: inherit;
-}
-
-#T1Score {
-    text-align: right;
-    padding-right: 5px;
-}
-
-#T2Score {
-    text-align: left;
-    padding-left: 5px;
-}
-
 .outfitAlias {
     text-align: left;
     display: inline-block;
-    width: 70px;
+    width: 80px;
     font-weight: 500;
     box-sizing: inherit;
     color: var(--faction-flavor-color, rgb(35, 35, 35));

@@ -9,7 +9,7 @@ var socket = io();
 socket.on('connect', function() {
 
     socket.on('title', function(title) {
-        console.log(title);
+        //console.log(title);
         $('#eventTitle').html(title);
     });
 
@@ -30,9 +30,6 @@ socket.on('connect', function() {
 
             $('#outfitT1').html(T1).addClass('outfitAlias');
             $('#outfitT2').html(T2).addClass('outfitAlias');
-            
-            $('#T1Score').addClass('activeWhiteText');
-            $('#T2Score').addClass('activeWhiteText');
 
             $('#T1Wedge').addClass('faction' + data.teamOne.faction + 'border');
             $('#T2Wedge').addClass('faction' + data.teamTwo.faction + 'border');
@@ -111,7 +108,7 @@ socket.on('connect', function() {
         
         var m = event.teamOne.members;
         for (keys in m) {
-            if (m[keys].kills > 0 || m[keys].deaths > 0) {
+            if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
                if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
@@ -135,7 +132,7 @@ socket.on('connect', function() {
 
         m = event.teamTwo.members;
         for (keys in m) {
-            if (m[keys].kills > 0 || m[keys].deaths > 0) {
+            if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
                 if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {

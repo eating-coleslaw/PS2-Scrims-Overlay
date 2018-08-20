@@ -14,6 +14,7 @@ let t1 = {
     netScore : 0,
     kills : 0,
     deaths : 0,
+    teamKills: 0,
     baseCaps: 0,
     members : {},
     memberArray : [],
@@ -31,6 +32,7 @@ let t2 = {
     netScore : 0,
     kills : 0,
     deaths : 0,
+    teamKills: 0,
     baseCaps: 0,
     members : {},
     memberArray : [],
@@ -48,6 +50,7 @@ function setTeams(one, two) {
     t1.netScore = 0;
     t1.kills = 0;
     t1.deaths = 0;
+    t1.teamKills = 0;
     t1.baseCaps = 0;
     t1.revies = 0;
     t1.dmgAssists = 0;
@@ -60,6 +63,7 @@ function setTeams(one, two) {
             netScore: 0,
             kills: 0,
             deaths: 0,
+            teamKills: 0,
             ps2Class: 0,
             revives: 0,
             dmgAssists: 0,
@@ -76,6 +80,7 @@ function setTeams(one, two) {
     t2.netScore = 0;
     t2.kills = 0;
     t2.deaths = 0;
+    t2.teamKills = 0;
     t2.baseCaps = 0;
     t2.revies = 0;
     t2.dmgAssists = 0;
@@ -88,6 +93,7 @@ function setTeams(one, two) {
             netScore: 0,
             kills: 0,
             deaths: 0,
+            teamKills: 0,
             ps2Class: 0,
             revives: 0,
             dmgAssists: 0,
@@ -143,8 +149,11 @@ function twoSuicide(two, twoClass) {
 
 function oneTeamKill(killer, killed, killerClass, killedClass) {
     t1.deaths++;
+    t1.teamKills++;
+    t1.members[killer].teamKills++;
     t1.members[killer].ps2Class = killerClass;
 
+    
     t1.members[killed].deaths++;
     t1.members[killed].ps2Class = killedClass;
 
@@ -153,6 +162,8 @@ function oneTeamKill(killer, killed, killerClass, killedClass) {
 
 function twoTeamKill(killer, killed, killerClass, killedClass) {
     t2.deaths++;
+    t2.teamKills++;
+    t2.members[killer].teamKills++;
     t2.members[killer].ps2Class = killerClass;
 
     t2.members[killed].deaths++;
@@ -166,6 +177,7 @@ function oneRevive(medic, revived, medicClass) {
     t1.members[medic].ps2Class = medicClass;
 
     t1.members[revived].revivesTaken++;
+    logScore();
 }
 
 function twoRevive(medic, revived, medicClass) {
@@ -173,6 +185,7 @@ function twoRevive(medic, revived, medicClass) {
     t2.members[medic].ps2Class = medicClass;
 
     t2.members[revived].revivesTaken++;
+    logScore();
 }
 
 function oneBaseCap(points) {
