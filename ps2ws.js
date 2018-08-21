@@ -178,7 +178,7 @@ function itsPlayerData(data) {
         console.log('   --> Invalid Player Event <--');
     }
 
-    //overlay.updateScoreOverlay();
+    overlay.updateScoreOverlay();
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
 }
