@@ -108,7 +108,7 @@ socket.on('connect', function() {
         
         var m = event.teamOne.members;
         for (keys in m) {
-            if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
+            if (m[keys].eventCount > 0) { //m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
                if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
@@ -132,7 +132,7 @@ socket.on('connect', function() {
 
         m = event.teamTwo.members;
         for (keys in m) {
-            if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
+            if (m[keys].eventCount > 0) { //m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
                 if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {

@@ -58,6 +58,7 @@ function initialise() {
 
 // Takes in the two team objects, writes the current scores
 function updateScoreOverlay() {
+    return;
     let one = playerNetscore(team.getT1());
     write(t1Players, one);
     one = team.getT1();
@@ -70,6 +71,7 @@ function updateScoreOverlay() {
 }
 
 function playerNetscore(team) {
+    return;
     let activePlayers = [];
     for (keys in team.members) {
         activePlayers.push(team.members[keys])

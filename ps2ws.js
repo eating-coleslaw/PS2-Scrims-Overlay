@@ -111,21 +111,22 @@ function dealWithTheData(raw) {
     const data = JSON.parse(raw).payload;
     switch(data.event_name) {
         case "Death":
-            console.log("it's player data");
+            console.log('it\'s player data');
             itsPlayerData(data);
             break;
 
         case "FacilityControl":
-            // console.log("it's facility data"); 
+            console.log("it's facility data"); 
             itsFacilityData(data);
             break;
 
         case "GainExperience":
-            console.log("it's experience data"); 
+            console.log('it\'s experience data'); 
             itsExperienceData(data);
             break;
         
         default:
+            //console.log(data.event_name);
             return;
     }
 }
@@ -174,10 +175,10 @@ function itsPlayerData(data) {
     }
 
     else {
-        console.log("   --> Invalid Player Event <--");
+        console.log('   --> Invalid Player Event <--');
     }
 
-    overlay.updateScoreOverlay();
+    //overlay.updateScoreOverlay();
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
 }
@@ -295,28 +296,62 @@ function itsFacilityData(data) {
 }
 
 function itsExperienceData(data) {
-
+    // console.log('processing data: ' + data.experience_id + ' | ' + data.character_id + ' (' + data.loadout_id + ')');
     if (teamOneObject.members.hasOwnProperty(data.character_id)) {
-        // Revive Data
-        if (allXpIdsRevives.includes(data.experience_id)) {
+       let xpID = parseInt(data.experience_id);
+       // Revive Data
+        if (allXpIdsRevives.includes(xpID)) {
             teamOneRevive(data);
-            console.log("Team 1 Revive");
+            console.log('Team 1 Revive');
         }
 
-        else if (allXpIdsPointControls.includes(data.experience_id)) {
+        else if (allXpIdsDmgAssists.includes(xpID)) {
+            teamOneDmgAssist(data);
+            console.log('Team 1 Dmg Assist');
+        }
+
+        else if (allXpIdsUtilAssists.includes(xpID)) {
+            teamOneUtilAssist(data);
+            console.log('Team 1 Util Assist');
+        }
+
+        else if (allXpIdsPointControls.includes(xpID)) {
+            teamOnePointControl(data);
+            console.log('Team 1 Point Control');
         }
     }
 
     else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+        let xpID = parseInt(data.experience_id);
         // Team 2 Revive
-        if (allXpIdsRevives.includes(data.experience_id)) {
+        if (allXpIdsRevives.includes(xpID)) {
             teamTwoRevive(data);
-            console.log("Team 2 Revive");
+            console.log('Team 2 Revive');
         }
-        
-        else if (allXpIdsPointControls.includes(data.experience_id)) {
+
+        else if (allXpIdsDmgAssists.includes(xpID)) {
+            teamTwoDmgAssist(data);
+            console.log('Team 2 Dmg Assist');
+        }
+
+        else if (allXpIdsUtilAssists.includes(xpID)) {
+            teamTwoUtilAssist(data);
+            console.log('Team 2 Util Assist');
+        }
+
+        else if (allXpIdsPointControls.includes(xpID)) {
+            teamTwoPointControl(data);
+            console.log('Team 2 Point Control');
         }
     }
+
+    // else {
+    //     console.log(data.experience_id);
+    // }
+
+    overlay.updateScoreOverlay();
+    teamOneObject = team.getT1();
+    teamTwoObject = team.getT2();
 }
 
 function teamOneRevive(data) {
@@ -325,6 +360,30 @@ function teamOneRevive(data) {
 
 function teamTwoRevive(data) {
     team.twoRevive(data.character_id, data.other_id, data.loadout_id);
+}
+
+function teamOneDmgAssist(data) {
+    team.oneDmgAssist(data.character_id, data.loadout_id);
+}
+
+function teamTwoDmgAssist(data) {
+    team.twoDmgAssist(data.character_id, data.loadout_id);
+}
+
+function teamOneUtilAssist(data) {
+    team.oneUtilAssist(data.character_id, data.loadout_id);
+}
+
+function teamTwoUtilAssist(data) {
+    team.twoUtilAssist(data.character_id, data.loadout_id);
+}
+
+function teamOnePointControl(data) {
+    team.onePointControl(data.character_id, data.loadout_id);
+}
+
+function teamTwoPointControl(data) {
+    team.twoPointControl(data.character_id, data.loadout_id);
 }
 
 function createStream() {
@@ -342,13 +401,13 @@ function createStream() {
 }
 
 function subscribe(ws) {
-    var xpGainString = getExperienceIds(true, true, true, false, false, false);
-    ws.send('{"service":"event","action":"subscribe","characters":["all"],"eventNames":["Death",' + xpGainString + ']}');
+    var xpGainString = getExperienceIds(true, false, true, true, true, false);
+    //ws.send('{"service":"event","action":"subscribe","characters":["all"],"eventNames":["Death",' + xpGainString + ']}');
 
     //team1 subscribing
     teamOneObject.memberArray.forEach(function (member) {
-        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death",' + xpGainString + ']}');
-        // ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
     });
 
     //team2 subscribing
@@ -432,7 +491,7 @@ function getTitle() {
  * Generates and returns a string of all experience gain IDs for the specified categories.
  *
  * @param {boolean} revives XP gains corresponding to medic revies
- * @param {boolean} spawns XP gains corresponding to respawning players
+ * @param {boolean} spawns (NOT IMPLEMENTED) XP gains corresponding to respawning players
  * @param {boolean} pointControls XP gains corresponding to contesting and capturing control points and objectives 
  * @param {boolean} dmgAssists XP gains corresponding to kill assists via raw damage 
  * @param {boolean} utilAssists XP gains corresponding to kill assists and other support actions, such as spotting,
@@ -442,52 +501,41 @@ function getTitle() {
  */
 function getExperienceIds(revives, spawns, pointControls, dmgAssists, utilAssists, bannedTicks) {
     var xpGainString = '';
+    
     if (revives === true) {
         for (xpIdx = 0; xpIdx < allXpIdsRevives.length; xpIdx++) {
             let xpID = allXpIdsRevives[xpIdx];
             xpGainString = addXpIdToXpGainString(xpID, xpGainString);
         }
     }
-    if (spawns === true) {
-    }
+
     if (pointControls === true) {
-        xpGainString = addXpIdToXpGainString(15, xpGainString);  // Control Point - Defend (100xp)
-        xpGainString = addXpIdToXpGainString(16, xpGainString);  // Control Point - Attack (100xp)
-        xpGainString = addXpIdToXpGainString(272, xpGainString); // Convert Capture Point (25xp)
-        xpGainString = addXpIdToXpGainString(556, xpGainString); // Objective Pulse Defend (50xp)
-        xpGainString = addXpIdToXpGainString(557, xpGainString); // Objective Pulse Capture (100xp)
-    }
-    if (dmgAssists === true) {
-        xpGainString = addXpIdToXpGainString(2, xpGainString);    // Kill Player Assist (100xp)
-        xpGainString = addXpIdToXpGainString(335, xpGainString);  // Savior Kill (Non MAX) (25xp)
-        xpGainString = addXpIdToXpGainString(371, xpGainString);  // Kill Player Priority Assist (150xp)
-        xpGainString = addXpIdToXpGainString(372, xpGainString);  // Kill Player High Priority Assist (300xp)
-        
-    }
-    if (utilAssists === true) {
-        xpGainString = addXpIdToXpGainString(5, xpGainString);    // Heal Assis (5xp)
-        xpGainString = addXpIdToXpGainString(438, xpGainString);  // Shield Repair (10xp)
-        xpGainString = addXpIdToXpGainString(439, xpGainString);  // Squad Shield Repair (15xp)
-        xpGainString = addXpIdToXpGainString(550, xpGainString);  // Concussion Grenade Assist (50xp)
-        xpGainString = addXpIdToXpGainString(551, xpGainString);  // Concussion Grenade Squad Assist (75xp)
-        xpGainString = addXpIdToXpGainString(552, xpGainString);  // EMP Grenade Assist (50xp)
-        xpGainString = addXpIdToXpGainString(553, xpGainString);  // EMP Grenade Squad Assist (75xp)
-        xpGainString = addXpIdToXpGainString(554, xpGainString);  // Flashbang Assist (50xp)
-        xpGainString = addXpIdToXpGainString(555, xpGainString);  // Flashbang Squad Assist (75xp)
-        xpGainString = addXpIdToXpGainString(1393, xpGainString); // Hardlight Cover - Blocking Exp (placeholder until code is done) (50xp)
-        xpGainString = addXpIdToXpGainString(1394, xpGainString); // Draw Fire Award (25xp)
-    }
-    if (bannedTicks === true) {
-        xpGainString = addXpIdToXpGainString(293, xpGainString);  // Motion Detect (10xp)
-        xpGainString = addXpIdToXpGainString(294, xpGainString);  // Squad Motion Spot (15xp)
-        xpGainString = addXpIdToXpGainString(593, xpGainString);  // Bounty Kill Bonus (250xp)
-        xpGainString = addXpIdToXpGainString(594, xpGainString);  // Bounty Kill Cashed In (400xp)
-        xpGainString = addXpIdToXpGainString(594, xpGainString);  // Bounty Kill Cashed In (400xp)
-        xpGainString = addXpIdToXpGainString(595, xpGainString);  // Bounty Kill Streak (595xp)
-        xpGainString = addXpIdToXpGainString(582, xpGainString);  // Kill Assist - Spitfire Turret (25xp)
+        for (xpIdx = 0; xpIdx < allXpIdsPointControls.length; xpIdx++) {
+            let xpID = allXpIdsPointControls[xpIdx];
+            xpGainString = addXpIdToXpGainString(xpID, xpGainString);
+        }
     }
 
-    console.log(xpGainString);
+    if (dmgAssists === true) {
+        for (xpIdx = 0; xpIdx < allXpIdsDmgAssists.length; xpIdx++) {
+            let xpID = allXpIdsDmgAssists[xpIdx];
+            xpGainString = addXpIdToXpGainString(xpID, xpGainString);
+        }
+    }
+    if (utilAssists === true) {
+        for (xpIdx = 0; xpIdx < allXpIdsUtilAssists.length; xpIdx++) {
+            let xpID = allXpIdsUtilAssists[xpIdx];
+            xpGainString = addXpIdToXpGainString(xpID, xpGainString);
+        }
+    }
+
+    if (bannedTicks === true) {
+        for (xpIdx = 0; xpIdx < allXpIdsBannedTicks.length; xpIdx++) {
+            let xpID = allXpIdsBannedTicks[xpIdx];
+            xpGainString = addXpIdToXpGainString(xpID, xpGainString);
+        }
+    }
+
     return xpGainString;
 }
 
