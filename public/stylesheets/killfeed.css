@@ -4,10 +4,10 @@
     box-sizing: inherit;
     position: relative;
     top: -15px;
-    text-shadow:0px 0px 1px rgba(37, 37, 37, 0.95);
+    text-shadow:0px 0px 1px #141414;
     line-height: 1.2;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     white-space: nowrap;
     z-index: -1;
     padding-top: 20px;
@@ -17,21 +17,12 @@
     filter: drop-shadow(0px 0px 1px rgb(20, 20, 20));
 }
 
-.killfeed.killfeedInactive {
-    height: 25px;
+.killfeed table {
+    margin: auto;
 }
 
-#killfeedContainer::after {
-    display: none;
-    box-sizing: inherit;
-    width: 30px;
-    position: relative;
-    left: calc(50% - 15px);
-    bottom: -5px;
-    content: "";
-    border-top: 5px double rgba(255, 216, 58, 0.8);
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
+.killfeed.killfeedInactive {
+    height: 25px;
 }
 
 .killfeedHeader {
@@ -45,7 +36,7 @@
     overflow-y: hidden;
     box-sizing: inherit;
     box-sizing: border-box;
-    max-width: 394px;
+    max-width: 400px;
 }
 
 .killfeedRowContainer {
