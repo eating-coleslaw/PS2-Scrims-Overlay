@@ -144,7 +144,7 @@ socket.on('connect', function() {
                     $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
                     '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
                     '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
-                    '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' + '<div class="strip"></div><div class="strip"></div>' +
+                    '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' +
                     '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div>'+ '</div>' + '</div>').appendTo($('#T2Players'));
                 } else {
                     var scoreEl = document.getElementById(m[keys].name + 'score');

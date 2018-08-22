@@ -16,11 +16,12 @@
 
 #T1Players {
     /* grid-template-columns: 30px 1fr; */
-    writing-mode: rl;
+    direction: ltr;
 }
 
 #T2Players {
     /* grid-template-columns: 1fr 30px; */
+    direction: rtl;
 }
 
 .teamPlayersContainer.teamOne {
@@ -33,6 +34,7 @@
 
 .playerStatsContainer {
     display: grid;
+    direction: ltr;
     grid-gap: 2px;
     grid-template-columns: 1fr 1fr 24px;
     grid-template-rows: 18px 5px;
@@ -68,6 +70,10 @@
     border-color: var(--faction-flavor-trans-color);
 }
 
+.playerEventMask:empty {
+    border-color: transparent;
+}
+
 .stripe {
     height: 50%;
     padding: 0 2px 0 3px;
@@ -78,7 +84,6 @@
         var(--faction-flavor-trans-color) 6px,
         var(--faction-flavor-trans-color) 12px
     );
-    /* background-size: 100% 200%; */
     animation: pointControlFlash 0.5s linear infinite alternate;
 }
   
