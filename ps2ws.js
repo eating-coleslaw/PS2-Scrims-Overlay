@@ -111,17 +111,14 @@ function dealWithTheData(raw) {
     const data = JSON.parse(raw).payload;
     switch(data.event_name) {
         case "Death":
-            console.log('it\'s player data');
             itsPlayerData(data);
             break;
 
         case "FacilityControl":
-            console.log("it's facility data"); 
             itsFacilityData(data);
             break;
 
         case "GainExperience":
-            console.log('it\'s experience data'); 
             itsExperienceData(data);
             break;
         
