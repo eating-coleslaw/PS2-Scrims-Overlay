@@ -112,11 +112,11 @@ socket.on('connect', function() {
                if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
-                    $('<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
-                        '<div class="playerStatsContainer" id="' + m[keys].name + '">' +
+                    $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
+                        '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
                         '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
-                        '<div class="playerStatsScore" id="' + m[keys].name + 'score">' + m[keys].netScore + '</div>'+
-                        '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div>' + '</div>').appendTo($('#T1Players'));
+                        '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' + '<div class="stripe"></div><div class="stripe"></div>' +
+                        '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div>'+ '</div>' + '</div>').appendTo($('#T1Players'));
                 } else {
                     var scoreEl = document.getElementById(m[keys].name + 'score');
                     scoreEl.textContent = m[keys].netScore;
@@ -125,8 +125,13 @@ socket.on('connect', function() {
                     var loserName = m[keys].loser;
                     playRespawning(loserName);
                 }
+                // if (m[keys].name == "Odiogn") {
+                //     var loserName = "Odiogn";
+                //     $("#OdiognEventMask").empty();
+                //     playRespawning(loserName);
+                // }
             } else {
-                $(m[keys].name).empty();
+                $(m[keys].name).empty(); //commenting out for testing
             }
         }
 
@@ -137,11 +142,10 @@ socket.on('connect', function() {
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
                     $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
-                        '<div class="playerStatsScore" id="' + m[keys].name + 'score">' + m[keys].netScore + '</div>' +
-                        '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' + 
-                        '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div></div>' +
-                        '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class">' + 
-                        '</div>').appendTo($('#T2Players'));
+                    '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
+                    '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
+                    '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' + '<div class="strip"></div><div class="strip"></div>' +
+                    '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div>'+ '</div>' + '</div>').appendTo($('#T2Players'));
                 } else {
                     var scoreEl = document.getElementById(m[keys].name + 'score');
                     scoreEl.textContent = m[keys].netScore;
@@ -150,6 +154,8 @@ socket.on('connect', function() {
                     var loserName = m[keys].loser;
                     playRespawning(loserName);
                 }
+            } else {
+                $(m[keys].name).empty(); //commenting out for testing
             }
         }
         updatePlayerClasses(event);
