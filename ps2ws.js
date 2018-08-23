@@ -103,7 +103,7 @@ function killfeedFacilityT2(points) {
     };
     app.send('killfeed', obj);
     overlay.updateKillfeedFacility(teamTwoObject.alias, points);
-    team.twoBaseCap(points);
+    team.twoBaseCap();
 }
 
 function dealWithTheData(raw) {
@@ -175,7 +175,7 @@ function itsPlayerData(data) {
         console.log('   --> Invalid Player Event <--');
     }
 
-    overlay.updateScoreOverlay();
+    //overlay.updateScoreOverlay();
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
 }
@@ -190,7 +190,7 @@ function oneIvITwo (data, points, item) {
         loser_faction: teamTwoObject.faction,
         loser_class_id: data.character_loadout_id,
         weapon: item.name,
-        points: points
+        is_kill: true
     });
 }
 
@@ -204,7 +204,7 @@ function twoIvIOne (data, points, item) {
         loser_faction: teamOneObject.faction,
         loser_class_id: data.character_loadout_id,
         weapon: item.name,
-        points: points,
+        is_kill: true
     });
 }
 
@@ -218,7 +218,7 @@ function teamOneSuicide (data, points, item) {
         loser_faction: teamOneObject.faction,
         loser_class_id: data.character_loadout_id,
         weapon: item.name,
-        points: points,
+        is_kill: true
     });
 }
 
@@ -232,7 +232,7 @@ function teamTwoSuicide (data, points, item) {
         loser_faction: teamTwoObject.faction,
         loser_class_id: data.character_loadout_id,
         weapon: item.name,
-        points: points,
+        is_kill: true
     });
 }
 
@@ -246,7 +246,7 @@ function teamOneTeamkill (data, points, item) {
         loser_faction: teamOneObject.faction,
         loser_class_id: data.character_loadout_id,
         weapon: item.name,
-        points: points,
+        is_kill: true
     });
 }
 
@@ -260,7 +260,7 @@ function teamTwoTeamkill (data, points, item) {
         loser_faction: teamTwoObject.faction,
         loser_class_id: data.character_loadout_id,
         weapon: item.name,
-        points: points,
+        is_kill: true
     });
 }
 
@@ -285,7 +285,7 @@ function itsFacilityData(data) {
             captures++;
         }
         //else it was captured by neither outfit
-        overlay.updateScoreOverlay();
+        //overlay.updateScoreOverlay();
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
     }
@@ -296,49 +296,51 @@ function itsExperienceData(data) {
     // console.log('processing data: ' + data.experience_id + ' | ' + data.character_id + ' (' + data.loadout_id + ')');
     if (teamOneObject.members.hasOwnProperty(data.character_id)) {
        let xpID = parseInt(data.experience_id);
+       let characterName = teamOneObject.members[data.character_id].name;
        // Revive Data
         if (allXpIdsRevives.includes(xpID)) {
             teamOneRevive(data);
-            console.log('Team 1 Revive');
+            console.log('Team 1 Revive: ' + characterName);
         }
 
         else if (allXpIdsDmgAssists.includes(xpID)) {
             teamOneDmgAssist(data);
-            console.log('Team 1 Dmg Assist');
+            console.log('Team 1 Dmg Assist: ' + characterName);
         }
 
         else if (allXpIdsUtilAssists.includes(xpID)) {
             teamOneUtilAssist(data);
-            console.log('Team 1 Util Assist');
+            console.log('Team 1 Util Assist: ' + characterName);
         }
 
         else if (allXpIdsPointControls.includes(xpID)) {
             teamOnePointControl(data);
-            console.log('Team 1 Point Control');
+            console.log('Team 1 Point Control: ' + characterName);
         }
     }
 
     else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
         let xpID = parseInt(data.experience_id);
+        let characterName = teamTwoObject.members[data.character_id].name;
         // Team 2 Revive
         if (allXpIdsRevives.includes(xpID)) {
             teamTwoRevive(data);
-            console.log('Team 2 Revive');
+            console.log('Team 2 Revive: ' + characterName);
         }
 
         else if (allXpIdsDmgAssists.includes(xpID)) {
             teamTwoDmgAssist(data);
-            console.log('Team 2 Dmg Assist');
+            console.log('Team 2 Dmg Assist: ' + characterName);
         }
 
         else if (allXpIdsUtilAssists.includes(xpID)) {
             teamTwoUtilAssist(data);
-            console.log('Team 2 Util Assist');
+            console.log('Team 2 Util Assist: ' + characterName);
         }
 
         else if (allXpIdsPointControls.includes(xpID)) {
             teamTwoPointControl(data);
-            console.log('Team 2 Point Control');
+            console.log('Team 2 Point Control: ' + characterName);
         }
     }
 
@@ -346,41 +348,103 @@ function itsExperienceData(data) {
     //     console.log(data.experience_id);
     // }
 
-    overlay.updateScoreOverlay();
+    //overlay.updateScoreOverlay();
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
 }
 
 function teamOneRevive(data) {
     team.oneRevive(data.character_id, data.other_id, data.loadout_id);
+    let loserName = teamOneObject.members.hasOwnProperty(data.other_id) ? teamOneObject.members[data.other_id].name : 'Random Pubbie';
+    killfeedPlayer({
+        winner: teamOneObject.members[data.character_id].name,
+        winner_faction: teamOneObject.faction,
+        winner_class_id: data.loadout_id,
+        loser: loserName,
+        loser_faction: teamOneObject.faction,
+        weapon: 'Revive',
+        is_revive: true
+    });
 }
 
 function teamTwoRevive(data) {
     team.twoRevive(data.character_id, data.other_id, data.loadout_id);
+    let loserName = teamTwoObject.members.hasOwnProperty(data.other_id) ? teamTwoObject.members[data.other_id].name : 'Random Pubbie';
+    killfeedPlayer({
+        winner: teamTwoObject.members[data.character_id].name,
+        winner_faction: teamTwoObject.faction,
+        winner_class_id: data.loadout_id,
+        loser: loserName,
+        loser_faction: teamTwoObject.faction,
+        weapon: 'Revive',
+        is_revive: true
+    });
 }
 
 function teamOneDmgAssist(data) {
     team.oneDmgAssist(data.character_id, data.loadout_id);
+    killfeedPlayer({
+        winner: teamOneObject.members[data.character_id].name,
+        winner_faction: teamOneObject.faction,
+        winner_class_id: data.loadout_id,
+        weapon: 'Dmg Assist',
+        is_assist: true
+    });
 }
 
 function teamTwoDmgAssist(data) {
     team.twoDmgAssist(data.character_id, data.loadout_id);
+    killfeedPlayer({
+        winner: teamTwoObject.members[data.character_id].name,
+        winner_faction: teamTwoObject.faction,
+        winner_class_id: data.loadout_id,
+        weapon: 'Dmg Assist',
+        is_assist: true
+    });
 }
 
 function teamOneUtilAssist(data) {
     team.oneUtilAssist(data.character_id, data.loadout_id);
+    killfeedPlayer({
+        winner: teamOneObject.members[data.character_id].name,
+        winner_faction: teamOneObject.faction,
+        winner_class_id: data.loadout_id,
+        weapon: 'Util Assist',
+        is_assist: true
+    });
 }
 
 function teamTwoUtilAssist(data) {
     team.twoUtilAssist(data.character_id, data.loadout_id);
+    killfeedPlayer({
+        winner: teamTwoObject.members[data.character_id].name,
+        winner_faction: teamTwoObject.faction,
+        winner_class_id: data.loadout_id,
+        weapon: 'Util Assist',
+        is_assist: true
+    });
 }
 
 function teamOnePointControl(data) {
     team.onePointControl(data.character_id, data.loadout_id);
+    killfeedPlayer({
+        winner: teamOneObject.members[data.character_id].name,
+        winner_faction: teamOneObject.faction,
+        winner_class_id: data.loadout_id,
+        weapon: 'PTFO',
+        is_control: true
+    });
 }
 
 function teamTwoPointControl(data) {
     team.twoPointControl(data.character_id, data.loadout_id);
+    killfeedPlayer({
+        winner: teamTwoObject.members[data.character_id].name,
+        winner_faction: teamTwoObject.faction,
+        winner_class_id: data.loadout_id,
+        weapon: 'PTFO',
+        is_control: true
+    });
 }
 
 function createStream() {

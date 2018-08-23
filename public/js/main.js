@@ -5,6 +5,16 @@
  */
 
 var socket = io();
+var playerStatusTimers = [];
+var onPointDuration = 3000; //3 seconds
+
+var IStatus = {
+    Alive: 1,
+    Dead: 2,
+    Reviving: 3,
+    OnPoint: 4,
+    _count: 4
+};
 
 socket.on('connect', function() {
 
@@ -82,6 +92,22 @@ socket.on('connect', function() {
             '</td></tr>') .prependTo($('#killfeed')
         );
         
+        if (event.is_kill === true) {
+            var loserName = event.loser;
+            console.log('respawning');
+            playRespawning(loserName);
+        }
+        else if (event.is_revive === true) {
+            var loserName = event.loser;
+            console.log('reviving');
+            playRevived(loserName);
+        }
+        else if (event.is_control === true) {
+            var winnerName = event.winner;
+            console.log('contesting point');
+            playContestingPoint(winnerName);
+        }
+
         updatePlayerClasses(event);
        
         //Remove the last row of the killfeed before adding the new row
@@ -104,7 +130,7 @@ socket.on('connect', function() {
 
     socket.on('score', function (event) {
         console.log(event);
-        $('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
+        //$('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
         
         var m = event.teamOne.members;
         for (keys in m) {
@@ -115,21 +141,24 @@ socket.on('connect', function() {
                     $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
                         '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
                         '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
-                        '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' + '<div class="stripe"></div><div class="stripe"></div>' +
+                        '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' +
                         '</div>' + '</div>').appendTo($('#T1Players'));
-                } else {
-                    var scoreEl = document.getElementById(m[keys].name + 'score');
-                    scoreEl.textContent = m[keys].netScore;
                 }
-                if (m[keys].name == event.loser) {
+                if (event.is_kill === true && m[keys].name === event.loser) {
                     var loserName = m[keys].loser;
+                    console.log('respawning');
                     playRespawning(loserName);
                 }
-                // if (m[keys].name == "Odiogn") {
-                //     var loserName = "Odiogn";
-                //     $("#OdiognEventMask").empty();
-                //     playRespawning(loserName);
-                // }
+                else if (event.is_revive && m[keys].name === event.loser) {
+                    var loserName = m[keys].loser;
+                    console.log('reviving');
+                    playRevived(loserName);
+                }
+                else if (event.is_control === true && m[keys].name === event.winner) {
+                    var winnerName = m[keys].winner;
+                    console.log('contesting point');
+                    playContestingPoint(winnerName);
+                }
             } else {
                 $(m[keys].name).empty(); //commenting out for testing
             }
@@ -146,13 +175,18 @@ socket.on('connect', function() {
                     '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
                     '<div class="playerEventMask" id="' + m[keys].name + 'EventMask"></div>' +
                     '</div>').appendTo($('#T2Players'));
-                } else {
-                    var scoreEl = document.getElementById(m[keys].name + 'score');
-                    scoreEl.textContent = m[keys].netScore;
                 }
-                if (m[keys].name == event.loser) {
+                if (event.is_kill === true && m[keys].name === event.loser) {
                     var loserName = m[keys].loser;
                     playRespawning(loserName);
+                }
+                else if (event.is_revive === true && m[keys].name === event.loser) {
+                    var loserName = m[keys].loser;
+                    playRevived(loserName);
+                }
+                else if (event.is_control === true && m[keys].name === event.winner) {
+                    var winnerName = m[keys].winner;
+                    playContestingPoint(winnerName);
                 }
             } else {
                 $(m[keys].name).empty(); //commenting out for testing
@@ -162,15 +196,46 @@ socket.on('connect', function() {
     });
 });
 
+function handlePlayerScoresEvent(event, members, playerContainerElId) {
+    for (keys in members) {
+        if (members[keys].eventCount > 0) { //members[keys].kills > 0 || members[keys].deaths > 0 || members[keys].revives > 0 || members[keys].teamKills > 0) {
+           if (members[keys].name == "") {return;}
+            var nameEl = document.getElementById(members[keys].name);
+            if (nameEl === null) {
+                $('<div class="playerStatsContainer" id="' + members[keys].name + '">' +
+                    '<div class="playerClass ' + getClassFromLoadoutID(members[keys].ps2Class) + '" id="' + members[keys].name + 'class"></div>' + 
+                    '<div class="playerStatsName" id="' + members[keys].name + 'name">' + members[keys].name + '</div>' +
+                    '<div class="playerEventMask" id="' + members[keys].name + 'EventMask">' + '<div class="stripe"></div><div class="stripe"></div>' +
+                    '</div>' + '</div>').appendTo($(playerContainerElId));
+            }
+            if (event.is_kill === true && members[keys].name === event.loser) {
+                var loserName = members[keys].loser;
+                playRespawning(loserName);
+            }
+            else if (event.is_revive && members[keys].name === event.loser) {
+                var loserName = members[keys].loser;
+                playRevived(loserName);
+            }
+            else if (event.is_control === true && members[keys].name === event.winner) {
+                var winnerName = members[keys].winner;
+                playContestingPoint(winnerName);
+            }
+        } else {
+            $(members[keys].name).empty(); //commenting out for testing
+        }
+    }
+}
+
 
 function updatePlayerClasses(event) {
     var winnerID = event.winner + "class";
     var loserID = event.loser + "class";
    
-   if (!($('#'+winnerID).length == 0)) {
+   if (event.winner_class_id !== undefined && !($('#'+winnerID).length == 0)) {
        document.getElementById(winnerID).className = "playerClass " + getClassFromLoadoutID(event.winner_class_id);
    }
-   if (!($('#'+loserID).length == 0)) {
+
+   if (event.loser_class_id !== undefined && !($('#'+loserID).length == 0) ) {
     document.getElementById(loserID).className = "playerClass " + getClassFromLoadoutID(event.loser_class_id);
    }
 }
@@ -185,20 +250,72 @@ function getFactionLabel(teamObject) {
 
 function playRespawning(eventLoserName) {
     var loserID = eventLoserName + 'respawn';
-   
-    var respawn = document.getElementById(loserID);
-    respawn.className = "playerRespawningBase";
-   
+    var classID = eventLoserName + 'class';
+    var eventMaskId = eventLoserName +'EventMask';
+
+    var player = document.getElementById(eventLoserName);
+    player.className = "playerStatsContainer";
+    
+    var playerClass = document.getElementById(classID);
+    $('#' + classID).removeClass('deadIconPlay'); //playerClass.removeClass('deadTextPlay');
+
+    emptyPlayersEventMask(eventLoserName);
+
+    window.requestAnimationFrame(function (time) {
+        window.requestAnimationFrame(function (time) {
+            $('<div id="' + eventLoserName + 'respawn" class="playerRespawningBar playerRespawningPlay shrinkLeft"></div>').appendTo($('#' + eventMaskId));
+            //respawn.className = 'playerRespawningBar playerRespawningPlay shrinkLeft';
+            player.className = 'playerStatsContainer deadTextPlay';
+            // playerClass.addClass('deadTextPlay');
+            $('#' + classID).addClass('deadIconPlay');
+
+
+            $('#' + loserID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+                function() {
+                    console.log('clearing revive');
+                    emptyPlayersEventMask(eventLoserName);
+                    $('#' + eventLoserName).toggleClass('deadTextPlay');// player.className = 'playerStatsContainer';
+                    // $('#' + classID).toggleClass('deadTextPlay');
+                    $('#' + classID).removeClass('deadIconPlay');
+
+                });
+        });
+    });
+    return;
+
+    $('#' + loserID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+        function() {
+            console.log('clearing revive');
+            emptyPlayersEventMask(eventLoserName);
+            $('#' + eventLoserName).toggleClass('deadTextPlay');// player.className = 'playerStatsContainer';
+        });
+}
+
+function playRevived(eventLoserName) {
+    emptyPlayersEventMask(eventLoserName);
+
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
 
-    var shrinkDirection = $('#T1Players #'+ eventLoserName) ? 'shrinkRight' : 'shrinkLeft';
-    window.requestAnimationFrame(function (time) {
-        window.requestAnimationFrame(function (time) {
-            respawn.className = "playerRespawningBar playerRespawningPlay " + shrinkDirection;
-            player.className = "playerStatsContainer deadTextPlay";
-        });
-    });
+}
+
+function playContestingPoint(eventWinnerName) {
+    var eventMaskId = eventWinnerName +'EventMask';
+    
+    // Control Point events can only happen at a set interval, so don't worry about restting the animation gracefully
+    emptyPlayersEventMask(eventWinnerName);
+    $('<div class="stripe"></div><div class="stripe"></div>').appendTo($('#' + eventMaskId));
+}
+
+function resetAnimation(el) {
+    el.style.animation = 'none';
+    el.offsetHeight; /* trigger reflow */
+    el.style.animation = null; 
+}
+
+function emptyPlayersEventMask(eventPlayerName) {
+    var eventMaskId = eventPlayerName + 'EventMask';
+    $('#' + eventMaskId).empty();
 }
 
 function getLoadoutIdMappings(loadoutID) {

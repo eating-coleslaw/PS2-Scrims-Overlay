@@ -256,24 +256,17 @@ function twoPointControl(player, playerClass) {
 }
 
 
-function oneBaseCap(points) {
+function oneBaseCap() {
     t1.baseCaps++;
-
-    // logging
-    console.log(t1.name + ' captured the base +' + points);
     logScore();
 }
 
-function twoBaseCap(points) {
+function twoBaseCap() {
     t2.baseCaps++;
-
-    // logging
-    console.log(t2.name + ' captured the base +' + points);
     logScore();
 }
 
 function logScore() {
-    console.log(t1.points + ' ' + t2.points);
     sendScores();
 }
 

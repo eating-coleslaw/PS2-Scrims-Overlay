@@ -30,6 +30,7 @@ function write(filename, data) {
 
 // Adjust the members name to ensure a uniform layout on the screen
 function lengthenName(name) {
+    return name;
     if (name.length > 16) {
         name = name.substring(0,15) + '.';
     }
@@ -41,6 +42,7 @@ function lengthenName(name) {
 
 // Adjust the stats to ensure a uniform layout on the screen
 function lengthenStats(stat) {
+    return stat;
     while (stat.length < 4) {
         stat = ' ' + stat;
     }
@@ -149,6 +151,8 @@ function writeFinalStats() {
           two  = __dirname + '/match/' + round + 'TeamTwo.txt';
     const t1 = playerStats(team.getT1());
     const t2 = playerStats(team.getT2());
+
+    return;
 
     write(full, 'Final Scores for this match:\n\n' + t1 + '\n\n' + t2);
     write(one, t1);

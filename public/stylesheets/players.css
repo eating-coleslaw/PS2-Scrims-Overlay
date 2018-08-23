@@ -1,7 +1,7 @@
 .teamPlayersContainer {
     display: grid;
     grid-template-columns: repeat(6, [col] 1fr);
-    grid-template-rows: repeat(2, 32px); 
+    grid-template-rows: repeat(4, 32px); 
     grid-column-gap: 5px;
     grid-row-gap: 3px;
     text-align: center;
@@ -83,7 +83,9 @@
         var(--faction-flavor-trans-color) 6px,
         var(--faction-flavor-trans-color) 12px
     );
-    animation: pointControlFlash 0.5s linear infinite alternate;
+    /* animation: pointControlFlash 0.5s linear infinite alternate; */
+    animation: pointControlFlash 0.5s linear alternate;
+    animation-iteration-count: 6;
 }
 
 .stripe:nth-child(even) {
@@ -93,8 +95,10 @@
         transparent 6px,
         transparent 12px
     );
-    animation: pointControlFlash 0.5s linear infinite alternate-reverse;
+    /* animation: pointControlFlash 0.5s linear infinite alternate-reverse; */
+    animation: pointControlFlash 0.5s linear alternate-reverse;
     animation-delay: 0.25s;
+    animation-iteration-count: 6;
 }
 
 @keyframes pointControlFlash {
@@ -208,8 +212,10 @@ img .darkenIconFilter {
 }
 
 .playerRespawningPlay {
-    height: 3px;
+    /* height: 3px; */
+    height: 100%;
     background-color: var(--faction-primary-color);
+    opacity: 0.8;
     -moz-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     -webkit-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
@@ -228,9 +234,14 @@ img .darkenIconFilter {
 }
 
 .deadTextPlay {
-    -moz-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.5s ease-in 10s 1 normal forwards deadText;
-    -webkit-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.5s ease-in 10s 1 normal forwards deadText;
-    animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.5s ease-in 10s 1 normal forwards deadText;
+    -moz-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
+    -webkit-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
+    animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
+}
+.deadIconPlay {
+    -moz-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+    -webkit-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+    animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
 }
 
 
@@ -310,5 +321,31 @@ img .darkenIconFilter {
     }
     to {
         color: var(--faction-light-color, rgb(245, 245, 255));
+    }
+}
+
+
+@-moz-keyframes fadeOutSimple {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@-webkit-keyframes fadeOutSimple {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fadeOutSimple {
+    from {
+        opacity: 0.4;
+    }
+    to {
+        opacity: 1;
     }
 }
