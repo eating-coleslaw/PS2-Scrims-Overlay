@@ -92,17 +92,17 @@ socket.on('connect', function() {
             '</td></tr>') .prependTo($('#killfeed')
         );
         
-        if (event.is_kill === true) {
+        if (event.is_kill === true && event.loser !== undefined) {
             var loserName = event.loser;
             console.log('respawning');
             playRespawning(loserName);
         }
-        else if (event.is_revive === true) {
+        else if (event.is_revive === true && event.loser !== undefined) {
             var loserName = event.loser;
             console.log('reviving');
             playRevived(loserName);
         }
-        else if (event.is_control === true) {
+        else if (event.is_control === true && event.winner !== undefined) {
             var winnerName = event.winner;
             console.log('contesting point');
             playContestingPoint(winnerName);
@@ -144,21 +144,21 @@ socket.on('connect', function() {
                         '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' +
                         '</div>' + '</div>').appendTo($('#T1Players'));
                 }
-                if (event.is_kill === true && m[keys].name === event.loser) {
-                    var loserName = m[keys].loser;
-                    console.log('respawning');
-                    playRespawning(loserName);
-                }
-                else if (event.is_revive && m[keys].name === event.loser) {
-                    var loserName = m[keys].loser;
-                    console.log('reviving');
-                    playRevived(loserName);
-                }
-                else if (event.is_control === true && m[keys].name === event.winner) {
-                    var winnerName = m[keys].winner;
-                    console.log('contesting point');
-                    playContestingPoint(winnerName);
-                }
+                // if (event.is_kill === true && m[keys].name === event.loser) {
+                //     var loserName = m[keys].loser;
+                //     console.log('respawning');
+                //     playRespawning(loserName);
+                // }
+                // else if (event.is_revive && m[keys].name === event.loser) {
+                //     var loserName = m[keys].loser;
+                //     console.log('reviving');
+                //     playRevived(loserName);
+                // }
+                // else if (event.is_control === true && m[keys].name === event.winner) {
+                //     var winnerName = m[keys].winner;
+                //     console.log('contesting point');
+                //     playContestingPoint(winnerName);
+                // }
             } else {
                 $(m[keys].name).empty(); //commenting out for testing
             }
@@ -176,18 +176,18 @@ socket.on('connect', function() {
                     '<div class="playerEventMask" id="' + m[keys].name + 'EventMask"></div>' +
                     '</div>').appendTo($('#T2Players'));
                 }
-                if (event.is_kill === true && m[keys].name === event.loser) {
-                    var loserName = m[keys].loser;
-                    playRespawning(loserName);
-                }
-                else if (event.is_revive === true && m[keys].name === event.loser) {
-                    var loserName = m[keys].loser;
-                    playRevived(loserName);
-                }
-                else if (event.is_control === true && m[keys].name === event.winner) {
-                    var winnerName = m[keys].winner;
-                    playContestingPoint(winnerName);
-                }
+                // if (event.is_kill === true && m[keys].name === event.loser) {
+                //     var loserName = m[keys].loser;
+                //     playRespawning(loserName);
+                // }
+                // else if (event.is_revive === true && m[keys].name === event.loser) {
+                //     var loserName = m[keys].loser;
+                //     playRevived(loserName);
+                // }
+                // else if (event.is_control === true && m[keys].name === event.winner) {
+                //     var winnerName = m[keys].winner;
+                //     playContestingPoint(winnerName);
+                // }
             } else {
                 $(m[keys].name).empty(); //commenting out for testing
             }
@@ -257,16 +257,14 @@ function playRespawning(eventLoserName) {
     player.className = "playerStatsContainer";
     
     var playerClass = document.getElementById(classID);
-    $('#' + classID).removeClass('deadIconPlay'); //playerClass.removeClass('deadTextPlay');
+    $('#' + classID).removeClass('deadIconPlay');
 
     emptyPlayersEventMask(eventLoserName);
 
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
             $('<div id="' + eventLoserName + 'respawn" class="playerRespawningBar playerRespawningPlay shrinkLeft"></div>').appendTo($('#' + eventMaskId));
-            //respawn.className = 'playerRespawningBar playerRespawningPlay shrinkLeft';
             player.className = 'playerStatsContainer deadTextPlay';
-            // playerClass.addClass('deadTextPlay');
             $('#' + classID).addClass('deadIconPlay');
 
 
@@ -274,26 +272,16 @@ function playRespawning(eventLoserName) {
                 function() {
                     console.log('clearing revive');
                     emptyPlayersEventMask(eventLoserName);
-                    $('#' + eventLoserName).toggleClass('deadTextPlay');// player.className = 'playerStatsContainer';
-                    // $('#' + classID).toggleClass('deadTextPlay');
+                    $('#' + eventLoserName).toggleClass('deadTextPlay');
                     $('#' + classID).removeClass('deadIconPlay');
 
                 });
         });
     });
-    return;
-
-    $('#' + loserID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
-        function() {
-            console.log('clearing revive');
-            emptyPlayersEventMask(eventLoserName);
-            $('#' + eventLoserName).toggleClass('deadTextPlay');// player.className = 'playerStatsContainer';
-        });
 }
 
 function playRevived(eventLoserName) {
     emptyPlayersEventMask(eventLoserName);
-
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
 
@@ -304,13 +292,17 @@ function playContestingPoint(eventWinnerName) {
     
     // Control Point events can only happen at a set interval, so don't worry about restting the animation gracefully
     emptyPlayersEventMask(eventWinnerName);
-    $('<div class="stripe"></div><div class="stripe"></div>').appendTo($('#' + eventMaskId));
-}
+    //$('<div class="stripe"></div><div class="stripe"></div>').appendTo($('#' + eventMaskId));
 
-function resetAnimation(el) {
-    el.style.animation = 'none';
-    el.offsetHeight; /* trigger reflow */
-    el.style.animation = null; 
+    window.requestAnimationFrame(function (time) {
+        window.requestAnimationFrame(function (time) {
+            $('<div class="stripe"></div><div class="stripe"></div>').appendTo($('#' + eventMaskId));
+            $('#' + eventMaskId).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+                function() {
+                    emptyPlayersEventMask(eventWinnerName);
+                });
+        });
+    });
 }
 
 function emptyPlayersEventMask(eventPlayerName) {
