@@ -269,6 +269,25 @@ function teamTwoTeamkill (data, points, item) {
 //#endregion
 
 function itsFacilityData(data) {
+    var capturingOutfitName;
+
+    // Only count Defenses as Captures on Jaeger
+    if (data.new_faction_id !== data.old_faction_id || data.world_id === 17) {
+        if (data.outfit_id === teamOneObject.outfit_id || data.outfit_id === teamTwoObject.outfit_id) {
+            capturingOutfitName = data.outfit_id === teamOneObject.outfit_id ? teamOneObject.name : teamTwoObject.name;
+            endRoundEarly(data.new_faction_id, capturingOutfitName);
+        }
+    } else if (data.world_id === 17) {
+        if (data.outfit_id === teamOneObject.outfit_id || data.outfit_id === teamTwoObject.outfit_id) {
+            capturingOutfitName = data.outfit_id === teamOneObject.outfit_id ? teamOneObject.name : teamTwoObject.name;
+            endRoundEarly(data.new_faction_id, capturingOutfitName);
+        }
+    }
+    
+    teamOneObject = team.getT1();
+    teamTwoObject = team.getT2();
+    return;
+
     //deals with adding points to the correct team
     if (data.new_faction_id !== data.old_faction_id) {
         if (data.outfit_id === teamOneObject.outfit_id) {
@@ -526,6 +545,16 @@ function resumeTheMatch() {
 
 function stopTheMatch() {
     timeCounter = 0;
+}
+
+function endRoundEarly(newFactionId, outfitTag) {
+    console.log(painter.green('Base Capture: [' + outfitTag + ']'));
+    playRoundEndAudio();
+    stopTheMatch();
+}
+
+function playRoundEndAudio() {
+
 }
 
 function startUp(oneObj, twoObj, secsInt, title) {

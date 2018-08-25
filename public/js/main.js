@@ -111,10 +111,6 @@ socket.on('connect', function() {
             console.log('contesting point');
             playContestingPoint(winnerName);
         }
-        else {
-            var winnerName = event.winner;
-            playRespawning(winnerName);
-        }
 
         updatePlayerClasses(event);
        
@@ -311,7 +307,7 @@ function playRevived(eventLoserName) {
             player.className = 'playerStatsContainer revivedFlashPlay';
             $('#' + classID).addClass('revivedFlashPlay');
 
-            $('#' + loserID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+            $('#' + eventLoserName).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
                     console.log('adding revive');
                     emptyPlayersEventMask(eventLoserName);

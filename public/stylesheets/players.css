@@ -1,7 +1,6 @@
 .teamPlayersContainer {
     display: grid;
     grid-template-columns: repeat(6, [col] 1fr);
-    /* grid-template-rows: repeat(4, 32px); */
     grid-auto-rows: 32px;
     grid-column-gap: 5px;
     grid-row-gap: 3px;
@@ -40,7 +39,6 @@
         "name name icon"
         "event event icon";
     text-align: left;
-    /* background-color: rgba(35, 35, 35, 0.9); */
     background-color: #1F233090;
     border: 1px solid #0F1320;
     text-overflow: ellipsis;
@@ -64,7 +62,7 @@
     overflow: hidden;
     border-style: solid;
     border-width: 1px;
-    border-color: var(--faction-flavor-trans-color);
+    border-color: var(--faction-dark-high-trans-color);
     box-sizing: border-box;
 }
 
@@ -73,6 +71,7 @@
     border-right-color: transparent;
     border-left-color: transparent;
     border-style: outset;
+    border-bottom-color: var(--faction-flavor-trans-color);
 }
 
 .stripe {
@@ -85,9 +84,7 @@
         var(--faction-flavor-trans-color) 6px,
         var(--faction-flavor-trans-color) 12px
     );
-    /* animation: pointControlFlash 0.5s linear infinite alternate; */
     animation: 0.5s pointControlFlash 10 linear alternate, 0.2s ease-out 2s 2 reverse forwards shrinkDown;
-    /* animation-iteration-count: 6; */
     animation-direction: alternate-reverse;
 }
 
@@ -98,10 +95,7 @@
         transparent 6px,
         transparent 12px
     );
-    /* animation: pointControlFlash 0.5s linear infinite alternate-reverse; */
     animation: 0.5s pointControlFlash 0.25s 10 linear alternate-reverse, 0.25s ease-out 2s 1 reverse forwards shrinkDown;
-    /* animation-delay: 0.25s; */
-    /* animation-iteration-count: 6; */
     animation-direction: alternate-reverse;
 }
 
@@ -158,15 +152,15 @@
 }
 
 #T1Players > .playerStatsContainer {
-    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
-    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
-    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
+    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
     box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
 }
 #T2Players > .playerStatsContainer {
-    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
-    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
-    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
+    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
     box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
 }
 
@@ -218,13 +212,11 @@ img .darkenIconFilter {
 }
 
 .playerRespawningPlay {
-    /* height: 3px; */
     height: 100%;
     background-color: var(--faction-primary-color);
-    /* background-color: var(--faction-secondary-color); */
     opacity: 0.65;
-    /* mix-blend-mode: hard-light; */
-    mix-blend-mode: color-dodge;
+    border-right: 2px solid var(--faction-flavor-trans-color);
+    /* mix-blend-mode: color-dodge; */
     -moz-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     -webkit-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
@@ -248,18 +240,17 @@ img .darkenIconFilter {
     animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
 }
 .deadIconPlay {
-    /* -moz-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple; */
-    /* -webkit-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple; */
-    /* animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple; */
     mix-blend-mode: soft-light;
 }
 
 .playerStatsContainer.deadTextPlay {
-    background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.4) 60%) !important;
-    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.4) 60%) !important;
-    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.4) 60%) !important;
-    border-color: transparent !important;
+    background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.45) 60%) !important;
+    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.45) 60%) !important;
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.45) 60%) !important;
+    /* border-color: var(--faction-flavor-dark-trans-color) !important; */
+    border-color: #1F233056 !important;
     box-shadow: none !important;
+    border-radius: 2px;
 }
 
 .revivedFlashPlay {

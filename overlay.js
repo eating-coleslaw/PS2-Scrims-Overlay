@@ -125,6 +125,7 @@ function updateTime(timeCounter) {
 }
 
 function updateKillfeedPlayer(killObj) {
+    return;
     p3Kill = p2Kill;
     p2Kill = p1Kill;
     p1Kill = lengthenName(killObj.winner) + ' ' + lengthenName('[' + killObj.weapon + ']') + '  ' + lengthenName(killObj.loser) + '\n';
@@ -132,6 +133,7 @@ function updateKillfeedPlayer(killObj) {
 }
 
 function updateKillfeedFacility(tag, points) {
+    return;
     p3Kill = p2Kill;
     p2Kill = p1Kill;
     p1Kill = '       [' + tag + '] Captured the base (+' + points + ')\n';
@@ -139,12 +141,14 @@ function updateKillfeedFacility(tag, points) {
 }
 
 function startKillfeed() {
+    return;
     p3Kill = ''; p2Kill = '';
     p1Kill = ' --- Match Started --- \n';
     write(killfeed, p1Kill + p2Kill + p3Kill);
 }
 
 function writeFinalStats() {
+    return;
     const round = ps2ws.getRound();
     const full = __dirname + '/match/' + round + '.txt',
           one  = __dirname + '/match/' + round + 'TeamOne.txt',
