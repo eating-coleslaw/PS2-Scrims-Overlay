@@ -71,6 +71,10 @@ socket.on('connect', function() {
             $('#T2Faction').html('N<BR>S');
 
             $('#killfeedContainer').addClass('killfeedInactive');
+
+            // Also empty the player containers
+            $('#T1Players').empty();
+            $('#T2Players').empty();
         }
     });
 
@@ -97,7 +101,7 @@ socket.on('connect', function() {
             console.log('respawning');
             playRespawning(loserName);
         }
-        else if (event.is_revive === true && event.loser !== undefined) {
+        else if (event.is_revive === true && (event.loser !== undefined || event.loser !== 'Random Pubbie')) {
             var loserName = event.loser;
             console.log('reviving');
             playRevived(loserName);
@@ -119,6 +123,7 @@ socket.on('connect', function() {
            return;
        }
 
+       return;
        if (event.weapon == 'Base Capture') {
            return;
         } else {
@@ -281,10 +286,37 @@ function playRespawning(eventLoserName) {
 }
 
 function playRevived(eventLoserName) {
-    emptyPlayersEventMask(eventLoserName);
+    // emptyPlayersEventMask(eventLoserName);
+    // var player = document.getElementById(eventLoserName);
+    // player.className = "playerStatsContainer";
+
+    var loserID = eventLoserName + 'respawn';
+    var classID = eventLoserName + 'class';
+    var eventMaskId = eventLoserName +'EventMask';
+
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
+    
+    var playerClass = document.getElementById(classID);
+    $('#' + classID).removeClass('deadIconPlay');
 
+    emptyPlayersEventMask(eventLoserName);
+
+    window.requestAnimationFrame(function (time) {
+        window.requestAnimationFrame(function (time) {
+            player.className = 'playerStatsContainer revivedFlashPlay';
+            $('#' + classID).addClass('revivedFlashPlay');
+
+            $('#' + loserID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+                function() {
+                    console.log('adding revive');
+                    emptyPlayersEventMask(eventLoserName);
+                    $('#' + eventLoserName).toggleClass('revivedFlashPlay');
+                    $('#' + classID).removeClass('revivedFlashPlay');
+
+                });
+        });
+    });
 }
 
 function playContestingPoint(eventWinnerName) {
