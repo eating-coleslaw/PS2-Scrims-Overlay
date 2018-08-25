@@ -40,8 +40,9 @@
         "name name icon"
         "event event icon";
     text-align: left;
-    background-color: rgba(35, 35, 35, 0.8);
-    border: 1px solid rgb(20, 20, 20);
+    /* background-color: rgba(35, 35, 35, 0.9); */
+    background-color: #1F233090;
+    border: 1px solid #0F1320;
     text-overflow: ellipsis;
     overflow: hidden;
     padding: 0 3px;
@@ -157,15 +158,15 @@
 }
 
 #T1Players > .playerStatsContainer {
-    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
+    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
+    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
+    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
     box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
 }
 #T2Players > .playerStatsContainer {
-    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
+    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
+    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330C9 60%);
     box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
 }
 
@@ -220,8 +221,10 @@ img .darkenIconFilter {
     /* height: 3px; */
     height: 100%;
     background-color: var(--faction-primary-color);
-    /* opacity: 0.65; */
-    mix-blend-mode: hard-light;
+    /* background-color: var(--faction-secondary-color); */
+    opacity: 0.65;
+    /* mix-blend-mode: hard-light; */
+    mix-blend-mode: color-dodge;
     -moz-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     -webkit-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
