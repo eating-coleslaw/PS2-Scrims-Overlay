@@ -101,7 +101,7 @@ socket.on('connect', function() {
             console.log('respawning');
             playRespawning(loserName);
         }
-        else if (event.is_revive === true && (event.loser !== undefined || event.loser !== 'Random Pubbie')) {
+        else if (event.is_revive === true && event.loser !== undefined && event.loser !== 'Random Pubbie') {
             var loserName = event.loser;
             console.log('reviving');
             playRevived(loserName);
@@ -110,6 +110,10 @@ socket.on('connect', function() {
             var winnerName = event.winner;
             console.log('contesting point');
             playContestingPoint(winnerName);
+        }
+        else {
+            var winnerName = event.winner;
+            playRespawning(winnerName);
         }
 
         updatePlayerClasses(event);

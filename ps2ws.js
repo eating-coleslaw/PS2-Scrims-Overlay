@@ -8,6 +8,7 @@ const api_key   = require('./api_key.js'),
       overlay     = require('./overlay.js'),
       team        = require('./team.js'),
       socket      = require('./socket.js');
+      painter     = require('./painter.js');
 
 // Variables
 let  teamOneObject,
@@ -172,13 +173,14 @@ function itsPlayerData(data) {
     }
 
     else {
-        console.log('   --> Invalid Player Event <--');
+        console.log(painter.red('   --> Invalid Player Event <--'));
     }
 
-    //overlay.updateScoreOverlay();
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
 }
+
+//#region Discrete Player Event Handling
 
 function oneIvITwo (data, points, item) {
     team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.attacker_loadout_id, data.character_loadout_id);
@@ -264,6 +266,8 @@ function teamTwoTeamkill (data, points, item) {
     });
 }
 
+//#endregion
+
 function itsFacilityData(data) {
     //deals with adding points to the correct team
     if (data.new_faction_id !== data.old_faction_id) {
@@ -284,8 +288,8 @@ function itsFacilityData(data) {
             app.send('score', { teamOne: team.getT1(), teamTwo: team.getT2() });
             captures++;
         }
+
         //else it was captured by neither outfit
-        //overlay.updateScoreOverlay();
         teamOneObject = team.getT1();
         teamTwoObject = team.getT2();
     }
@@ -352,6 +356,8 @@ function itsExperienceData(data) {
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
 }
+
+//#region Discrete Experience Event Handling
 
 function teamOneRevive(data) {
     team.oneRevive(data.character_id, data.other_id, data.loadout_id);
@@ -447,6 +453,8 @@ function teamTwoPointControl(data) {
     });
 }
 
+//#endregion
+
 function createStream() {
     const ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
     ws.on('open', function open() {
@@ -504,8 +512,16 @@ function startTimer(ws) {
             socket.setRunning(false);
         }
         overlay.updateTime(timeCounter);
-        timeCounter--;
+        if (socket.getRunning() === true) timeCounter--;
     }, 1000);
+}
+
+function pauseTheMatch() {
+    socket.setRunning(false);
+}
+
+function resumeTheMatch() {
+    socket.setRunning(true);
 }
 
 function stopTheMatch() {
@@ -525,7 +541,7 @@ function startUp(oneObj, twoObj, secsInt, title) {
         overlay.startKillfeed();
         app.send('refresh', '');
         app.send('title', String(eventTitle));
-        console.log('startUp title: ' + eventTitle);
+        console.log('startUp title: ' + painter.green(eventTitle));
         socket.setRunning(true);
     }).catch(function (err) {
         console.error('Items did not initialise!!');
