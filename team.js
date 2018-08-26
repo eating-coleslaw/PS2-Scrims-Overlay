@@ -69,7 +69,8 @@ function setTeams(one, two) {
             dmgAssists: 0,
             utilAssists: 0,
             revivesTaken: 0,
-            eventCount: 0
+            eventCount: 0,
+            eventNetScore: 0
         };
     });
 
@@ -100,7 +101,8 @@ function setTeams(one, two) {
             dmgAssists: 0,
             utilAssists: 0,
             revivesTaken: 0,
-            eventCount: 0
+            eventCount: 0,
+            eventNetScore: 0
         };
     });
 }
