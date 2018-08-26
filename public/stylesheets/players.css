@@ -172,6 +172,7 @@
     justify-self: center;
     box-sizing: inherit;
     filter: brightness(0) drop-shadow(0px 0px 1px var(--faction-dark-trans-color));
+    mix-blend-mode: normal;
 }
 
 #T1Players .iconPlayerClass:last-of-type {
@@ -240,13 +241,16 @@ img .darkenIconFilter {
     animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
 }
 .deadIconPlay {
-    mix-blend-mode: soft-light;
+   -moz-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+   -webkit-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+   animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+   /* mix-blend-mode: soft-light; */
 }
 
 .playerStatsContainer.deadTextPlay {
-    background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.45) 60%) !important;
-    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.45) 60%) !important;
-    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.45) 60%) !important;
+    background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
     /* border-color: var(--faction-flavor-dark-trans-color) !important; */
     border-color: #1F233056 !important;
     box-shadow: none !important;
@@ -374,24 +378,30 @@ img .darkenIconFilter {
 @-moz-keyframes fadeOutSimple {
     from {
         opacity: 0.4;
+        mix-blend-mode: soft-light;
     }
     to {
         opacity: 1;
+        /* mix-blend-mode: normal; */
     }
 }
 @-webkit-keyframes fadeOutSimple {
     from {
         opacity: 0.4;
+        mix-blend-mode: soft-light;
     }
     to {
         opacity: 1;
+        /* mix-blend-mode: normal; */
     }
 }
 @keyframes fadeOutSimple {
     from {
         opacity: 0.4;
+        mix-blend-mode: soft-light;
     }
     to {
         opacity: 1;
+        /* mix-blend-mode: normal; */
     }
 }

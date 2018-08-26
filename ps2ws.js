@@ -549,6 +549,7 @@ function stopTheMatch() {
 
 function endRoundEarly(newFactionId, outfitTag) {
     console.log(painter.green('Base Capture: [' + outfitTag + ']'));
+    app.send('base captured');
     playRoundEndAudio();
     stopTheMatch();
 }

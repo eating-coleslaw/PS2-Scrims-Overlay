@@ -5,29 +5,16 @@
  */
 
 var socket = io();
-var playerStatusTimers = [];
-var onPointDuration = 3000; //3 seconds
-
-var IStatus = {
-    Alive: 1,
-    Dead: 2,
-    Reviving: 3,
-    OnPoint: 4,
-    _count: 4
-};
+const debugLogs = false;
 
 socket.on('connect', function() {
 
     socket.on('title', function(title) {
-        //console.log(title);
         $('#eventTitle').html(title);
     });
 
     socket.on('teams', function (data) {
-        console.log(data);
-        
-        //$('#eventTitle').html(data.title);
-        //console.log('Event Title: ' + title);
+        if (debugLogs === true) { console.log(data);}
         
         if (data.teamOne.name !== "") {
             var T1 = data.teamOne.alias
@@ -89,57 +76,41 @@ socket.on('connect', function() {
     });
 
     socket.on('killfeed', function (event) {
-        console.log(event);
-        $('<tr><td class="killfeedRowContainer"><div class="killfeedWinner killfeedPlayer killfeedCell faction' + event.winner_faction + '">' + event.winner + '</div>' +
-            '<div class="killfeedWeapon killfeedCell">' + event.weapon + '</div>' +
-            '<div class="killfeedLoser killfeedPlayer killfeedCell faction' + event.loser_faction + '">' + event.loser + '</div>' +
-            '</td></tr>') .prependTo($('#killfeed')
-        );
+        if (debugLogs === true) { console.log(event);}
         
         if (event.is_kill === true && event.loser !== undefined) {
             var loserName = event.loser;
-            console.log('respawning');
+            addKillfeedRow(event);
+            updatePlayerClasses(event);
             playRespawning(loserName);
         }
         else if (event.is_revive === true && event.loser !== undefined && event.loser !== 'Random Pubbie') {
             var loserName = event.loser;
-            console.log('reviving');
+            addKillfeedRow(event);
+            updatePlayerClasses(event);
             playRevived(loserName);
         }
         else if (event.is_control === true && event.winner !== undefined) {
             var winnerName = event.winner;
-            console.log('contesting point');
+            if (debugLogs === true) { addKillfeedRow(event);}
+            updatePlayerClasses(event);
             playContestingPoint(winnerName);
         }
-
-        updatePlayerClasses(event);
        
         //Remove the last row of the killfeed before adding the new row
         var killTable = document.getElementById('killfeed');
         var killRows = killTable.getElementsByTagName('tr');
         if (killRows.length > 4) {
             killTable.deleteRow(4);
-       } else {
-           return;
        }
-
-       return;
-       if (event.weapon == 'Base Capture') {
-           return;
-        } else {
-            playRespawning(event.loser, event.loser_loadout_id);
-        }
-
-
     });
 
     socket.on('score', function (event) {
-        console.log(event);
-        //$('#T1Score').empty().html(event.teamOne.points); $('#T2Score').empty().html(event.teamTwo.points);
+        if (debugLogs === true) { console.log(event);}
         
         var m = event.teamOne.members;
         for (keys in m) {
-            if (m[keys].eventCount > 0) { //m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
+            if (m[keys].eventCount > 0) {
                if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
@@ -149,29 +120,14 @@ socket.on('connect', function() {
                         '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' +
                         '</div>' + '</div>').appendTo($('#T1Players'));
                 }
-                // if (event.is_kill === true && m[keys].name === event.loser) {
-                //     var loserName = m[keys].loser;
-                //     console.log('respawning');
-                //     playRespawning(loserName);
-                // }
-                // else if (event.is_revive && m[keys].name === event.loser) {
-                //     var loserName = m[keys].loser;
-                //     console.log('reviving');
-                //     playRevived(loserName);
-                // }
-                // else if (event.is_control === true && m[keys].name === event.winner) {
-                //     var winnerName = m[keys].winner;
-                //     console.log('contesting point');
-                //     playContestingPoint(winnerName);
-                // }
             } else {
-                $(m[keys].name).empty(); //commenting out for testing
+                $('#' + m[keys].name).remove();
             }
         }
 
         m = event.teamTwo.members;
         for (keys in m) {
-            if (m[keys].eventCount > 0) { //m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].revives > 0 || m[keys].teamKills > 0) {
+            if (m[keys].eventCount > 0) {
                 if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
@@ -181,56 +137,21 @@ socket.on('connect', function() {
                     '<div class="playerEventMask" id="' + m[keys].name + 'EventMask"></div>' +
                     '</div>').appendTo($('#T2Players'));
                 }
-                // if (event.is_kill === true && m[keys].name === event.loser) {
-                //     var loserName = m[keys].loser;
-                //     playRespawning(loserName);
-                // }
-                // else if (event.is_revive === true && m[keys].name === event.loser) {
-                //     var loserName = m[keys].loser;
-                //     playRevived(loserName);
-                // }
-                // else if (event.is_control === true && m[keys].name === event.winner) {
-                //     var winnerName = m[keys].winner;
-                //     playContestingPoint(winnerName);
-                // }
             } else {
-                $(m[keys].name).empty(); //commenting out for testing
+                $('#' + m[keys].name).remove();
             }
         }
         updatePlayerClasses(event);
     });
 });
 
-function handlePlayerScoresEvent(event, members, playerContainerElId) {
-    for (keys in members) {
-        if (members[keys].eventCount > 0) { //members[keys].kills > 0 || members[keys].deaths > 0 || members[keys].revives > 0 || members[keys].teamKills > 0) {
-           if (members[keys].name == "") {return;}
-            var nameEl = document.getElementById(members[keys].name);
-            if (nameEl === null) {
-                $('<div class="playerStatsContainer" id="' + members[keys].name + '">' +
-                    '<div class="playerClass ' + getClassFromLoadoutID(members[keys].ps2Class) + '" id="' + members[keys].name + 'class"></div>' + 
-                    '<div class="playerStatsName" id="' + members[keys].name + 'name">' + members[keys].name + '</div>' +
-                    '<div class="playerEventMask" id="' + members[keys].name + 'EventMask">' + '<div class="stripe"></div><div class="stripe"></div>' +
-                    '</div>' + '</div>').appendTo($(playerContainerElId));
-            }
-            if (event.is_kill === true && members[keys].name === event.loser) {
-                var loserName = members[keys].loser;
-                playRespawning(loserName);
-            }
-            else if (event.is_revive && members[keys].name === event.loser) {
-                var loserName = members[keys].loser;
-                playRevived(loserName);
-            }
-            else if (event.is_control === true && members[keys].name === event.winner) {
-                var winnerName = members[keys].winner;
-                playContestingPoint(winnerName);
-            }
-        } else {
-            $(members[keys].name).empty(); //commenting out for testing
-        }
-    }
+function addKillfeedRow(event) {
+    $('<tr><td class="killfeedRowContainer"><div class="killfeedWinner killfeedPlayer killfeedCell faction' + event.winner_faction + '">' + event.winner + '</div>' +
+            '<div class="killfeedWeapon killfeedCell">' + event.weapon + '</div>' +
+            '<div class="killfeedLoser killfeedPlayer killfeedCell faction' + event.loser_faction + '">' + event.loser + '</div>' +
+            '</td></tr>').prependTo($('#killfeed')
+        );
 }
-
 
 function updatePlayerClasses(event) {
     var winnerID = event.winner + "class";
@@ -261,7 +182,6 @@ function playRespawning(eventLoserName) {
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
     
-    var playerClass = document.getElementById(classID);
     $('#' + classID).removeClass('deadIconPlay');
 
     emptyPlayersEventMask(eventLoserName);
@@ -286,18 +206,10 @@ function playRespawning(eventLoserName) {
 }
 
 function playRevived(eventLoserName) {
-    // emptyPlayersEventMask(eventLoserName);
-    // var player = document.getElementById(eventLoserName);
-    // player.className = "playerStatsContainer";
-
-    var loserID = eventLoserName + 'respawn';
     var classID = eventLoserName + 'class';
-    var eventMaskId = eventLoserName +'EventMask';
-
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
     
-    var playerClass = document.getElementById(classID);
     $('#' + classID).removeClass('deadIconPlay');
 
     emptyPlayersEventMask(eventLoserName);
@@ -324,7 +236,6 @@ function playContestingPoint(eventWinnerName) {
     
     // Control Point events can only happen at a set interval, so don't worry about restting the animation gracefully
     emptyPlayersEventMask(eventWinnerName);
-    //$('<div class="stripe"></div><div class="stripe"></div>').appendTo($('#' + eventMaskId));
 
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
