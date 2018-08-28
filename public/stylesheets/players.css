@@ -33,11 +33,11 @@
     display: grid;
     direction: ltr;
     grid-gap: 2px;
-    grid-template-columns: 1fr 1fr 24px;
+    grid-template-columns: 16px 1fr 24px;
     grid-template-rows: 18px 7px;
     grid-template-areas:
         "name name icon"
-        "event event icon";
+        "score event icon";
     text-align: left;
     background-color: #1F233090;
     border: 1px solid #0F1320;
@@ -52,6 +52,15 @@
     text-overflow: ellipsis;
     grid-area: name;
     overflow: hidden;
+}
+
+.playerStatsScore {
+    grid-area: score;
+    font-size: 12px;
+    position: relative;
+    top: -6px;
+    left: 2px;
+    color: var(--faction-flavor-trans-color);
 }
 
 .playerEventMask {
@@ -216,7 +225,7 @@ img .darkenIconFilter {
     height: 100%;
     background-color: var(--faction-primary-color);
     opacity: 0.65;
-    border-right: 2px solid var(--faction-flavor-trans-color);
+    border-right: 3px solid var(--faction-flavor-trans-color);
     /* mix-blend-mode: color-dodge; */
     -moz-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     -webkit-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;

@@ -82,18 +82,21 @@ socket.on('connect', function() {
             var loserName = event.loser;
             addKillfeedRow(event);
             updatePlayerClasses(event);
+            updatePlayerScores(event);
             playRespawning(loserName);
         }
         else if (event.is_revive === true && event.loser !== undefined && event.loser !== 'Random Pubbie') {
             var loserName = event.loser;
             addKillfeedRow(event);
             updatePlayerClasses(event);
+            updatePlayerScores(event);
             playRevived(loserName);
         }
         else if (event.is_control === true && event.winner !== undefined) {
             var winnerName = event.winner;
             if (debugLogs === true) { addKillfeedRow(event);}
             updatePlayerClasses(event);
+            updatePlayerScores(event);
             playContestingPoint(winnerName);
         }
        
@@ -113,11 +116,14 @@ socket.on('connect', function() {
             if (m[keys].eventCount > 0) {
                if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
+                var score = m[keys].netEventScore === undefined ? 0 : m[keys].netEventScore;
+                console.log(nameEl + ' Score: ' + score);
                 if (nameEl === null) {
                     $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
                         '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
                         '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
-                        '<div class="playerEventMask" id="' + m[keys].name + 'EventMask">' +
+                        '<div class="playerEventMask" id="' + m[keys].name + 'EventMask"></div>' +
+                        '<span class="playerStatsScore"><div class="' + getEmojiFromNetEventScore(score) + '" id="' + m[keys].name + 'Score"></div></span>' +
                         '</div>' + '</div>').appendTo($('#T1Players'));
                 }
             } else {
@@ -130,11 +136,14 @@ socket.on('connect', function() {
             if (m[keys].eventCount > 0) {
                 if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
+                var score = m[keys].netEventScore === undefined ? 0 : m[keys].netEventScore;
+                console.log(nameEl + ' Score: ' + score);
                 if (nameEl === null) {
                     $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
                     '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
                     '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
                     '<div class="playerEventMask" id="' + m[keys].name + 'EventMask"></div>' +
+                    '<span class="playerStatsScore"><div class="' + getEmojiFromNetEventScore(score) + '" id="' + m[keys].name + 'Score"></div></span>' +
                     '</div>').appendTo($('#T2Players'));
                 }
             } else {
@@ -166,6 +175,22 @@ function updatePlayerClasses(event) {
    }
 }
 
+function updatePlayerScores(event) {
+    var winnerID = event.winner + 'Score';
+    var loserID = event.loser + 'Score';
+
+    if (event.winner_net_score !== undefined && !($('#'+winnerID).length == 0)) {
+        console.log(event.winner + ' Net: ' + event.winner_net_score);
+        document.getElementById(winnerID).className = "playerClass " + getEmojiFromNetEventScore(event.winner_net_score);
+    }
+ 
+    if (event.loser_net_score !== undefined && !($('#'+loserID).length == 0) ) {
+        console.log(event.loser + ' Net: ' + event.loser_net_score);
+        document.getElementById(loserID).className = "playerClass " + getEmojiFromNetEventScore(event.loser_net_score);
+    }
+
+}
+
 function getFactionLabel(teamObject) {
    var factions = new Array();
    factions[1] = "V<BR>S";
@@ -183,6 +208,7 @@ function playRespawning(eventLoserName) {
     player.className = "playerStatsContainer";
     
     $('#' + classID).removeClass('deadIconPlay');
+    $('#' + eventLoserName).removeClass('deadTextPlay');
 
     emptyPlayersEventMask(eventLoserName);
 
@@ -195,10 +221,9 @@ function playRespawning(eventLoserName) {
 
             $('#' + loserID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
-                    console.log('clearing revive');
                     emptyPlayersEventMask(eventLoserName);
-                    $('#' + eventLoserName).toggleClass('deadTextPlay');
-                    $('#' + classID).removeClass('deadIconPlay');
+                    $('#' + eventLoserName).toggleClass('revivedFlashPlay deadTextPlay');
+                    $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
 
                 });
         });
@@ -211,6 +236,7 @@ function playRevived(eventLoserName) {
     player.className = "playerStatsContainer";
     
     $('#' + classID).removeClass('deadIconPlay');
+    $('#' + eventLoserName).removeClass('deadTextPlay');
 
     emptyPlayersEventMask(eventLoserName);
 
@@ -221,10 +247,9 @@ function playRevived(eventLoserName) {
 
             $('#' + eventLoserName).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
-                    console.log('adding revive');
                     emptyPlayersEventMask(eventLoserName);
-                    $('#' + eventLoserName).toggleClass('revivedFlashPlay');
-                    $('#' + classID).removeClass('revivedFlashPlay');
+                    $('#' + eventLoserName).removeClass('revivedFlashPlay deadTextPlay');
+                    $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
 
                 });
         });
@@ -267,6 +292,31 @@ function getLoadoutIdMappings(loadoutID) {
 
 function getClassFromLoadoutID(loadoutID) {
     return getLoadoutIdMappings(loadoutID);
+}
+
+function getEmojiFromNetEventScore(netEventScore) {
+    // Neutral -> Negative Score Emojis
+    if (netEventScore <= 2) {
+        if (netEventScore >= -3) { return makeEmojiClassString('meh');}         // :|
+        if (netEventScore >= -12) { return makeEmojiClassString('frown');}       // :(
+        // if (netEventScore >= -12) { return makeEmojiClassString('sad-tear');}   // ;( 
+        // if (netEventScore >= -16) { return makeEmojiClassString('sad-cry');}    // T.T 
+        if (netEventScore < -20) { return makeEmojiClassString('tired');}    // T.T 
+    }
+    // Positive Score Emojis
+    else if (netEventScore > 2) {
+        if (netEventScore <= 6) { return makeEmojiClassString('smile');}
+        if (netEventScore <= 16) { return makeEmojiClassString('grin-beam');}
+        // if (netEventScore < 6) { return makeEmojiClassString('laugh-squint');}
+        if (netEventScore > 20) { return makeEmojiClassString('laugh-beam');}
+    }
+}
+
+function makeEmojiClassString(emoji) {
+    let size =' sm';
+    let prefix = 'far fa-';
+    console.log('emoji: ' + prefix + emoji + size);
+    return prefix + emoji + size;
 }
 
 socket.emit('backchat', { obj: 'New Connection' });
