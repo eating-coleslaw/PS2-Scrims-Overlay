@@ -84,7 +84,7 @@
 }
 
 .stripe {
-    height: 50%;
+    height: 52%;
     padding: 0 2px 0 3px;
     transform-origin: bottom;
     background-image: repeating-linear-gradient(-45deg,
@@ -93,9 +93,8 @@
         var(--faction-flavor-trans-color) 6px,
         var(--faction-flavor-trans-color) 12px
     );
-    animation: 0.5s pointControlFlash 10 linear alternate, 0.2s ease-out 2s 2 reverse forwards shrinkDown;
-    animation-direction: alternate-reverse;
-}
+    animation: 0.5s pointControlFlash 12 linear alternate, 0.2s ease-out 2.25s 2 reverse forwards shrinkDown;
+    animation-direction: alternate-reverse;}
 
 .stripe:nth-child(odd) {
     background-image: repeating-linear-gradient(-45deg,
@@ -104,7 +103,7 @@
         transparent 6px,
         transparent 12px
     );
-    animation: 0.5s pointControlFlash 0.25s 10 linear alternate-reverse, 0.25s ease-out 2s 1 reverse forwards shrinkDown;
+    animation: 0.5s pointControlFlash 0.25s 12 linear alternate-reverse, 0.25s ease-out 2.25s 1 reverse forwards shrinkDown;
     animation-direction: alternate-reverse;
 }
 
