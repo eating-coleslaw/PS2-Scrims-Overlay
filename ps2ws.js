@@ -72,14 +72,14 @@ function individualPointUpdate(event) {
  
 const objectivePointsMap = {
     revive: 2,
-    kill: 2,
+    kill: 3, //2,
     dmgAssist: 1,
     utilAssist: 1,
     control: 3,
-    death: -4,
-    teamkill: -5,
+    death: -6, //-4,
+    teamkill: -6, //-5,
     tkDeath: -1,
-    suicide: -5,
+    suicide: -6, //-5,
     reviveTaken: 1
 }
 
@@ -90,34 +90,6 @@ function killfeedPlayer(obj) {
     // overlay.updateKillfeedPlayer(obj);
     teamOneObject = team.getT1();
     teamTwoObject = team.getT1();
-}
-
-function killfeedFacilityT1(points) {
-    const obj = {
-        winner: '[' + teamOneObject.alias + ']',
-        winner_faction: teamOneObject.faction,
-        loser: '[' + teamTwoObject.alias + ']',
-        loser_faction: teamTwoObject.faction,
-        weapon: 'Base Capture',
-        points: points
-    };
-    app.send('killfeed', obj);
-    // overlay.updateKillfeedFacility(teamOneObject.alias, points);
-    team.oneBaseCap(points);
-}
-
-function killfeedFacilityT2(points) {
-    const obj = {
-        winner: '[' + teamTwoObject.alias + ']',
-        winner_faction: teamTwoObject.faction,
-        loser: '[' + teamOneObject.alias + ']',
-        loser_faction: teamOneObject.faction,
-        weapon: 'Base Capture',
-        points: points
-    };
-    app.send('killfeed', obj);
-    // overlay.updateKillfeedFacility(teamTwoObject.alias, points);
-    team.twoBaseCap();
 }
 
 function dealWithTheData(raw) {
@@ -319,7 +291,7 @@ function itsExperienceData(data) {
        let xpID = parseInt(data.experience_id);
        let characterName = teamOneObject.members[data.character_id].name;
        // Revive Data
-        if (allXpIdsRevives.includes(xpID)) {
+        if (allXpIdsRevives.includes(xpID && teamOneObject.members.hasOwnProperty(data.other_id))) {
             teamOneRevive(data, objectivePointsMap);
             console.log('Team 1 Revive: ' + characterName);
         }
@@ -344,7 +316,7 @@ function itsExperienceData(data) {
         let xpID = parseInt(data.experience_id);
         let characterName = teamTwoObject.members[data.character_id].name;
         // Team 2 Revive
-        if (allXpIdsRevives.includes(xpID)) {
+        if (allXpIdsRevives.includes(xpID) && teamTwoObject.members.hasOwnProperty(data.other_id)) {
             teamTwoRevive(data, objectivePointsMap);
             console.log('Team 2 Revive: ' + characterName);
         }
@@ -389,7 +361,14 @@ function teamOneRevive(data, pointsMap) {
 
 function teamTwoRevive(data, pointsMap) {
     team.twoRevive(data.character_id, data.other_id, data.loadout_id, pointsMap);
-    let loserName = teamTwoObject.members.hasOwnProperty(data.other_id) ? teamTwoObject.members[data.other_id].name : 'Random Pubbie';
+    if (teamTwoObject.members.hasOwnProperty(data.other_id)) {
+        var loserName = 'Random Pubbie';
+        var score = 'loserName';
+    }
+    else {
+        var loserName = teamTwoObject.members[data.other_id].name;
+        var score = teamTwoObject.members[data.other_id].eventNetScore;
+    }
     killfeedPlayer({
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -572,10 +551,10 @@ function startUp(oneObj, twoObj, secsInt, title) {
         matchLength = secsInt;
         eventTitle = title ? title : '#BanConcs'; //'PS2 IvI Scrims';
         createStream();
-        overlay.startKillfeed();
+        // overlay.startKillfeed();
         app.send('refresh', '');
         app.send('title', String(eventTitle));
-        console.log('startUp title: ' + painter.green(eventTitle));
+        console.log('Match Started: ' + painter.green(eventTitle));
         socket.setRunning(true);
     }).catch(function (err) {
         console.error('Items did not initialise!!');
@@ -588,7 +567,7 @@ function newRound() {
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
     createStream();
-    overlay.startKillfeed();
+    // overlay.startKillfeed();
     app.send('refresh', '');
     app.send('title', getTitle());
     socket.setRunning(true);

@@ -99,6 +99,9 @@ socket.on('connect', function() {
             updatePlayerScores(event);
             playContestingPoint(winnerName);
         }
+        else {
+            updatePlayerScores(event);
+        }
        
         //Remove the last row of the killfeed before adding the new row
         var killTable = document.getElementById('killfeed');
@@ -117,7 +120,6 @@ socket.on('connect', function() {
                if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 var score = m[keys].netEventScore === undefined ? 0 : m[keys].netEventScore;
-                console.log(nameEl + ' Score: ' + score);
                 if (nameEl === null) {
                     $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
                         '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
@@ -137,7 +139,6 @@ socket.on('connect', function() {
                 if (m[keys].name == "") {return;}
                 var nameEl = document.getElementById(m[keys].name);
                 var score = m[keys].netEventScore === undefined ? 0 : m[keys].netEventScore;
-                console.log(nameEl + ' Score: ' + score);
                 if (nameEl === null) {
                     $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
                     '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
@@ -151,6 +152,7 @@ socket.on('connect', function() {
             }
         }
         updatePlayerClasses(event);
+        updatePlayerScores(event);
     });
 });
 
@@ -166,27 +168,28 @@ function updatePlayerClasses(event) {
     var winnerID = event.winner + "class";
     var loserID = event.loser + "class";
    
-   if (event.winner_class_id !== undefined && !($('#'+winnerID).length == 0)) {
+   if (event.winner_class_id !== undefined && !($('#' + winnerID).length == 0)) {
        document.getElementById(winnerID).className = "playerClass " + getClassFromLoadoutID(event.winner_class_id);
    }
 
-   if (event.loser_class_id !== undefined && !($('#'+loserID).length == 0) ) {
+   if (event.loser_class_id !== undefined && !($('#' + loserID).length == 0) ) {
     document.getElementById(loserID).className = "playerClass " + getClassFromLoadoutID(event.loser_class_id);
    }
 }
 
 function updatePlayerScores(event) {
+    // return;
     var winnerID = event.winner + 'Score';
     var loserID = event.loser + 'Score';
 
-    if (event.winner_net_score !== undefined && !($('#'+winnerID).length == 0)) {
+    if (event.winner_net_score !== undefined && !($('#' + winnerID).length == 0)) {
         console.log(event.winner + ' Net: ' + event.winner_net_score);
-        document.getElementById(winnerID).className = "playerClass " + getEmojiFromNetEventScore(event.winner_net_score);
+        document.getElementById(winnerID).className = getEmojiFromNetEventScore(event.winner_net_score);
     }
  
-    if (event.loser_net_score !== undefined && !($('#'+loserID).length == 0) ) {
+    if (event.loser_net_score !== undefined && !($('#' + loserID).length == 0) ) {
         console.log(event.loser + ' Net: ' + event.loser_net_score);
-        document.getElementById(loserID).className = "playerClass " + getEmojiFromNetEventScore(event.loser_net_score);
+        document.getElementById(loserID).className = getEmojiFromNetEventScore(event.loser_net_score);
     }
 
 }
@@ -306,7 +309,7 @@ function getEmojiFromNetEventScore(netEventScore) {
     // Positive Score Emojis
     else if (netEventScore > 2) {
         if (netEventScore <= 6) { return makeEmojiClassString('smile');}
-        if (netEventScore <= 16) { return makeEmojiClassString('grin-beam');}
+        if (netEventScore <= 20) { return makeEmojiClassString('grin-beam');}
         // if (netEventScore < 6) { return makeEmojiClassString('laugh-squint');}
         if (netEventScore > 20) { return makeEmojiClassString('laugh-beam');}
     }
@@ -315,7 +318,6 @@ function getEmojiFromNetEventScore(netEventScore) {
 function makeEmojiClassString(emoji) {
     let size =' sm';
     let prefix = 'far fa-';
-    console.log('emoji: ' + prefix + emoji + size);
     return prefix + emoji + size;
 }
 
