@@ -77,7 +77,7 @@ socket.on('connect', function() {
     });
 
     socket.on('killfeed', function (event) {
-        //console.log(event);
+        console.log(event);
         var pointsString = "";
         if (Number(event.points) > 0) { 
             pointsString = '+' + event.points;

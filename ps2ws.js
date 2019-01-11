@@ -67,28 +67,93 @@ function individualPointUpdate(event) {
     pointMap.name = 'Custom';
 }
 
+const experienceGainNumbers=['7','53','2','371','372','550','551','552','553','554','556']
+
+const experienceGainsMap = {
+    '7': {
+        type: 'revive',
+        subscribeVal: "GainExperience_experience_id_7",
+        description: "Revive"
+    },
+    '53': {
+        type: 'revive',
+        subscribeVal: "GainExperience_experience_id_53",
+        description: "Squad Revive"
+    },
+    '2': {
+        type: 'damageAssist',
+        subscribeVal: "GainExperience_experience_id_2",
+        description: "Kill Player Assist"
+    },
+    '371': {
+        type: 'damageAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "Kill Player Priority Assist"
+    },
+    '372': {
+        type: 'damageAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "Kill Player High Priority Assist"
+    },
+    '550': {
+        type: 'utilityAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "Concussion Grenade Assist"
+    },
+    '551': {
+        type: 'utilityAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "Concussion Grenade Squad Assist"
+    },
+    '552': {
+        type: 'utilityAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "EMP Grenade Assist"
+    },
+    '553': {
+        type: 'utilityAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "EMP Grenade Squad Assist"
+    },
+    '554': {
+        type: 'utilityAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "Flashbang Assist"
+    },
+    '556': {
+        type: 'utilityAssist',
+        subscribeVal: "GainExperience_experience_id_",
+        description: "Flashbang Squad Assist"
+    }
+};
+
+function getExperienceGainsMap() {
+    return experienceGainsMap;
+}
+
+function getExpGainsSubscribeString() {
+    var expGainsArray = new Array();
+    //var experienceGainsMap = getExperienceGainMap();
+    experienceGainNumbers.forEach( function(expID) {
+        expGainsArray.push(experienceGainsMap[expID].subscribeVal);
+    });
+    return expGainsArray.toString();
+}
+
 const reviveExpGainIDs = ['7','53'];
 const damageAssistExpGainIDs = ['2','371','372',]; //TO-DO: 3, 5, 22, 30, 102?
 const utilityAssistExpGainIDs = ['550','551','552','553','554','556',]; //TO-DO: 582?
 
+/*
 function getExperienceGainMap() {
     var experienceGainMap = {
-        'revive': reviveExpGainIDs,
-        'damageAssist': damageAssistExpGainIDs,
-        'utilityAssist': utilityAssistExpGainIDs
-    }
+        revive: reviveExpGainIDs,
+        damageAssist: damageAssistExpGainIDs,
+        utilityAssist: utilityAssistExpGainIDs
+    };
     return experienceGainMap;
 }
-    
-    // for (i = 0; i < reviveExpGainIDs.length; i++) {
-    //     experienceGainMap[reviveExpGainIDs[i]] = { "action": 'revive' };
-    // }
-    // for (i = 0; i < damageAssistExpGainIDs.length; i++) {
-    //     experienceGainMap[damageAssistExpGainIDs[i]] = { "action": 'damageAssist' };
-    // }
-    // for (i = 0; i < utilityAssistExpGainIDs.length; i++) {
-    //     experienceGainMap[utilityAssistExpGainIDs[i]] = { "action": 'utilityAssist' };
-    // }
+*/
 
 function getRound() { return roundTracker; }
 
@@ -132,6 +197,10 @@ function dealWithTheData(raw) {
     const data = JSON.parse(raw).payload;
     if (data.event_name === "Death") {
         itsPlayerData(data);
+    } else if (data.event_name.startsWith("GainExperience_experience_id_")) {
+        let expID = data.lookupItem(data.event_name);
+        let expDescription = expID.description;
+        console.log(expID);
     } else {
         itsFacilityData(data);
     }
@@ -321,28 +390,58 @@ function createStream() {
 }
 
 function subscribe(ws) {
+    var expGainString = getExpGainsSubscribeString();
+    
     //team1 subscribing
-    //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
     teamOneObject.memberArray.forEach(function (member) {
-        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"' + expGainString + ']}');
+
     });
+    
     //team2 subscribing
     teamTwoObject.memberArray.forEach(function (member) {
-        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
+        ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"' + expGainString + ']}');
+
     });
+    
     //facility Subscribing - subscribes to all capture data
     ws.send('{"service":"event","action":"subscribe","worlds":["1","10","13","17","19","25"],"eventNames":["FacilityControl"]}');
+    
     //start timer
     startTimer(ws);
 
     console.log('Subscribed to facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
 }
 
+/*
+function getAllExperienceGainsString() {
+    var expGainMap = getExperienceGainMap();
+    var expGainArray = new Array();
+    var expGainPrefix = "GainExperience_experience_id_";
+    expGainMap.forEach( function (expType) {
+        expGainMap[expType].forEach( function(expID) {
+            expGainArray.push()
+        })
+        expGainArray.concat(expGainMap.expType);
+    });
+    expGainString = "";
+    expArrayLength = expGainArray.length();
+    for (i = 0; i <= expArrayLength; i++) {
+        if (expGainString !== "") {
+            expGainString += ",";
+        }
+        expGainString += "GainExperience_experience_id_" + expGainArray[i];
+    };
+    return expGainString;
+}
+*/
+
 function unsubscribe(ws) {
     // unsubscribes from all events
     ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
     console.log('Unsubscribed from facility and kill/death events between ' + teamOneObject.alias + ' and '  +teamTwoObject.alias);
 }
+
 
 function startTimer(ws) {
     console.log('timer started');
@@ -408,4 +507,4 @@ exports.stopTheMatch          = stopTheMatch;
 exports.startUp               = startUp;
 exports.newRound              = newRound;
 exports.getTitle              = getTitle;
-exports.getExperienceGainMap   = getExperienceGainMap;
+exports.getExperienceGainsMap = getExperienceGainsMap;

@@ -26,3 +26,7 @@ match/*.txt
 
 #GIMP files
 *.xcf
+DBG_Census_Experience_Gain_IDs.JSON
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
+.vs/PS2-SME_Pickups-Overlay/v15/.suo

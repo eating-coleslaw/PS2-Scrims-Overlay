@@ -50,7 +50,7 @@ function setTeams(one, two) {
     t1.kills = 0;
     t1.deaths = 0;
     t1.baseCaps = 0;
-    setClasses(t1.members[member.character_id], faction);
+    setClasses(t1, t1.faction);
     t1.memberArray = one.members;
     one.members.forEach(function(member) {
         t1.members[member.character_id] = {
@@ -65,7 +65,7 @@ function setTeams(one, two) {
             ps2Class: 0,
             classArray: []
         };
-        setClasses(t1.members[member.character_id], faction);
+        setClasses(t1.members[member.character_id], t1.faction);
     });
 
     t2.alias = two.alias;
@@ -77,7 +77,7 @@ function setTeams(one, two) {
     t2.kills = 0;
     t2.deaths = 0;
     t2.baseCaps = 0;
-    setClasses(t2, faction);
+    setClasses(t2, t2.faction);
     t2.memberArray = two.members;
     two.members.forEach(function(member) {
         t2.members[member.character_id] = {
@@ -92,7 +92,7 @@ function setTeams(one, two) {
             ps2Class: 0,
             classArray: []
         };
-        setClasses(t2.members[member.character_id], faction);
+        setClasses(t2.members[member.character_id], t2.faction);
     });
 }
 
