@@ -1,61 +1,100 @@
 .teamPlayersContainer {
     display: grid;
-    /* grid-gap: 2px; */
+    /* grid-template-columns: 1fr; */
+    grid-auto-rows: 27px;
     grid-column-gap: 2px;
     grid-row-gap: 3px;
     text-align: center;
     box-sizing: inherit;
     white-space: nowrap;
-    /* min-width: 280px; */
-    /* max-width: calc(25% - 70px - 30px); */
     width: calc(20% - 70px - 30px);
     color: var(--faction-light-color, rgb(245, 245, 255));
     font-weight: 500;
     font-size: 18px;
+    position: relative;
     top: -12px;
+    box-sizing: border-box;
 }
 
-#T1Players {
+#T1Players.teamPlayersContainer {
     grid-template-columns: 30px 1fr;
-}
-
-#T2Players {
-    grid-template-columns: 1fr 30px;
-}
-
-.teamPlayersContainer.teamOne {
+    grid-template-areas: "icon infoBox";
     float: left;
 }
 
-.teamPlayersContainer.teamTwo {
+#T2Players.teamPlayersContainer {
+    grid-template-columns: 1fr 30px;
+    grid-template-areas: "infoBox icon";
     float: right;
 }
 
 .playerStatsContainer {
-    text-align: left;
-    display: inline-block;
-    box-sizing: inherit;
+    display: grid;
+    grid-area: infoBox;
+    grid-gap: 2px;
+    grid-template-rows: 18px 7px;
     background-color: #1F233090;
     border: 1px solid #0F1320;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    /* padding: 0 3px; */
 }
 
-#T2Players .playerStatsContainer .playerStatsScore {
-   text-align: left;
-   padding-left: 5px;
-}
-#T2Players .playerStatsContainer .playerStatsName {
-    text-align: right;
-    padding-right: 3px;
+.playerStatsContainer.deadTextPlay {
+    border-color: #1F233056 !important;
+    border-radius: 2px;
+    box-shadow: none !important;
+    /* background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important; */
+    /* border-color: var(--faction-flavor-dark-trans-color) !important; */
 }
 
-#T1Players .playerStatsContainer .playerStatsScore {
-   text-align: right;
-   padding-right: 5px;
+#T1Players > .playerStatsContainer {
+    display: grid;
+    grid-template-areas:
+        "name score"
+        "event event";
+    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
 }
-#T1Players .playerStatsContainer .playerStatsName {
+
+#T2Players > .playerStatsContainer {
+    display: grid;
+    grid-template-areas:
+        "score name"
+        "event event";
+    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
+}
+
+#T1Players > .playerStatsContainer.deadTextPlay {
+    background: -moz-linear-gradient(-10deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: linear-gradient(-10deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: -webkit-linear-gradient(-10deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+}
+
+#T2Players > .playerStatsContainer.deadTextPlay {
+    background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+}
+
+#T1Players .playerStatsName,
+#T2Players .playerStatsScore {
     text-align: left;
-    padding-left: 3px;
-}
+    padding-left: 5px;
+ }
+
+#T1Players .playerStatsScore,
+#T2Players .playerStatsName {
+    text-align: right;
+    padding-right: 5px;
+ }
 
 #T1Players .playerStatsContainer:nth-child(2) {
     border-top-right-radius: 5px;
@@ -74,23 +113,32 @@
 }
 
 .playerStatsName {
+    grid-area: name;
     display: inline-block;
-    width: calc(100% - 70px);
-    box-sizing: border-box;
     text-overflow: ellipsis;
+    overflow: hidden;
+    /* box-sizing: border-box; */
+    /* width: calc(100% - 70px); */
 }
 
-.playerEventMask {
-    /* grid-area: event; */
-    display: block;
-    height: 3px; /* 100%; */
+.playerStatsScore {
+    grid-area: score;
+    display: inline-block;
+    box-sizing: border-box;
+    /* width: 70px; */
+    /* text-align: right; */
+}
+
+.playerEvenMask {
+    grid-area: event;
+    height: 100%;
     position: relative;
     border-radius: 2px;
     overflow: hidden;
     border-style: solid;
     border-width: 1px;
     border-color: var(--faction-dark-high-trans-color);
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 
 .playerEventMask:empty {
@@ -101,51 +149,22 @@
     border-bottom-color: var(--faction-flavor-trans-color);
 }
 
-.stripe {
-    height: 100%; /* 52%; */
-    /* padding: 0 2px 0 3px; */
-    transform-origin: bottom;
-    background-image: repeating-linear-gradient(-45deg,
-        transparent,
-        transparent 6px,
-        var(--faction-flavor-trans-color) 6px,
-        var(--faction-flavor-trans-color) 12px
-    );
-    animation: 0.5s pointControlFlash 12 linear alternate, 0.2s ease-out 2.25s 2 reverse forwards shrinkDown;
-    animation-direction: alternate-reverse;}
-
-.stripe:nth-child(odd) {
-    background-image: repeating-linear-gradient(-45deg,
-        var(--faction-flavor-trans-color),
-        var(--faction-flavor-trans-color) 6px,
-        transparent 6px,
-        transparent 12px
-    );
-    animation: 0.5s pointControlFlash 0.25s 12 linear alternate-reverse, 0.25s ease-out 2.25s 1 reverse forwards shrinkDown;
-    animation-direction: alternate-reverse;
-}
-
-@keyframes pointControlFlash {
-    0% {
-        background-color: var(--faction-flavor-trans-color);
-    }
-    100% {
-        background-color: #0000;
-    }
-}
-
 .playerClass {
+    grid-area: icon;
+    display: inline-block;
     background-image: url('../images/even_borders/Icon_white_unknown_no_border_32.png');
     background-size: cover;
-    display: inline-block;
     background-position: center center;
     background-repeat: no-repeat;
     height: 20px;
     width: 20px;
     margin: auto;
+    justify-self: center;
     filter: drop-shadow(0px 0px 2px var(--faction-dark-trans-color, rgba(20, 20, 20, 0.8)));
     opacity: 0.9;
-    box-sizing: inherit;
+    vertical-align: middle;
+    /* margin-top: 3px; */
+    /* box-sizing: inherit; */
 }
 
 .medic {
@@ -176,85 +195,43 @@
     background-image: url('../images/Icon_white_unknown_32.png') !important;
 }
 
-.playerStatsScore {
-    display: inline-block;
-    text-align: right;
-    width: 70px;
-    box-sizing: border-box;
-}
-
-#T1Players > .playerStatsContainer .playerStatsScore {
-    padding-right: 5px;
-}
-
-#T1Players > .playerStatsContainer {
-    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
-    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
-    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
-    box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
-}
-#T2Players > .playerStatsContainer {
-    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
-    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
-    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
-    box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
-}
-
-
-.iconPlayerClass {
-    display: inline-block;
-    height: 20px;
-    width: 20px;
-    justify-self: center;
-    box-sizing: inherit;
-    filter: brightness(0) drop-shadow(0px 0px 1px var(--faction-dark-trans-color));
-}
-
-#T1Players .iconPlayerClass:last-of-type {
-    border-bottom-left-radius: 5px;
-}
-#T2Players .iconPlayerClass:last-of-type {
-    border-bottom-right-radius: 5px;
-}
-
-img  {
-    vertical-align: middle;
-}
-
-img .darkenIconFilter {
-    filter: brightness(0) drop-shadow(0px 0px 1px var(--faction-dark-trans-color));
-}
-
-.iconPlayerClass.iconClassLA {
-    background-image: url('../images/Icon_white_lightAssault_32.png');
-    background-size: 17px;
-    display: inline-block;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.iconPlayerClass.iconClassUnknown {
-    background-image: url('../images/icon_LA_no_outline.png');
-    background-size: 17px;
-    display: inline-block;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.playerRespawningBase {
-    display: block;
-    width: 100%;
-    height: 0px;
-}
 
 .playerRespawningPlay {
     height: 100%; /* 3px; */
     background-color: var(--faction-primary-color);
+    opacity: 0.75; /* 0.65 */
     /* opacity: 0.65; */
     -moz-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     -webkit-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
 }
+
+
+.stripe {
+    height: 52%;
+    padding: 0 2px 0 3px;
+    transform-origin: bottom;
+    background-image: repeating-linear-gradient(-45deg,
+        transparent,
+        transparent 6px,
+        var(--faction-flavor-trans-color) 6px,
+        var(--faction-flavor-trans-color) 12px
+    );
+    animation: 0.5s pointControlFlash 12 linear alternate, 0.2s ease-out 2.25s 2 reverse forwards shrinkDown;
+    animation-direction: alternate-reverse;
+}
+
+.stripe:nth-child(odd) {
+    background-image: repeating-linear-gradient(-45deg,
+        var(--faction-flavor-trans-color),
+        var(--faction-flavor-trans-color) 6px,
+        transparent 6px,
+        transparent 12px
+    );
+    animation: 0.5s pointControlFlash 0.25s 12 linear alternate-reverse, 0.25s ease-out 2.25s 1 reverse forwards shrinkDown;
+    animation-direction: alternate-reverse;
+}
+
 
 .shrinkLeft {
     -moz-transform-origin: left center;
@@ -271,19 +248,16 @@ img .darkenIconFilter {
 }
 
 .deadTextPlay {
-    -moz-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.5s ease-in 10s 1 normal forwards deadText;
-    -webkit-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.5s ease-in 10s 1 normal forwards deadText;
-    animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.5s ease-in 10s 1 normal forwards deadText;
+    -moz-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
+    -webkit-animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
+    animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.75s ease-in 10s 1 normal forwards deadText;
 }
 
-.playerStatsContainer.deadTextPlay {
-    background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
-    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
-    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
-    /* border-color: var(--faction-flavor-dark-trans-color) !important; */
-    border-color: #1F233056 !important;
-    box-shadow: none !important;
-    border-radius: 2px;
+.deadIconPlay {
+   -moz-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+   -webkit-animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+   animation: 0.5s ease-in 0s 1 reverse forwards fadeOutSimple, 0.75s ease-in 10s 1 normal forwards fadeOutSimple;
+   /* mix-blend-mode: soft-light; */
 }
 
 .revivedFlashPlay {
@@ -291,7 +265,6 @@ img .darkenIconFilter {
     -webkit-animation:  1s ease-out 1 normal forwards flashTextShadow;
     animation:  1s ease-out 1 normal forwards flashTextShadow;
 }
-
 
 @-moz-keyframes respawnIn {
     from {
@@ -317,7 +290,6 @@ img .darkenIconFilter {
         transform: scaleX(1);
     }
 }
-
 
 @-moz-keyframes shrinkDown {
     from {
@@ -350,7 +322,6 @@ img .darkenIconFilter {
     }
 }
 
-
 @-moz-keyframes wipeUp {
     from {
         height: 3px;
@@ -375,8 +346,6 @@ img .darkenIconFilter {
         height: 0px;
     }
 }
-
-
 
 @-moz-keyframes deadText {
     from {
@@ -403,7 +372,6 @@ img .darkenIconFilter {
     }
 }
 
-
 @-moz-keyframes fadeOutSimple {
     from {
         opacity: 0.4;
@@ -411,7 +379,6 @@ img .darkenIconFilter {
     }
     to {
         opacity: 1;
-        /* mix-blend-mode: normal; */
     }
 }
 @-webkit-keyframes fadeOutSimple {
@@ -421,7 +388,6 @@ img .darkenIconFilter {
     }
     to {
         opacity: 1;
-        /* mix-blend-mode: normal; */
     }
 }
 @keyframes fadeOutSimple {
@@ -431,6 +397,14 @@ img .darkenIconFilter {
     }
     to {
         opacity: 1;
-        /* mix-blend-mode: normal; */
+    }
+}
+
+@keyframes pointControlFlash {
+    0% {
+        background-color: var(--faction-flavor-trans-color);
+    }
+    100% {
+        background-color: #0000;
     }
 }
