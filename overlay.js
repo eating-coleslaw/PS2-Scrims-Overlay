@@ -30,6 +30,7 @@ function write(filename, data) {
 
 // Adjust the members name to ensure a uniform layout on the screen
 function lengthenName(name) {
+    return name;
     if (name.length > 16) {
         name = name.substring(0,15) + '.';
     }
@@ -41,6 +42,7 @@ function lengthenName(name) {
 
 // Adjust the stats to ensure a uniform layout on the screen
 function lengthenStats(stat) {
+    return stat;
     while (stat.length < 4) {
         stat = ' ' + stat;
     }
@@ -58,6 +60,7 @@ function initialise() {
 
 // Takes in the two team objects, writes the current scores
 function updateScoreOverlay() {
+    return;
     let one = playerNetscore(team.getT1());
     write(t1Players, one);
     one = team.getT1();
@@ -70,6 +73,7 @@ function updateScoreOverlay() {
 }
 
 function playerNetscore(team) {
+    return;
     let activePlayers = [];
     for (keys in team.members) {
         activePlayers.push(team.members[keys])
@@ -121,6 +125,7 @@ function updateTime(timeCounter) {
 }
 
 function updateKillfeedPlayer(killObj) {
+    return;
     p3Kill = p2Kill;
     p2Kill = p1Kill;
     p1Kill = lengthenName(killObj.winner) + ' ' + lengthenName('[' + killObj.weapon + ']') + '  ' + lengthenName(killObj.loser) + '\n';
@@ -128,6 +133,7 @@ function updateKillfeedPlayer(killObj) {
 }
 
 function updateKillfeedFacility(tag, points) {
+    return;
     p3Kill = p2Kill;
     p2Kill = p1Kill;
     p1Kill = '       [' + tag + '] Captured the base (+' + points + ')\n';
@@ -135,18 +141,22 @@ function updateKillfeedFacility(tag, points) {
 }
 
 function startKillfeed() {
+    return;
     p3Kill = ''; p2Kill = '';
     p1Kill = ' --- Match Started --- \n';
     write(killfeed, p1Kill + p2Kill + p3Kill);
 }
 
 function writeFinalStats() {
+    return;
     const round = ps2ws.getRound();
     const full = __dirname + '/match/' + round + '.txt',
           one  = __dirname + '/match/' + round + 'TeamOne.txt',
           two  = __dirname + '/match/' + round + 'TeamTwo.txt';
     const t1 = playerStats(team.getT1());
     const t2 = playerStats(team.getT2());
+
+    return;
 
     write(full, 'Final Scores for this match:\n\n' + t1 + '\n\n' + t2);
     write(one, t1);

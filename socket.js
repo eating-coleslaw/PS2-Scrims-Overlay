@@ -166,4 +166,7 @@ module.exports = {
     setRunning : function (run) {
         running = run;
     },
+    getRunning : function () {
+        return running;
+    }
 };

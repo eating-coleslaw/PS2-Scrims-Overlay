@@ -4,10 +4,10 @@
     box-sizing: inherit;
     position: relative;
     top: -15px;
-    text-shadow:0px 0px 1px rgba(37, 37, 37, 0.95);
+    text-shadow:0px 0px 1px #141414; /* rgba(37, 37, 37, 0.95); */
     line-height: 1.2;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     white-space: nowrap;
     z-index: -1;
     padding-top: 20px;
@@ -17,10 +17,15 @@
     filter: drop-shadow(0px 0px 1px rgb(20, 20, 20));
 }
 
+.killfeed table {
+    margin: auto;
+}
+
 .killfeed.killfeedInactive {
     height: 25px;
 }
 
+/* TODO: remove this, probably */
 #killfeedContainer::after {
     display: none;
     box-sizing: inherit;
@@ -103,8 +108,6 @@
     -webkit-filter: drop-shadow(0px 0px 2px rgba(20, 20, 20, 0.8));
     filter: drop-shadow(0px 0px 2px rgba(20, 20, 20, 0.8));
 }
-
-
 
 .killfeedCell.killfeedPlayer1, .killfeedCell.killfeedPlayer2, .killfeedCell.killfeedPlayer3 {
     overflow: hidden;

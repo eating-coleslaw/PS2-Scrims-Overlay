@@ -3,24 +3,30 @@
   --faction-primary-color: rgb(112, 80, 237);
   --faction-dark-color: rgb(46, 33, 96);
   --faction-dark-trans-color: rgba(46, 33, 96, 0.8);
+  --faction-dark-high-trans-color: rgba(46, 33, 96, 0.7);
   --faction-light-color: rgb(202, 188, 255);
   --faction-flavor-color: rgb(184, 233, 227);
+  --faction-flavor-trans-color: rgb(184, 233, 227, 0.5);
 }
 
  .faction2 {
     --faction-primary-color: rgb(30, 153, 252);
     --faction-dark-color: rgb(7, 37, 61);
     --faction-dark-trans-color: rgba(7, 37, 61, 0.8);
+    --faction-dark-high-trans-color: rgba(7, 37, 61, 0.7);
     --faction-light-color: rgb(182, 221, 253);
     --faction-flavor-color: rgb(255, 247, 175);
+    --faction-flavor-trans-color: rgb(255, 247, 175, 0.5);
 }
 
 .faction3 {
     --faction-primary-color: rgb(255, 108, 112);
     --faction-dark-color: rgb(64, 27, 28);
     --faction-dark-trans-color: rgba(64, 27, 28, 0.8);
+    --faction-dark-high-trans-color: rgba(64, 27, 28, 0.7);
     --faction-light-color: rgb(255, 190, 191);
     --faction-flavor-color: rgb(229, 217, 212);
+    --faction-flavor-trans-color: rgb(229, 217, 212, 0.5);
   }
 
 .faction1dark {

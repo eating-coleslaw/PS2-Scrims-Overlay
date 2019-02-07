@@ -1,14 +1,18 @@
 .teamPlayersContainer {
     display: grid;
-    grid-gap: 2px;
+    /* grid-gap: 2px; */
+    grid-column-gap: 2px;
+    grid-row-gap: 3px;
     text-align: center;
     box-sizing: inherit;
     white-space: nowrap;
-    min-width: 280px;
-    max-width: calc(25% - 70px - 30px);
+    /* min-width: 280px; */
+    /* max-width: calc(25% - 70px - 30px); */
+    width: calc(20% - 70px - 30px);
     color: var(--faction-light-color, rgb(245, 245, 255));
     font-weight: 500;
     font-size: 18px;
+    top: -12px;
 }
 
 #T1Players {
@@ -31,8 +35,8 @@
     text-align: left;
     display: inline-block;
     box-sizing: inherit;
-    background-color: rgba(35, 35, 35, 0.8);
-    border: 1px solid rgb(20, 20, 20);
+    background-color: #1F233090;
+    border: 1px solid #0F1320;
 }
 
 #T2Players .playerStatsContainer .playerStatsScore {
@@ -74,6 +78,60 @@
     width: calc(100% - 70px);
     box-sizing: border-box;
     text-overflow: ellipsis;
+}
+
+.playerEventMask {
+    /* grid-area: event; */
+    display: block;
+    height: 3px; /* 100%; */
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--faction-dark-high-trans-color);
+    box-sizing: border-box;
+}
+
+.playerEventMask:empty {
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-left-color: transparent;
+    border-style: outset;
+    border-bottom-color: var(--faction-flavor-trans-color);
+}
+
+.stripe {
+    height: 100%; /* 52%; */
+    /* padding: 0 2px 0 3px; */
+    transform-origin: bottom;
+    background-image: repeating-linear-gradient(-45deg,
+        transparent,
+        transparent 6px,
+        var(--faction-flavor-trans-color) 6px,
+        var(--faction-flavor-trans-color) 12px
+    );
+    animation: 0.5s pointControlFlash 12 linear alternate, 0.2s ease-out 2.25s 2 reverse forwards shrinkDown;
+    animation-direction: alternate-reverse;}
+
+.stripe:nth-child(odd) {
+    background-image: repeating-linear-gradient(-45deg,
+        var(--faction-flavor-trans-color),
+        var(--faction-flavor-trans-color) 6px,
+        transparent 6px,
+        transparent 12px
+    );
+    animation: 0.5s pointControlFlash 0.25s 12 linear alternate-reverse, 0.25s ease-out 2.25s 1 reverse forwards shrinkDown;
+    animation-direction: alternate-reverse;
+}
+
+@keyframes pointControlFlash {
+    0% {
+        background-color: var(--faction-flavor-trans-color);
+    }
+    100% {
+        background-color: #0000;
+    }
 }
 
 .playerClass {
@@ -130,14 +188,16 @@
 }
 
 #T1Players > .playerStatsContainer {
-    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
+    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
 }
 #T2Players > .playerStatsContainer {
-    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
-    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, rgba(35, 35, 35, 0.8) 60%);
+    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
 }
 
 
@@ -188,8 +248,9 @@ img .darkenIconFilter {
 }
 
 .playerRespawningPlay {
-    height: 3px;
+    height: 100%; /* 3px; */
     background-color: var(--faction-primary-color);
+    /* opacity: 0.65; */
     -moz-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     -webkit-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
@@ -199,12 +260,14 @@ img .darkenIconFilter {
     -moz-transform-origin: left center;
     -webkit-transform-origin: left center;
     transform-origin: left center;
+    border-right: 3px solid var(--faction-flavor-trans-color);
 }
 
 .shrinkRight {
     -moz-transform-origin: right center;
     -webkit-transform-origin: right center;
     transform-origin: right center;
+    border-left: 3px solid var(--faction-flavor-trans-color);
 }
 
 .deadTextPlay {
@@ -213,6 +276,21 @@ img .darkenIconFilter {
     animation: 0.5s ease-in 0s 1 reverse forwards deadText, 0.5s ease-in 10s 1 normal forwards deadText;
 }
 
+.playerStatsContainer.deadTextPlay {
+    background: -moz-linear-gradient(170deg, var(--faction-high-dark-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-high-trans-color) 0%, rgba(35, 35, 35, 0.55) 60%) !important;
+    /* border-color: var(--faction-flavor-dark-trans-color) !important; */
+    border-color: #1F233056 !important;
+    box-shadow: none !important;
+    border-radius: 2px;
+}
+
+.revivedFlashPlay {
+    -moz-animation: 1s ease-out 1 normal forwards flashTextShadow;
+    -webkit-animation:  1s ease-out 1 normal forwards flashTextShadow;
+    animation:  1s ease-out 1 normal forwards flashTextShadow;
+}
 
 
 @-moz-keyframes respawnIn {
@@ -237,6 +315,38 @@ img .darkenIconFilter {
     }
     to {
         transform: scaleX(1);
+    }
+}
+
+
+@-moz-keyframes shrinkDown {
+    from {
+        -moz-transform: scaleY(0);
+        opacity: 0.4;
+    }
+    to {
+        -moz-transform: scaleY(1);
+        opacity: 1;
+    }
+}
+@-webkit-keyframes shrinkDown {
+    from {
+        -webkit-transform: scaleY(0);
+        opacity: 0.2;
+    }
+    to {
+        -webkit-transform: scaleY(1);
+        opacity: 1;
+    }
+}
+@keyframes shrinkDown {
+    from {
+        transform: scaleY(0);
+        opacity: 0.2;
+    }
+    to {
+        transform: scaleY(1);
+        opacity: 1;
     }
 }
 
@@ -290,5 +400,37 @@ img .darkenIconFilter {
     }
     to {
         color: var(--faction-light-color, rgb(245, 245, 255));
+    }
+}
+
+
+@-moz-keyframes fadeOutSimple {
+    from {
+        opacity: 0.4;
+        mix-blend-mode: soft-light;
+    }
+    to {
+        opacity: 1;
+        /* mix-blend-mode: normal; */
+    }
+}
+@-webkit-keyframes fadeOutSimple {
+    from {
+        opacity: 0.4;
+        mix-blend-mode: soft-light;
+    }
+    to {
+        opacity: 1;
+        /* mix-blend-mode: normal; */
+    }
+}
+@keyframes fadeOutSimple {
+    from {
+        opacity: 0.4;
+        mix-blend-mode: soft-light;
+    }
+    to {
+        opacity: 1;
+        /* mix-blend-mode: normal; */
     }
 }
