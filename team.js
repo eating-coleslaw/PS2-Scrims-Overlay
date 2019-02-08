@@ -113,12 +113,13 @@ function getT2() { return t2; }
 
 //#region Kill/Death Handling
 
-function oneIvITwo(one, two, points, item, oneClass, twoClass) {
+function oneIvITwo(one, two, oneClass, twoClass, points) {
     t1.kills++;
     t1.points += points;
     t1.netScore += points;
     t1.members[one].kills++;
     t1.members[one].eventCount++;
+
     t1.members[one].points += points;
     t1.members[one].netScore += points;
     t1.members[one].ps2Class = oneClass;
@@ -127,18 +128,20 @@ function oneIvITwo(one, two, points, item, oneClass, twoClass) {
     t2.netScore -= points;
     t2.members[two].deaths++;
     t2.members[two].eventCount++;
+
     t2.members[two].netScore -= points;
     t2.members[two].ps2Class = twoClass;
 
     // logging
-    console.log(t1.members[one].name + ' (' + t1.members[one].ps2Class + ') -->  ' + t2.members[two].name + ' (' + t2.members[two].ps2Class + ') for ' + points + ' points (' + item.name + ')');
+    // console.log(t1.members[one].name + ' (' + t1.members[one].ps2Class + ') -->  ' + t2.members[two].name + ' (' + t2.members[two].ps2Class + ') for ' + points + ' points (' + item.name + ')');
     logScore();
 }
 
-function twoIvIOne(two, one, points, item, oneClass, twoClass) {
+function twoIvIOne(two, one, oneClass, twoClass, points) {
     t2.kills++;
     t2.points += points;
     t2.netScore += points;
+
     t2.members[two].kills++;
     t2.members[two].eventCount++;
     t2.members[two].points += points;
@@ -147,20 +150,22 @@ function twoIvIOne(two, one, points, item, oneClass, twoClass) {
 
     t1.deaths++;
     t1.netScore -= points;
+
     t1.members[one].deaths++;
     t1.members[one].eventCount++;
     t1.members[one].netScore -= points;
     t1.members[one].ps2Class = oneClass;
 
     // logging
-    console.log(t2.members[two].name + ' -->  ' + t1.members[one].name + ' for ' + points + ' points (' + item.name + ')');
+    // console.log(t2.members[two].name + ' -->  ' + t1.members[one].name + ' for ' + points + ' points (' + item.name + ')');
     logScore();
 }
 
-function oneSuicide(one, points, oneClass) {
+function oneSuicide(one, oneClass, points) {
     t1.deaths++;
     t1.points += points;
     t1.netScore += points;
+    
     t1.members[one].deaths++;
     t1.members[one].eventCount++;
     t1.members[one].points += points;
@@ -172,10 +177,11 @@ function oneSuicide(one, points, oneClass) {
     logScore();
 }
 
-function twoSuicide(two, points, twoClass) {
+function twoSuicide(two, twoClass, points) {
     t2.deaths++;
     t2.points += points;
     t2.netScore += points;
+    
     t2.members[two].deaths++;
     t2.members[two].eventCount++;
     t2.members[two].points += points;
@@ -187,11 +193,12 @@ function twoSuicide(two, points, twoClass) {
     logScore();
 }
 
-function oneTeamKill(killer, killed, points, killerClass, killedClass) {
+function oneTeamKill(killer, killed, killerClass, killedClass, points) {
     t1.deaths++;
     t1.teamKills++;
     t1.points += points;
     t1.netScore += points;
+
     t1.members[killer].teamKills++;
     t1.members[killer].eventCount++;
     t1.members[killer].points += points;
@@ -199,6 +206,7 @@ function oneTeamKill(killer, killed, points, killerClass, killedClass) {
     t1.members[killer].ps2Class = killerClass;
     
     t1.members[killed].deaths++;
+    t1.members[killed].eventCount++;
     t1.members[killed].ps2Class = killedClass;
 
     // logging
@@ -206,11 +214,12 @@ function oneTeamKill(killer, killed, points, killerClass, killedClass) {
     logScore();
 }
 
-function twoTeamKill(killer, killed, points, killerClass, killedClass) {
+function twoTeamKill(killer, killed, killerClass, killedClass, points) {
     t2.deaths++;
     t2.teamKills++;
     t2.points += points;
     t2.netScore += points;
+    
     t2.members[killer].teamKills++;
     t2.members[killer].eventCount++;
     t2.members[killer].points += points;
@@ -218,6 +227,7 @@ function twoTeamKill(killer, killed, points, killerClass, killedClass) {
     t2.members[killer].ps2Class = killerClass;
 
     t2.members[killed].deaths++;
+    t2.members[killed].eventCount++;
     t2.members[killed].ps2Class = killedClass;
 
     // logging
@@ -229,38 +239,30 @@ function twoTeamKill(killer, killed, points, killerClass, killedClass) {
 
 //#region Revive Experience Handling
 
-function oneRevive(medic, revived, medicClass, pointsMap) {
+function oneRevive(medic, revived, medicClass) {
     t1.revives++;
     t1.members[medic].revives++;
     t1.members[medic].eventCount++;
-    if (t1.members[medic].eventNetScore !== undefined) { t1.members[medic].eventNetScore += pointsMap.revive;}
-    else {t1.members[medic].eventNetScore = pointsMap.revive;}
     t1.members[medic].ps2Class = medicClass;
     
     if (t1.members.hasOwnProperty(revived)) {
         console.log(painter.faction(t1.members[revived].name, t1.faction) + painter.lightGreen(' took a revive!'));
         t1.members[revived].revivesTaken++;
         t1.members[revived].eventCount++;
-        if (t1.members[revived].eventNetScore !== undefined) { t1.members[revived].eventNetScore += pointsMap.reviveTaken;}
-        else { t1.members[revived].eventNetScore = pointsMap.reviveTaken;}
     }
     logScore();
 }
 
-function twoRevive(medic, revived, medicClass, pointsMap) {
+function twoRevive(medic, revived, medicClass) {
     t2.revives++;
     t2.members[medic].revives++;
     t2.members[medic].eventCount++;
-    if (t2.members[medic].eventNetScore !== undefined) { t2.members[medic].eventNetScore += pointsMap.revive;}
-    else { t2.members[medic].eventNetScore = pointsMap.revive;};
     t2.members[medic].ps2Class = medicClass;
 
     if (t2.members.hasOwnProperty(revived)) {
         console.log(painter.faction(t2.members[revived].name, t2.faction) + painter.green(' took a revive!'));
         t2.members[revived].revivesTaken++;
         t2.members[revived].eventCount++;
-        if (t2.members[revived].eventNetScore !== undefined) { t2.members[revived].eventNetScore += pointsMap.reviveTaken;}
-        else {t2.members[revived].eventNetScore = pointsMap.reviveTaken;}
     }
     logScore();
 }
@@ -269,62 +271,48 @@ function twoRevive(medic, revived, medicClass, pointsMap) {
 
 //#region Assist Experience Handling
 
-function oneDmgAssist(player, playerClass, pointsMap) {
+function oneDmgAssist(player, playerClass) {
     t1.dmgAssists++;
     t1.members[player].dmgAssists++;
     t1.members[player].eventCount++;
-    // t1.members[player].eventNetScore += pointsMap.dmgAssist;
-    if (t1.members[player].eventNetScore !== undefined) { t1.members[player].eventNetScore += pointsMap.dmgAssist;}
-    else { t1.members[player].eventNetScore = pointsMap.dmgAssist;}
     t1.members[player].ps2Class = playerClass;
     logScore();
 }
 
-function twoDmgAssist(player, playerClass, pointsMap) {
+function twoDmgAssist(player, playerClass) {
     t2.dmgAssists++;
     t2.members[player].dmgAssists++;
     t2.members[player].eventCount++;
-    // t2.members[player].eventNetScore += pointsMap.dmgAssist;
-    if (t2.members[player].eventNetScore !== undefined) { t2.members[player].eventNetScore += pointsMap.dmgAssist;}
-    else { t2.members[player].eventNetScore = pointsMap.dmgAssist;}
     t2.members[player].ps2Class = playerClass;
     logScore();
 }
 
-function oneUtilAssist(player, playerClass, pointsMap) {
+function oneUtilAssist(player, playerClass) {
     t1.utilAssists++;
     t1.members[player].utilAssists++;
     t1.members[player].eventCount++;
-    if (t1.members[player].eventNetScore !== undefined) { t1.members[player].eventNetScore += pointsMap.utilAssist;}
-    else { t1.members[player].eventNetScore = pointsMap.utilAssist;};
     t1.members[player].ps2Class = playerClass;
     logScore();
 }
 
-function twoUtilAssist(player, playerClass, pointsMap) {
+function twoUtilAssist(player, playerClass) {
     t2.utilAssists++;
     t2.members[player].utilAssists++;
     t2.members[player].eventCount++;
-    if (t2.members[player].eventNetScore !== undefined) { t2.members[player].eventNetScore += pointsMap.utilAssist;}
-    else { t2.members[player].eventNetScore = pointsMap.utilAssist;};
     t2.members[player].ps2Class = playerClass;
     logScore();
 }
 
 //#endregion Assist Experience Handling
 
-function onePointControl(player, playerClass, pointsMap) {
+function onePointControl(player, playerClass) {
     t1.members[player].eventCount++;
-    if (t1.members[player].eventNetScore !== undefined) { t1.members[player].eventNetScore += pointsMap.control;}
-    else { t1.members[player].eventNetScore = pointsMap.control;};
     t1.members[player].ps2Class = playerClass;
     logScore();
 }
 
-function twoPointControl(player, playerClass, pointsMap) {
+function twoPointControl(player, playerClass) {
     t2.members[player].eventCount++;
-    if (t2.members[player].eventNetScore !== undefined) { t2.members[player].eventNetScore += pointsMap.control;}
-    else { t2.members[player].eventNetScore = pointsMap.control;}
     t2.members[player].ps2Class = playerClass;
     logScore();
 }

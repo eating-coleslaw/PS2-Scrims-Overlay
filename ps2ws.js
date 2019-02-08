@@ -16,7 +16,8 @@ let  teamOneObject,
      roundTracker = 0,
      timeCounter = 0,
      matchLength = 900,
-     eventTitle;
+     eventTitle,
+     format = 'kdr';
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -29,8 +30,9 @@ let pointMap = {
     '13' : { "action" : "Max Suicide",             points : -12, id : "class13"},
     '21' : { "action" : "Infantry TK",             points : -3, id : "class21"},
     '22' : { "action" : "Infantry Suicide",        points : -3, id : "class22"},
-    '23' : { "action" : "InfanStry v Max",          points : 12,  id : "class23"},
-    'name': 'Thunderdome Ruleset'
+    '23' : { "action" : "Infantry v Max",          points : 12,  id : "class23"},
+    '24' : { "action" : "Max TK",                  points : -15, id : "class24"},
+    'name': 'Planetside Infantry League Ruleset'
 };
 
 // Thunderdome (2016)
@@ -66,6 +68,7 @@ function individualPointUpdate(event) {
     if (event.class21 !== '') { pointMap['21'].points = event.class21; }
     if (event.class22 !== '') { pointMap['22'].points = event.class22; }
     if (event.class23 !== '') { pointMap['23'].points = event.class23; }
+    if (event.class24 !== '') { pointMap['24'].points = event.class24; }
     pointMap.name = 'Custom';
 }
 
@@ -81,6 +84,7 @@ const objectivePointsMap = {
     suicide: -10, //-6, //-5,
     reviveTaken: 1
 }
+
 
 function getRound() { return roundTracker; }
 
@@ -146,77 +150,100 @@ function dealWithTheData(raw) {
     }
 }
 
+// deals with adding points to the correct player & team
 function itsPlayerData(data) {
-    // deals with adding points to the correct player & team
     //console.log(data);
     let item = items.lookupItem(data.attacker_weapon_id);
     var faction1 = teamOneObject.faction;
     var faction2 = teamTwoObject.faction;
     let points = items.lookupPointsfromCategory(item.category_id);
-    
-    if ((data.attacker_loadout_id === '7') || (data.attacker_loadout_id === '14') || (data.attacker_loadout_id === '21')) {
-        // Attacker using a max
-        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-            // Attacker used a max to kill a max
-            points = pointMap['12'].points;
-        } else {
-            // max v infantry
-            points = pointMap['11'].points;
+    let killerIsMax = isMaxLoadout(data.attacker_loadout_id);
+    let victimIsMax = isMaxLoadout(data.character_id);
+
+    // Team 1 Killer
+    if (teamOneObject.members.hasOwnProperty(data.attacker_character_id)) {
+        var name1 = teamOneObject.members[data.attacker_character_id].name;
+        
+        // One IVI Two || One Max Two
+        if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+            if (killerIsMax === true) {
+                points = victimIsMax ? pointMap['12'].points : pointMap['11'].points;
+            }
+            else {
+                points = victimIsMax ? pointMap['23'].points : points;
+            }
+            oneIvITwo(data, points, item);
+            // console.log(painter.brightWhite('Kill: ') + painter.faction(name1 + ' => ', faction1) + painter.faction(teamTwoObject.members[data.character_id].name, faction2));
         }
-    } else if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-        // defender used a max
-        points = pointMap['23'].points;
-    }
-    // Infantry v Infantry
-    if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("one IVI two");
-        oneIvITwo(data, points, item);
-    } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("Two IVI one");
-        twoIvIOne(data, points, item);
-    }
-    // Suicides (loadout id 7/14/21 means it was a max that suicided)
-    else if ((data.attacker_character_id === data.character_id) && (teamOneObject.members.hasOwnProperty(data.character_id))){
-        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-            points = pointMap['13'].points;
-        } else {
-            points = pointMap['22'].points;
+        
+        //One Suicide || One Max Suicide
+        else if (data.attacker_character_id === data.character_id) {
+            points = killerIsMax ? pointMap['13'].points : pointMap['22'];
+            teamOneSuicide(data, points, item);
+            // console.log(painter.faction(name1 + ' killed themselves!', faction1));
         }
-        //console.log("one suicide");
-        teamOneSuicide(data, points, item);
-    } else if ((data.attacker_character_id === data.character_id) && (teamTwoObject.members.hasOwnProperty(data.character_id))){
-        if ((data.character_loadout_id === '7') || (data.character_loadout_id === '14') || (data.character_loadout_id === '21')) {
-            points = pointMap['13'].points;
-        } else {
-            points = pointMap['22'].points;
+
+        // One TK || One TK Max
+        else if (teamOneObject.members.hasOwnProperty(data.character_id)) {
+            points = victimIsMax ? pointMap['24'].points : pointMap['21'];
+            teamOneTeamkill(data, points, item);
+            // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name1 + ' => ' + teamOneObject.members[data.character_id].name, faction1));
         }
-        //console.log("two suicide");
-        teamTwoSuicide(data, points, item);
-    }
-    // Team Kills
-    else if ((teamOneObject.members.hasOwnProperty(data.attacker_character_id)) && (teamOneObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("one tk");
-        teamOneTeamkill(data, pointMap['21'].points, item);
-    } else if ((teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) && (teamTwoObject.members.hasOwnProperty(data.character_id))) {
-        //console.log("two tk");
-        teamTwoTeamkill(data, pointMap['21'].points, item);
     }
 
-    //
+    // Team 2 Killer
+    else if (teamTwoObject.members.hasOwnProperty(data.attacker_character_id)) {
+        var name2 = teamTwoObject.members[data.attacker_character_id].name;
+
+        // Two IVI One || Two Max One
+        if (teamOneObject.members.hasOwnProperty(data.character_id)) {
+            if (killerIsMax === true) {
+                points = victimIsMax ? pointMap['12'].points : pointMap['11'].points;
+            }
+            else {
+                points = victimIsMax ? pointMap['23'].points : points;
+            }
+            twoIvIOne(data, points, item);
+            // console.log(painter.brightWhite('Kill: ') + painter.faction(name2 + ' => ', faction2) + painter.faction(teamOneObject.members[data.character_id].name, faction1));
+        }
+
+        // Two Suicide || Two Max Suicide
+        else if (data.attacker_character_id === data.character_id) {
+            points = killerIsMax ? pointMap['13'].points : pointMap['22'];
+            teamTwoSuicide(data, points, item);
+            // console.log(painter.faction(name2 + ' killed themselves!', faction2));
+        }
+        
+        // Two TK || Two TK Max
+        else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+            points = victimIsMax ? pointMap['24'].points : pointMap['21'];
+            teamTwoTeamkill(data, points, item);
+            // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name2 + ' => ' + teamTwoObject.members[data.character_id].name, faction2));
+        }
+    }
+
+    // One of the players isn't involved in the match
     else {
         console.log(painter.gray('   !!! Possible Match Interruption !!!'));
         console.log(painter.gray('         winner: ' + data.attacker_character_id));
-        console.log(painter.gray('         loser:  ' + data.character_id))
+        console.log(painter.gray('         loser:  ' + data.character_id));
+        return;
     }
 
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
+
+}
+
+function isMaxLoadout(loadout) {
+    if ((loadout === '7') || (loadout === '14') || (loadout === '21')) { return true; }
+    else { return false; }
 }
 
 //#region Discrete Player Event Handling
 
 function oneIvITwo (data, points, item) {
-    team.oneIvITwo(data.attacker_character_id, data.character_id, points, item, data.attacker_loadout_id, data.attacker_loadout_id, data.character_loadout_id);
+    team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.attacker_loadout_id, data.character_loadout_id, points);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -225,7 +252,7 @@ function oneIvITwo (data, points, item) {
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         loser_class_id: data.character_loadout_id,
-        loser_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        loser_net_score: teamTwoObject.members[data.character_id].eventNetScore,
         weapon: item.name,
         points: points,
         is_kill: true
@@ -233,7 +260,7 @@ function oneIvITwo (data, points, item) {
 }
 
 function twoIvIOne (data, points, item) {
-    team.twoIvIOne(data.attacker_character_id, data.character_id, points, item, data.attacker_loadout_id, data.character_loadout_id);
+    team.twoIvIOne(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -250,7 +277,7 @@ function twoIvIOne (data, points, item) {
 }
 
 function teamOneSuicide (data, points, item) {
-    team.oneSuicide(data.attacker_character_id, points, data.attacker_loadout_id);
+    team.oneSuicide(data.attacker_character_id, data.attacker_loadout_id, points);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -267,7 +294,7 @@ function teamOneSuicide (data, points, item) {
 }
 
 function teamTwoSuicide (data, points, item) {
-    team.twoSuicide(data.attacker_character_id, points, data.attacker_loadout_id);
+    team.twoSuicide(data.attacker_character_id, data.attacker_loadout_id, points);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -284,7 +311,7 @@ function teamTwoSuicide (data, points, item) {
 }
 
 function teamOneTeamkill (data, points, item) {
-    team.oneTeamKill(data.attacker_character_id, data.character_id, points, data.attacker_loadout_id, data.character_loadout_id);
+    team.oneTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -301,7 +328,7 @@ function teamOneTeamkill (data, points, item) {
 }
 
 function teamTwoTeamkill (data, points, item) {
-    team.twoTeamKill(data.attacker_character_id, data.character_id, points, data.attacker_loadout_id, data.character_loadout_id);
+    team.twoTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -377,23 +404,23 @@ function itsExperienceData(data) {
        let faction = teamOneObject.faction;
        // Revive Data
         if (allXpIdsRevives.includes(xpID && teamOneObject.members.hasOwnProperty(data.other_id))) {
-            console.log(painter.lightGreen('Team 1 Revive: ') + painter.faction(characterName, faction));
-            teamOneRevive(data, objectivePointsMap);
+            teamOneRevive(data);
+            // console.log(painter.lightGreen('Team 1 Revive: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsDmgAssists.includes(xpID)) {
-            console.log(painter.lightPurple('Team 1 Dmg Assist: ') + painter.faction(characterName, faction));
-            teamOneDmgAssist(data, objectivePointsMap);
+            teamOneDmgAssist(data);
+            // console.log(painter.lightPurple('Team 1 Dmg Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsUtilAssists.includes(xpID)) {
-            console.log(painter.lightYellow('Team 1 Util Assist: ') + painter.faction(characterName, faction));
-            teamOneUtilAssist(data, objectivePointsMap);
+            teamOneUtilAssist(data);
+            // console.log(painter.lightYellow('Team 1 Util Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsPointControls.includes(xpID)) {
-            console.log(painter.yellow('Team 1 Point Control: ') + painter.faction(characterName, faction));
-            teamOnePointControl(data, objectivePointsMap);
+            teamOnePointControl(data);
+            // console.log(painter.yellow('Team 1 Point Control: ') + painter.faction(characterName, faction));
         }
     }
 
@@ -403,23 +430,23 @@ function itsExperienceData(data) {
         let faction = teamTwoObject.faction;
         // Team 2 Revive
         if (allXpIdsRevives.includes(xpID) && teamTwoObject.members.hasOwnProperty(data.other_id)) {
-            console.log(painter.lightGreen('Team 2 Revive: ') + painter.faction(characterName, faction));
-            teamTwoRevive(data, objectivePointsMap);
+            teamTwoRevive(data);
+            // console.log(painter.lightGreen('Team 2 Revive: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsDmgAssists.includes(xpID)) {
-            console.log(painter.lightPurple('Team 2 Dmg Assist: ') + painter.faction(characterName, faction));
-            teamTwoDmgAssist(data, objectivePointsMap);
+            teamTwoDmgAssist(data);
+            // console.log(painter.lightPurple('Team 2 Dmg Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsUtilAssists.includes(xpID)) {
-            console.log(painter.lightYellow('Team 2 Util Assist: ') + painter.faction(characterName, faction));
-            teamTwoUtilAssist(data, objectivePointsMap);
+            teamTwoUtilAssist(data);
+            // console.log(painter.lightYellow('Team 2 Util Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsPointControls.includes(xpID)) {
-            console.log(painter.yellow('Team 2 Point Control: ') + painter.faction(characterName, faction));
-            teamTwoPointControl(data, objectivePointsMap);
+            teamTwoPointControl(data);
+            // console.log(painter.yellow('Team 2 Point Control: ') + painter.faction(characterName, faction));
         }
     }
 
@@ -429,8 +456,8 @@ function itsExperienceData(data) {
 
 //#region Discrete Experience Event Handling
 
-function teamOneRevive(data, pointsMap) {
-    team.oneRevive(data.character_id, data.other_id, data.loadout_id, pointsMap);
+function teamOneRevive(data) {
+    team.oneRevive(data.character_id, data.other_id, data.loadout_id);
     let loserName = teamOneObject.members.hasOwnProperty(data.other_id) ? teamOneObject.members[data.other_id].name : 'Random Pubbie';
     killfeedPlayer({
         winner: teamOneObject.members[data.character_id].name,
@@ -445,8 +472,8 @@ function teamOneRevive(data, pointsMap) {
     });
 }
 
-function teamTwoRevive(data, pointsMap) {
-    team.twoRevive(data.character_id, data.other_id, data.loadout_id, pointsMap);
+function teamTwoRevive(data) {
+    team.twoRevive(data.character_id, data.other_id, data.loadout_id);
     if (teamTwoObject.members.hasOwnProperty(data.other_id)) {
         var loserName = teamTwoObject.members[data.other_id].name;
         var loserScore = teamTwoObject.members[data.other_id].eventNetScore;
@@ -468,8 +495,8 @@ function teamTwoRevive(data, pointsMap) {
     });
 }
 
-function teamOneDmgAssist(data, pointsMap) {
-    team.oneDmgAssist(data.character_id, data.loadout_id, pointsMap);
+function teamOneDmgAssist(data) {
+    team.oneDmgAssist(data.character_id, data.loadout_id);
     killfeedPlayer({
         winner: teamOneObject.members[data.character_id].name,
         winner_faction: teamOneObject.faction,
@@ -480,8 +507,8 @@ function teamOneDmgAssist(data, pointsMap) {
     });
 }
 
-function teamTwoDmgAssist(data, pointsMap) {
-    team.twoDmgAssist(data.character_id, data.loadout_id, pointsMap);
+function teamTwoDmgAssist(data) {
+    team.twoDmgAssist(data.character_id, data.loadout_id);
     killfeedPlayer({
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -492,8 +519,8 @@ function teamTwoDmgAssist(data, pointsMap) {
     });
 }
 
-function teamOneUtilAssist(data, pointsMap) {
-    team.oneUtilAssist(data.character_id, data.loadout_id, pointsMap);
+function teamOneUtilAssist(data) {
+    team.oneUtilAssist(data.character_id, data.loadout_id);
     killfeedPlayer({
         winner: teamOneObject.members[data.character_id].name,
         winner_faction: teamOneObject.faction,
@@ -504,8 +531,8 @@ function teamOneUtilAssist(data, pointsMap) {
     });
 }
 
-function teamTwoUtilAssist(data, pointsMap) {
-    team.twoUtilAssist(data.character_id, data.loadout_id, pointsMap);
+function teamTwoUtilAssist(data) {
+    team.twoUtilAssist(data.character_id, data.loadout_id);
     killfeedPlayer({
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -516,8 +543,8 @@ function teamTwoUtilAssist(data, pointsMap) {
     });
 }
 
-function teamOnePointControl(data, pointsMap) {
-    team.onePointControl(data.character_id, data.loadout_id, pointsMap);
+function teamOnePointControl(data) {
+    team.onePointControl(data.character_id, data.loadout_id);
     killfeedPlayer({
         winner: teamOneObject.members[data.character_id].name,
         winner_faction: teamOneObject.faction,
@@ -528,8 +555,8 @@ function teamOnePointControl(data, pointsMap) {
     });
 }
 
-function teamTwoPointControl(data, pointsMap) {
-    team.twoPointControl(data.character_id, data.loadout_id, pointsMap);
+function teamTwoPointControl(data) {
+    team.twoPointControl(data.character_id, data.loadout_id);
     killfeedPlayer({
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
