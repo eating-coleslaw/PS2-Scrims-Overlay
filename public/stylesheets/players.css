@@ -232,6 +232,19 @@
     animation-direction: alternate-reverse;
 }
 
+#T1Players .playerRespawningPlay {
+    -moz-transform-origin: right center;
+    -webkit-transform-origin: right center;
+    transform-origin: right center;
+    border-left: 3px solid var(--faction-flavor-trans-color);
+}
+
+#T2Players .playerRespawningPlay {
+    -moz-transform-origin: left center;
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+    border-right: 3px solid var(--faction-flavor-trans-color);
+}
 
 .shrinkLeft {
     -moz-transform-origin: left center;

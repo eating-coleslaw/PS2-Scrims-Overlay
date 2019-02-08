@@ -108,17 +108,7 @@ socket.on('connect', function() {
             updatePlayerScores(event);
         }
 
-        // addKillfeedRow(event);
         truncateKillfeed();
-
-        // updatePlayerClasses(event);
-
-        // if (event.weapon == 'Base Capture') {
-        //    return;
-        // }
-        // else {
-        //     playRespawning(event.loser, event.loser_loadout_id);
-        // }
     });
 
     socket.on('score', function (event) {
@@ -128,59 +118,54 @@ socket.on('connect', function() {
         
         var m = event.teamOne.members;
         for (keys in m) {
-            if (m[keys].eventCount > 0) { // m[keys].kills > 0 || m[keys].deaths > 0) {
-               if (m[keys].name === "") {return;}
+            if (m[keys].eventCount > 0) {
+               if (m[keys].name === "") { return; }
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
-                    $('<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class"></div>' + 
-                      '<div class="playerStatsContainer" id="' + m[keys].name + '">' +
-                        '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' +
-                        '<div class="playerStatsScore" id="' + m[keys].name + 'Score">' + m[keys].netScore + '</div>'+
-                        '<div class="playerEventMask" id="' + m[keys].name + 'EventMask"></div>' +
-                      '</div>').appendTo($('#T1Players'));
-                        // '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div>' + '</div>').appendTo($('#T1Players'));
+                    $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T1Players'));
+                    $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T1Players'));
                 }
                 else {
                     var scoreEl = document.getElementById(m[keys].name + 'Score');
                     scoreEl.textContent = m[keys].netScore;
                 }
-                if (m[keys].name == event.loser) {
+                if (m[keys].name === event.loser) {
                     var loserName = m[keys].loser;
                     playRespawning(loserName);
                 }
             }
+            // Remove the player from the overlay if they haven't done anything
             else {
-                $(m[keys].name).empty();
-                // $('#' + m[keys].name).remove(); TODO: make each player row a grid row
+                //TODO: make each player row a grid row
+                $('#' + m[keys].name + 'class').remove();
+                $('#' + m[keys].name).remove(); 
             }
         }
 
         m = event.teamTwo.members;
         for (keys in m) {
-            if (m[keys].eventCount > 0) { // m[keys].kills > 0 || m[keys].deaths > 0) {
-                if (m[keys].name === "") {return;}
+            if (m[keys].eventCount > 0) {
+                if (m[keys].name === "") { return; }
+                
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
-                    $('<div class="playerStatsContainer" id="' + m[keys].name + '">' +
-                        '<div class="playerStatsScore" id="' + m[keys].name + 'Score">' + m[keys].netScore + '</div>' +
-                        '<div class="playerStatsName" id="' + m[keys].name + 'name">' + m[keys].name + '</div>' + 
-                        '<div class="playerEventMask" id="' + m[keys].name + 'EventMask"></div></div>' +
-                        // '<div class="playerRespawningBase" id="' + m[keys].name + 'respawn"></div></div>' +
-                      '<div class="playerClass ' + getClassFromLoadoutID(m[keys].ps2Class) + '" id="' + m[keys].name + 'class">' + 
-                      '</div>').appendTo($('#T2Players'));
+                    $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T2Players'));
+                    $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T2Players'));
                 }
                 else {
                     var scoreEl = document.getElementById(m[keys].name + 'Score');
                     scoreEl.textContent = m[keys].netScore;
                 }
-                if (m[keys].name == event.loser) {
+                if (m[keys].name === event.loser) {
                     var loserName = m[keys].loser;
                     playRespawning(loserName);
                 }
             }
+            // Remove the player from the overlay if they haven't done anything
             else {
-                $(m[keys].name).empty();
-                // $('#' + m[keys].name).remove(); TODO: make each player row a grid row
+                //TODO: make each player row a grid row
+                $('#' + m[keys].name + 'class').remove();
+                $('#' + m[keys].name).remove(); 
             }
         }
         updatePlayerClasses(event);
@@ -201,12 +186,7 @@ function addKillfeedRow(event) {
         pointsString = '0';
     }
     
-    $('<tr><td class="killfeedRowContainer">' + 
-        '<div class="killfeedWinner killfeedPlayer killfeedCell faction' + event.winner_faction + '">' + event.winner + '</div>' +
-        '<div class="killfeedPoints killfeedCell ">' + pointsString + '</div>' +
-        '<div class="killfeedWeapon killfeedCell">' + event.weapon + '</div>' +
-        '<div class="killfeedLoser killfeedPlayer killfeedCell faction' + event.loser_faction + '">' + event.loser + '</div>' +
-      '</td></tr>').prependTo($('#killfeed'));
+    $(getKillfeedRowHtml(event.winner, event.winner_faction, event.loser, event.loser_faction, pointsString, event.weapon)).prependTo($('#killfeed'));
 }
 
 /* Remove the last row of the killfeed */
@@ -214,6 +194,29 @@ function truncateKillfeed() {
     var killTable = document.getElementById('killfeed');
     var killRows = killTable.getElementsByTagName('tr');
     if (killRows.length > 4) { killTable.deleteRow(4); }
+}
+
+function getPlayerStatsHtml(name, netScore) {
+    return '<div class="playerStatsContainer" id="' + name + '">' +
+                '<div class="playerStatsScore" id="' + name + 'Score">' + netScore + '</div>' +
+                '<div class="playerStatsName" id="' + name + 'name">' + name + '</div>' + 
+                '<div class="playerEventMask" id="' + name + 'EventMask"></div>' +
+           '</div>';
+}
+
+function getPlayerClassHtml(name, ps2Class) {
+    return '<div class="playerClass ' + getClassFromLoadoutID(ps2Class) + '" id="' + name + 'class"></div>'
+}
+
+function getKillfeedRowHtml(winner, winnerFaction, loser, loserFaction, points, weapon) {
+    return '<tr>' +
+                '<td class="killfeedRowContainer">' + 
+                    '<div class="killfeedWinner killfeedPlayer killfeedCell faction' + winnerFaction + '">' + winner + '</div>' +
+                    '<div class="killfeedPoints killfeedCell ">' + points + '</div>' +
+                    '<div class="killfeedWeapon killfeedCell">' + weapon + '</div>' +
+                    '<div class="killfeedLoser killfeedPlayer killfeedCell faction' + loserFaction + '">' + loser + '</div>' +
+                '</td>' +
+            '</tr>'
 }
 
 function updatePlayerClasses(event) {
@@ -234,13 +237,13 @@ function updatePlayerScores(event) {
     var winnerID = event.winner + 'Score';
     var loserID = event.loser + 'Score';
 
-    if (event.winner_net_score !== undefined && !($('#' + winnerID).length == 0)) {
+    if (event.winner_net_score !== undefined && !($('#' + winnerID).length === 0)) {
         console.log(event.winner + ' Net: ' + event.winner_net_score);
         winnerID.textContent = m[keys].netScore;
        // document.getElementById(winnerID).className = getEmojiFromNetEventScore(event.winner_net_score);
     }
  
-    if (event.loser_net_score !== undefined && !($('#' + loserID).length == 0) ) {
+    if (event.loser_net_score !== undefined && !($('#' + loserID).length === 0) ) {
         console.log(event.loser + ' Net: ' + event.loser_net_score);
         loserID.textContent = m[keys].netScore;
         //document.getElementById(loserID).className = getEmojiFromNetEventScore(event.loser_net_score);
@@ -257,50 +260,70 @@ function getFactionLabel(teamObject) {
 };
 
 function playRespawning(eventLoserName) {
-    var loserID = eventLoserName + 'respawn';
-    var eventMaskId = eventLoserName +'EventMask';
-   
-    var respawn = document.getElementById(loserID);
-    respawn.className = "playerRespawningBase";
+    var respawnID = '#' + eventLoserName + 'respawn';
+    // var classID = eventLoserName + 'class';
+    var loserId = '#' + eventLoserName;
+    var eventMaskId = '#' + eventLoserName +'EventMask';
    
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
+    
+    // var respawn = document.getElementById(loserID);
+    // respawn.className = "playerRespawningBase";
+   
+    // $('#' + classID).removeClass('deadIconPlay');
+    $(loserId).removeClass('deadTextPlay');
 
-    $('#' + eventLoserName).removeClass('deadTextPlay');
+    // $('#' + eventLoserName).removeClass('deadTextPlay');
 
     emptyPlayersEventMask(eventLoserName);
 
-    var shrinkDirection = $('#T1Players #'+ eventLoserName) ? 'shrinkRight' : 'shrinkLeft';
+    // var shrinkDirection = $('#T1Players #'+ eventLoserName) ? 'shrinkRight' : 'shrinkLeft';
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
-            respawn.className = "playerRespawningBar playerRespawningPlay " + shrinkDirection;
+            $(getRespawnBarHtml(eventLoserName)).appendTo($(eventMaskId));
+            // respawn.className = "playerRespawningBar playerRespawningPlay"; // " + shrinkDirection;
             player.className = "playerStatsContainer deadTextPlay";
+            // $('#' + classID).addClass('deadIconPlay');
+
+            $(respawnID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+                function() {
+                    emptyPlayersEventMask(eventLoserName);
+                    $(loserId).remove('revivedFlashPlay deadTextPlay');
+                    // $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
+
+                });
         });
     });
+}
+
+function getRespawnBarHtml(name) {
+    return '<div id="' + name + 'respawn" class="playerRespawningBar playerRespawningPlay"></div>'
 }
 
 // TODO: actually implement this
 function playRevived(eventLoserName) {
     var classID = eventLoserName + 'class';
+    var playerId = '#' + eventLoserName;
     
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
     
-    $('#' + classID).removeClass('deadIconPlay');
-    $('#' + eventLoserName).removeClass('deadTextPlay');
+    // $('#' + classID).removeClass('deadIconPlay');
+    $(playerId).removeClass('deadTextPlay');
 
     emptyPlayersEventMask(eventLoserName);
 
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
             player.className = 'playerStatsContainer revivedFlashPlay';
-            $('#' + classID).addClass('revivedFlashPlay');
+            // $('#' + classID).addClass('revivedFlashPlay');
 
-            $('#' + eventLoserName).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+            $(playerId).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
                     emptyPlayersEventMask(eventLoserName);
                     $('#' + eventLoserName).removeClass('revivedFlashPlay deadTextPlay');
-                    $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
+                    // $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
 
                 });
         });
@@ -309,15 +332,16 @@ function playRevived(eventLoserName) {
 
 // TODO: actually implement this
 function playContestingPoint(eventWinnerName) {
-    var eventMaskId = eventWinnerName +'EventMask';
+    var eventMaskId = '#' + eventWinnerName +'EventMask';
     
     // Control Point events can only happen at a set interval, so don't worry about restting the animation gracefully
     emptyPlayersEventMask(eventWinnerName);
 
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
-            $('<div class="stripe"></div><div class="stripe"></div>').appendTo($('#' + eventMaskId));
-            $('#' + eventMaskId).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
+            $(getPointControlHtml()).appendTo($(eventMaskId));
+
+            $(eventMaskId).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
                     emptyPlayersEventMask(eventWinnerName);
                 });
@@ -325,10 +349,14 @@ function playContestingPoint(eventWinnerName) {
     });
 }
 
+function getPointControlHtml() {
+    return '<div class="stripe"></div><div class="stripe"></div>';
+}
+
 // TOD: actually implement this
 function emptyPlayersEventMask(eventPlayerName) {
-    var eventMaskId = eventPlayerName + 'EventMask';
-    $('#' + eventMaskId).empty();
+    var eventMaskId = '#' + eventPlayerName + 'EventMask';
+    $(eventMaskId).empty();
 }
 
 function getLoadoutIdMappings(loadoutID) {
