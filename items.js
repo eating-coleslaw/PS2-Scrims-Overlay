@@ -87,8 +87,11 @@ let categoryMap  = {
     '130': { 'category' : 'Sunderer Rear Gunner',       points : 0, id: 'item130'},
     '131': { 'category' : 'Vanguard Gunner Weapon',     points : 0, id: 'item131'},
     '132': { 'category' : 'Vanguard Primary Weapon',    points : 0, id: 'item132'},
+    '138': { 'category' : 'Valkyrie Weapon',            points : 0, id: 'item138'},
     '139': { 'category' : 'Engineer Turrets',           points : 0, id: 'item139'},
-    '147': { 'category' : 'Aerial Combat Weapon',       points : 0, id: 'item147'},
+    '144': { 'category' : 'Ant Top Weapon',             points : 0, id: 'item144'},
+    '147': { 'category' : 'Aerial Combat Weapon',       points : 0, id: 'item147'}, // Rocklet Rifle
+    '148': { 'category' : 'Ant Mining Laster',          points : 0, id: 'item148'},
     'name': 'Planetside Infantry League Ruleset'
 };
 
@@ -161,8 +164,11 @@ function individualCategoryUpdate(event) {
     if (event.item130  !== '') { categoryMap['130'].points = event.item130; }
     if (event.item131  !== '') { categoryMap['131'].points = event.item131; }
     if (event.item132  !== '') { categoryMap['132'].points = event.item132; }
+    if (event.item138  !== '') { categoryMap['138'].points = event.item138; }
     if (event.item139  !== '') { categoryMap['139'].points = event.item139; }
+    if (event.item144  !== '') { categoryMap['144'].points = event.item144; }
     if (event.item147  !== '') { categoryMap['147'].points = event.item147; }
+    if (event.item148  !== '') { categoryMap['148'].points = event.item148; }
     categoryMap.name = 'Custom';
 }
 
