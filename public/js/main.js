@@ -94,19 +94,19 @@ socket.on('connect', function() {
             var loserName = event.loser;
             addKillfeedRow(event);
             updatePlayerClasses(event);
-            updatePlayerScores(event);
+            // updatePlayerScores(event);
             playRevived(loserName);
         }
         else if (event.is_control === true && event.winner !== undefined) {
             var winnerName = event.winner;
             if (debugLogs === true) { addKillfeedRow(event);}
             updatePlayerClasses(event);
-            updatePlayerScores(event);
+            // updatePlayerScores(event);
             playContestingPoint(winnerName);
         }
-        else {
-            updatePlayerScores(event);
-        }
+        // else {
+        //     updatePlayerScores(event);
+        // }
 
         truncateKillfeed();
     });
@@ -239,13 +239,13 @@ function updatePlayerScores(event) {
 
     if (event.winner_net_score !== undefined && !($('#' + winnerID).length === 0)) {
         console.log(event.winner + ' Net: ' + event.winner_net_score);
-        winnerID.textContent = m[keys].netScore;
+        winnerID.textContent = event.winner_net_score;
        // document.getElementById(winnerID).className = getEmojiFromNetEventScore(event.winner_net_score);
     }
  
     if (event.loser_net_score !== undefined && !($('#' + loserID).length === 0) ) {
         console.log(event.loser + ' Net: ' + event.loser_net_score);
-        loserID.textContent = m[keys].netScore;
+        loserID.textContent = event.loser_net_score;
         //document.getElementById(loserID).className = getEmojiFromNetEventScore(event.loser_net_score);
     }
 
@@ -289,7 +289,8 @@ function playRespawning(eventLoserName) {
             $(respawnID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
                     emptyPlayersEventMask(eventLoserName);
-                    $(loserId).remove('revivedFlashPlay deadTextPlay');
+                    // player.className = "playerStatsContainer";
+                    $(loserId).removeClass('revivedFlashPlay deadTextPlay');
                     // $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
 
                 });

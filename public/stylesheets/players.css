@@ -140,9 +140,9 @@
     position: relative;
     /* border-radius: 2px; */
     overflow: hidden;
-    border-style: solid;
+    /* border-style: solid;
     border-width: 1px 0px 0px 0px;
-    border-color: var(--faction-dark-high-trans-color);
+    border-color: var(--faction-dark-high-trans-color); */
     margin-top: -2px; /* -3px; */
     /* box-sizing: border-box; */
     z-index: 0;
@@ -211,8 +211,10 @@
     -moz-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     -webkit-animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
     animation: 10s linear 0s 1 reverse forwards respawnIn, 0.1s ease-in 10s 1 normal forwards wipeUp;
+    border-style: solid;
+    border-width: 1px 0px 0px 0px;
+    border-color: var(--faction-dark-high-trans-color);
 }
-
 
 .stripe {
     height: 52%;
@@ -226,6 +228,10 @@
     );
     animation: 0.5s pointControlFlash 12 linear alternate, 0.2s ease-out 2.25s 2 reverse forwards shrinkDown;
     animation-direction: alternate-reverse;
+
+    /* border-style: outset;
+    border-width: 1px 0px 0px 0px;
+    border-color: var(--faction-dark-high-trans-color); */
 }
 
 .stripe:nth-child(odd) {
@@ -237,6 +243,10 @@
     );
     animation: 0.5s pointControlFlash 0.25s 12 linear alternate-reverse, 0.25s ease-out 2.25s 1 reverse forwards shrinkDown;
     animation-direction: alternate-reverse;
+
+    /* border-style: outset;
+    border-width: 1px 0px 0px 0px;
+    border-color: var(--faction-dark-high-trans-color); */
 }
 
 #T1Players .playerRespawningPlay {

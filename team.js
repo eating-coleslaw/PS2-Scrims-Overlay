@@ -113,48 +113,50 @@ function getT2() { return t2; }
 
 //#region Kill/Death Handling
 
-function oneIvITwo(one, two, oneClass, twoClass, points) {
+function oneIvITwo(killer, killed, killerClass, killedClass, points) {
     t1.kills++;
     t1.points += points;
     t1.netScore += points;
-    t1.members[one].kills++;
-    t1.members[one].eventCount++;
 
-    t1.members[one].points += points;
-    t1.members[one].netScore += points;
-    t1.members[one].ps2Class = oneClass;
+    t1.members[killer].kills++;
+    t1.members[killer].eventCount++;
+
+    t1.members[killer].points += points;
+    t1.members[killer].netScore += points;
+    t1.members[killer].ps2Class = killerClass;
 
     t2.deaths++;
     t2.netScore -= points;
-    t2.members[two].deaths++;
-    t2.members[two].eventCount++;
+    
+    t2.members[killed].deaths++;
+    t2.members[killed].eventCount++;
 
-    t2.members[two].netScore -= points;
-    t2.members[two].ps2Class = twoClass;
+    t2.members[killed].netScore -= points;
+    t2.members[killed].ps2Class = killedClass;
 
     // logging
     // console.log(t1.members[one].name + ' (' + t1.members[one].ps2Class + ') -->  ' + t2.members[two].name + ' (' + t2.members[two].ps2Class + ') for ' + points + ' points (' + item.name + ')');
     logScore();
 }
 
-function twoIvIOne(two, one, oneClass, twoClass, points) {
+function twoIvIOne(killer, killed, killerClass, killedClass, points) {
     t2.kills++;
     t2.points += points;
     t2.netScore += points;
 
-    t2.members[two].kills++;
-    t2.members[two].eventCount++;
-    t2.members[two].points += points;
-    t2.members[two].netScore += points;
-    t2.members[two].ps2Class = twoClass;
+    t2.members[killer].kills++;
+    t2.members[killer].eventCount++;
+    t2.members[killer].points += points;
+    t2.members[killer].netScore += points;
+    t2.members[killer].ps2Class = killerClass;
 
     t1.deaths++;
     t1.netScore -= points;
 
-    t1.members[one].deaths++;
-    t1.members[one].eventCount++;
-    t1.members[one].netScore -= points;
-    t1.members[one].ps2Class = oneClass;
+    t1.members[killed].deaths++;
+    t1.members[killed].eventCount++;
+    t1.members[killed].netScore -= points;
+    t1.members[killed].ps2Class = killedClass;
 
     // logging
     // console.log(t2.members[two].name + ' -->  ' + t1.members[one].name + ' for ' + points + ' points (' + item.name + ')');
@@ -386,7 +388,7 @@ function adjustScore(team1, team2, reason) {
 }
 
 function logScore() {
-    console.log(t1.points + ' ' + t2.points);
+    // console.log(t1.points + ' ' + t2.points);
     sendScores();
 }
 

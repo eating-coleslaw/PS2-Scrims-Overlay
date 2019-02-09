@@ -16,8 +16,9 @@ let  teamOneObject,
      roundTracker = 0,
      timeCounter = 0,
      matchLength = 900,
-     eventTitle,
-     format = 'kdr';
+     eventTitle;
+
+const debugLogs = false;
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -178,14 +179,14 @@ function itsPlayerData(data) {
         
         //One Suicide || One Max Suicide
         else if (data.attacker_character_id === data.character_id) {
-            points = killerIsMax ? pointMap['13'].points : pointMap['22'];
+            points = killerIsMax ? pointMap['13'].points : pointMap['22'].points;
             teamOneSuicide(data, points, item);
             // console.log(painter.faction(name1 + ' killed themselves!', faction1));
         }
 
         // One TK || One TK Max
         else if (teamOneObject.members.hasOwnProperty(data.character_id)) {
-            points = victimIsMax ? pointMap['24'].points : pointMap['21'];
+            points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamOneTeamkill(data, points, item);
             // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name1 + ' => ' + teamOneObject.members[data.character_id].name, faction1));
         }
@@ -209,14 +210,14 @@ function itsPlayerData(data) {
 
         // Two Suicide || Two Max Suicide
         else if (data.attacker_character_id === data.character_id) {
-            points = killerIsMax ? pointMap['13'].points : pointMap['22'];
+            points = killerIsMax ? pointMap['13'].points : pointMap['22'].points;
             teamTwoSuicide(data, points, item);
             // console.log(painter.faction(name2 + ' killed themselves!', faction2));
         }
         
         // Two TK || Two TK Max
         else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
-            points = victimIsMax ? pointMap['24'].points : pointMap['21'];
+            points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamTwoTeamkill(data, points, item);
             // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name2 + ' => ' + teamTwoObject.members[data.character_id].name, faction2));
         }
@@ -224,9 +225,11 @@ function itsPlayerData(data) {
 
     // One of the players isn't involved in the match
     else {
-        console.log(painter.gray('   !!! Possible Match Interruption !!!'));
-        console.log(painter.gray('         winner: ' + data.attacker_character_id));
-        console.log(painter.gray('         loser:  ' + data.character_id));
+        if (debugLogs === true) {
+            console.log(painter.gray('   !!! Possible Match Interruption !!!'));
+            console.log(painter.gray('         winner: ' + data.attacker_character_id));
+            console.log(painter.gray('         loser:  ' + data.character_id));
+        }
         return;
     }
 
@@ -243,16 +246,16 @@ function isMaxLoadout(loadout) {
 //#region Discrete Player Event Handling
 
 function oneIvITwo (data, points, item) {
-    team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.attacker_loadout_id, data.character_loadout_id, points);
+    team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         winner_class_id: data.attacker_loadout_id,
-        winner_net_score: teamOneObject.members[data.attacker_character_id].netEventScore,
+        winner_net_score: teamOneObject.members[data.attacker_character_id].netScore,
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         loser_class_id: data.character_loadout_id,
-        loser_net_score: teamTwoObject.members[data.character_id].eventNetScore,
+        loser_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
         is_kill: true
@@ -265,11 +268,11 @@ function twoIvIOne (data, points, item) {
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         winner_class_id: data.attacker_loadout_id,
-        winner_net_score: teamTwoObject.members[data.attacker_character_id].netEventScore,
+        winner_net_score: teamTwoObject.members[data.attacker_character_id].netScore,
         loser: teamOneObject.members[data.character_id].name,
         loser_faction: teamOneObject.faction,
         loser_class_id: data.character_loadout_id,
-        loser_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        loser_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
         is_kill: true
@@ -282,11 +285,11 @@ function teamOneSuicide (data, points, item) {
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         winner_class_id: data.attacker_loadout_id,
-        winner_net_score: teamOneObject.members[data.attacker_character_id].netEventScore,
+        winner_net_score: teamOneObject.members[data.attacker_character_id].netScore,
         loser: teamOneObject.members[data.character_id].name,
         loser_faction: teamOneObject.faction,
         loser_class_id: data.character_loadout_id,
-        loser_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        loser_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
         is_kill: true
@@ -299,11 +302,11 @@ function teamTwoSuicide (data, points, item) {
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         winner_class_id: data.attacker_loadout_id,
-        winner_net_score: teamTwoObject.members[data.attacker_character_id].netEventScore,
+        winner_net_score: teamTwoObject.members[data.attacker_character_id].netScore,
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         loser_class_id: data.character_loadout_id,
-        loser_net_score: teamTwoObject.members[data.character_id].eventNetScore,
+        loser_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
         is_kill: true
@@ -316,11 +319,11 @@ function teamOneTeamkill (data, points, item) {
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
         winner_class_id: data.attacker_loadout_id,
-        winner_net_score: teamOneObject.members[data.attacker_character_id].netEventScore,
+        winner_net_score: teamOneObject.members[data.attacker_character_id].netScore,
         loser: teamOneObject.members[data.character_id].name,
         loser_faction: teamOneObject.faction,
         loser_class_id: data.character_loadout_id,
-        loser_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        loser_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
         is_kill: true
@@ -333,11 +336,11 @@ function teamTwoTeamkill (data, points, item) {
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
         winner_class_id: data.attacker_loadout_id,
-        winner_net_score: teamTwoObject.members[data.attacker_character_id].netEventScore,
+        winner_net_score: teamTwoObject.members[data.attacker_character_id].netScore,
         loser: teamTwoObject.members[data.character_id].name,
         loser_faction: teamTwoObject.faction,
         loser_class_id: data.character_loadout_id,
-        loser_net_score: teamTwoObject.members[data.character_id].eventNetScore,
+        loser_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
         is_kill: true
@@ -405,22 +408,22 @@ function itsExperienceData(data) {
        // Revive Data
         if (allXpIdsRevives.includes(xpID && teamOneObject.members.hasOwnProperty(data.other_id))) {
             teamOneRevive(data);
-            // console.log(painter.lightGreen('Team 1 Revive: ') + painter.faction(characterName, faction));
+            console.log(painter.lightGreen('Team 1 Revive: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsDmgAssists.includes(xpID)) {
             teamOneDmgAssist(data);
-            // console.log(painter.lightPurple('Team 1 Dmg Assist: ') + painter.faction(characterName, faction));
+            console.log(painter.lightPurple('Team 1 Dmg Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsUtilAssists.includes(xpID)) {
             teamOneUtilAssist(data);
-            // console.log(painter.lightYellow('Team 1 Util Assist: ') + painter.faction(characterName, faction));
+            console.log(painter.lightYellow('Team 1 Util Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsPointControls.includes(xpID)) {
             teamOnePointControl(data);
-            // console.log(painter.yellow('Team 1 Point Control: ') + painter.faction(characterName, faction));
+            console.log(painter.yellow('Team 1 Point Control: ') + painter.faction(characterName, faction));
         }
     }
 
@@ -431,22 +434,22 @@ function itsExperienceData(data) {
         // Team 2 Revive
         if (allXpIdsRevives.includes(xpID) && teamTwoObject.members.hasOwnProperty(data.other_id)) {
             teamTwoRevive(data);
-            // console.log(painter.lightGreen('Team 2 Revive: ') + painter.faction(characterName, faction));
+            console.log(painter.lightGreen('Team 2 Revive: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsDmgAssists.includes(xpID)) {
             teamTwoDmgAssist(data);
-            // console.log(painter.lightPurple('Team 2 Dmg Assist: ') + painter.faction(characterName, faction));
+            console.log(painter.lightPurple('Team 2 Dmg Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsUtilAssists.includes(xpID)) {
             teamTwoUtilAssist(data);
-            // console.log(painter.lightYellow('Team 2 Util Assist: ') + painter.faction(characterName, faction));
+            console.log(painter.lightYellow('Team 2 Util Assist: ') + painter.faction(characterName, faction));
         }
 
         else if (allXpIdsPointControls.includes(xpID)) {
             teamTwoPointControl(data);
-            // console.log(painter.yellow('Team 2 Point Control: ') + painter.faction(characterName, faction));
+            console.log(painter.yellow('Team 2 Point Control: ') + painter.faction(characterName, faction));
         }
     }
 
@@ -463,10 +466,10 @@ function teamOneRevive(data) {
         winner: teamOneObject.members[data.character_id].name,
         winner_faction: teamOneObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamOneObject.members[data.character_id].netScore,
         loser: loserName,
         loser_faction: teamOneObject.faction,
-        loser_net_score: teamOneObject.members[data.other_id].eventNetScore,
+        loser_net_score: teamOneObject.members[data.other_id].netScore,
         weapon: 'Revive',
         is_revive: true
     });
@@ -476,7 +479,7 @@ function teamTwoRevive(data) {
     team.twoRevive(data.character_id, data.other_id, data.loadout_id);
     if (teamTwoObject.members.hasOwnProperty(data.other_id)) {
         var loserName = teamTwoObject.members[data.other_id].name;
-        var loserScore = teamTwoObject.members[data.other_id].eventNetScore;
+        var loserScore = teamTwoObject.members[data.other_id].netScore;
     }
     else {
         var loserName = 'Random Pubbie'
@@ -486,7 +489,7 @@ function teamTwoRevive(data) {
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamTwoObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamTwoObject.members[data.character_id].netScore,
         loser: loserName,
         loser_faction: teamTwoObject.faction,
         loser_net_score: loserScore,
@@ -501,7 +504,7 @@ function teamOneDmgAssist(data) {
         winner: teamOneObject.members[data.character_id].name,
         winner_faction: teamOneObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: 'Dmg Assist',
         is_assist: true
     });
@@ -513,7 +516,7 @@ function teamTwoDmgAssist(data) {
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamTwoObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: 'Dmg Assist',
         is_assist: true
     });
@@ -525,7 +528,7 @@ function teamOneUtilAssist(data) {
         winner: teamOneObject.members[data.character_id].name,
         winner_faction: teamOneObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: 'Util Assist',
         is_assist: true
     });
@@ -537,7 +540,7 @@ function teamTwoUtilAssist(data) {
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamTwoObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: 'Util Assist',
         is_assist: true
     });
@@ -549,7 +552,7 @@ function teamOnePointControl(data) {
         winner: teamOneObject.members[data.character_id].name,
         winner_faction: teamOneObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamOneObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: 'PTFO',
         is_control: true
     });
@@ -561,7 +564,7 @@ function teamTwoPointControl(data) {
         winner: teamTwoObject.members[data.character_id].name,
         winner_faction: teamTwoObject.faction,
         winner_class_id: data.loadout_id,
-        winner_net_score: teamTwoObject.members[data.character_id].eventNetScore,
+        winner_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: 'PTFO',
         is_control: true
     });
