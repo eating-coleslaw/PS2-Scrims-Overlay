@@ -1,0 +1,26 @@
+.statsContainer {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+}
+
+.statsTable {
+    display: grid;
+    grid-auto-rows: 25px;
+    color: var(--faction-light-color, rgb(245, 245, 255));
+}
+
+
+
+.statsRow {
+    display: grid;
+    grid-template-rows: 25px;
+    grid-template-areas: "label score graph net kills deaths hsr assists utils";
+    width: 100%;
+    border-bottom: black;
+}
+

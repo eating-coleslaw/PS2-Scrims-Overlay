@@ -118,37 +118,43 @@ socket.on('connect', function() {
         
         var m = event.teamOne.members;
         for (keys in m) {
-            if (m[keys].eventCount > 0) {
+            if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].teamKills > 0 || m[keys].dmgAssists > 0) {
                if (m[keys].name === "") { return; }
-                var nameEl = document.getElementById(m[keys].name);
-                if (nameEl === null) {
-                    $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T1Players'));
-                    $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T1Players'));
-                }
-                else {
-                    var scoreEl = document.getElementById(m[keys].name + 'Score');
-                    scoreEl.textContent = m[keys].netScore;
-                }
-                if (m[keys].name === event.loser) {
-                    var loserName = m[keys].loser;
-                    playRespawning(loserName);
-                }
+
+               var nameEl = document.getElementById(m[keys].name);
+               if (nameEl === null) {
+                //    console.log("Adding T1 player: " + m[keys].name);
+                   $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T1Players'));
+                   $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T1Players'));
+               }
+               else {
+                   var scoreEl = document.getElementById(m[keys].name + 'Score');
+                   scoreEl.textContent = m[keys].netScore;
+               }
+               if (m[keys].name === event.loser) {
+                   var loserName = m[keys].loser;
+                   playRespawning(loserName);
+               }
             }
             // Remove the player from the overlay if they haven't done anything
             else {
                 //TODO: make each player row a grid row
-                $('#' + m[keys].name + 'class').remove();
-                $('#' + m[keys].name).remove(); 
+                // console.log("Removing T1 player: " + m[keys].name);
+                if($('#' + m[keys].name, '#T1Players').length === 1) {
+                    $('#' + m[keys].name + 'class').remove();
+                    $('#' + m[keys].name).remove(); 
+                }
             }
         }
 
         m = event.teamTwo.members;
         for (keys in m) {
-            if (m[keys].eventCount > 0) {
+            if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].teamKills > 0 || m[keys].dmgAssists > 0) {
                 if (m[keys].name === "") { return; }
                 
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
+                    // console.log("Adding T2 player: " + m[keys].name);
                     $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T2Players'));
                     $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T2Players'));
                 }
@@ -164,8 +170,13 @@ socket.on('connect', function() {
             // Remove the player from the overlay if they haven't done anything
             else {
                 //TODO: make each player row a grid row
-                $('#' + m[keys].name + 'class').remove();
-                $('#' + m[keys].name).remove(); 
+                // console.log("Removing T2 player: " + m[keys].name);
+                if($('#' + m[keys].name, '#T2Players').length === 1) {
+                    $('#' + m[keys].name + 'class').remove();
+                    $('#' + m[keys].name).remove(); 
+                }
+                // $('#' + m[keys].name + 'class').remove();
+                // $('#' + m[keys].name).remove(); 
             }
         }
         updatePlayerClasses(event);
@@ -223,12 +234,14 @@ function updatePlayerClasses(event) {
     var winnerID = event.winner + "class";
     var loserID = event.loser + "class";
    
-   if (event.winner_class_id !== undefined && !($('#' + winnerID).length == 0)) {
+   if (event.winner_class_id !== undefined && !($('#' + winnerID).length === 0)) {
+    //    console.log(event.winner + ' Class: ' + event.winner_class_id);
        document.getElementById(winnerID).className = "playerClass " + getClassFromLoadoutID(event.winner_class_id);
    }
 
-   if (event.loser_class_id !== undefined && !($('#' + loserID).length == 0)) {
-    document.getElementById(loserID).className = "playerClass " + getClassFromLoadoutID(event.loser_class_id);
+   if (event.loser_class_id !== undefined && !($('#' + loserID).length === 0)) {
+    //    console.log(event.loser + ' Class: ' + event.loser_class_id);
+       document.getElementById(loserID).className = "playerClass " + getClassFromLoadoutID(event.loser_class_id);
    }
 }
 
@@ -362,7 +375,7 @@ function emptyPlayersEventMask(eventPlayerName) {
 
 function getLoadoutIdMappings(loadoutID) {
     var classMap = [];
-   classMap[0] = 'unknown';
+    classMap[0] = 'unknown';
     classMap[1] ='infil'; classMap[8] = 'infil'; classMap[15] = 'infil';
     classMap[3] = 'la'; classMap[10] = 'la'; classMap[17] = 'la';
     classMap[4] = 'medic'; classMap[11] = 'medic'; classMap[18] = 'medic';

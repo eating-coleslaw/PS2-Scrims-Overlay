@@ -174,21 +174,21 @@ function itsPlayerData(data) {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
             oneIvITwo(data, points, item);
-            // console.log(painter.brightWhite('Kill: ') + painter.faction(name1 + ' => ', faction1) + painter.faction(teamTwoObject.members[data.character_id].name, faction2));
+            console.log(painter.brightWhite('Kill: ') + painter.faction(name1 + ' => ', faction1) + painter.faction(teamTwoObject.members[data.character_id].name, faction2));
         }
         
         //One Suicide || One Max Suicide
         else if (data.attacker_character_id === data.character_id) {
             points = killerIsMax ? pointMap['13'].points : pointMap['22'].points;
             teamOneSuicide(data, points, item);
-            // console.log(painter.faction(name1 + ' killed themselves!', faction1));
+            console.log(painter.faction(name1 + ' killed themselves!', faction1));
         }
 
         // One TK || One TK Max
         else if (teamOneObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamOneTeamkill(data, points, item);
-            // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name1 + ' => ' + teamOneObject.members[data.character_id].name, faction1));
+            console.log(painter.brightWhite('Teamkill: ') + painter.faction(name1 + ' => ' + teamOneObject.members[data.character_id].name, faction1));
         }
     }
 
@@ -205,21 +205,21 @@ function itsPlayerData(data) {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
             twoIvIOne(data, points, item);
-            // console.log(painter.brightWhite('Kill: ') + painter.faction(name2 + ' => ', faction2) + painter.faction(teamOneObject.members[data.character_id].name, faction1));
+            console.log(painter.brightWhite('Kill: ') + painter.faction(name2 + ' => ', faction2) + painter.faction(teamOneObject.members[data.character_id].name, faction1));
         }
 
         // Two Suicide || Two Max Suicide
         else if (data.attacker_character_id === data.character_id) {
             points = killerIsMax ? pointMap['13'].points : pointMap['22'].points;
             teamTwoSuicide(data, points, item);
-            // console.log(painter.faction(name2 + ' killed themselves!', faction2));
+            console.log(painter.faction(name2 + ' killed themselves!', faction2));
         }
         
         // Two TK || Two TK Max
         else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamTwoTeamkill(data, points, item);
-            // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name2 + ' => ' + teamTwoObject.members[data.character_id].name, faction2));
+            console.log(painter.brightWhite('Teamkill: ') + painter.faction(name2 + ' => ' + teamTwoObject.members[data.character_id].name, faction2));
         }
     }
 
@@ -630,7 +630,8 @@ function startTimer(ws) {
         if (timeCounter < 1) {
             clearInterval(time);
             unsubscribe(ws);
-            overlay.writeFinalStats(teamOneObject,teamTwoObject);
+            logTeamStats();
+            // overlay.writeFinalStats(teamOneObject,teamTwoObject);
             socket.setRunning(false);
         }
         overlay.updateTime(timeCounter);
@@ -695,6 +696,74 @@ function newRound() {
 
 function getTitle() {
     return eventTitle;
+}
+
+function logTeamStats() {
+    console.log(painter.gray('_____'));
+    console.log(painter.gray('==============================================================='));
+    console.log(painter.white('                          ' + '   Pts   Net   Kll   Dth   Dmg   Utl'));
+    /*
+    ===============================================================
+    playerNameThatsReallyLong...  Pts   Net   Kll   Dth   Dmg   Utl
+    ---------------------------------------------------------------
+    '                             '
+    */
+   
+   var t1 = team.getT1();
+   console.log(painter.faction('---------------------------------------------------------------', t1.faction));
+   let name = ('[' + t1.alias + ']' + '                          ').slice(0,25);
+   let stats = getStatsString(t1.points, t1.netScore, t1.kills, t1.deaths, t1.dmgAssists, t1.utilAssists);
+   console.log(painter.faction(name, t1.faction) + ' ' + painter.white(stats));
+   
+   m = t1.members;
+   for (keys in m) {
+       player = m[keys];
+       if (player.kills > 0 || player.deaths > 0 || player.teamKills > 0 || player.dmgAssists > 0 || player.utilAssists) {
+            name = padLabelRight(player.name);
+            stats = getStatsString(player.points, player.netScore, player.kills, player.deaths, player.dmgAssists, player.utilAssists);
+            console.log(painter.white(name + ' ' + stats));
+        }
+    }
+
+    var t2 = team.getT2();
+    console.log(painter.faction('---------------------------------------------------------------', t2.faction));
+    name = ('[' + t2.alias + ']' + '                          ').slice(0,25);
+    stats = getStatsString(t2.points, t2.netScore, t2.kills, t2.deaths, t2.dmgAssists, t2.utilAssists);
+    console.log(painter.faction(name, t2.faction) + ' ' + painter.white(stats));
+    
+    m = t2.members;
+    for (keys in m) {
+        player = m[keys];
+        if (player.kills > 0 || player.deaths > 0 || player.teamKills > 0 || player.dmgAssists > 0 || player.utilAssists) {
+            name = padLabelRight(player.name);
+            stats = getStatsString(player.points, player.netScore, player.kills, player.deaths, player.dmgAssists, player.utilAssists);
+            console.log(painter.white(name + ' ' + stats));
+        }
+    }
+
+    console.log(painter.gray('==============================================================='));
+    console.log(painter.gray('*****'));
+}
+
+function padLabelRight(label) {
+    if (label.length > 25) {
+        label = label.slice(0,22) + '...';
+    }
+    return ' ' + (label + '                          ').slice(0,24);
+}
+
+function getStatsString(points, netScore, kills, deaths, dmgAssists, utilAssists) {
+    var pts = padStatLeft(points),
+        net = padStatLeft(netScore),
+        kll = padStatLeft(kills),
+        dth = padStatLeft(deaths),
+        dmg = padStatLeft(dmgAssists),
+        utl = padStatLeft(utilAssists);
+    return pts + net + kll + dth + dmg + utl; 
+}
+
+function padStatLeft(stat) {
+    return ' ' + ('     ' + stat).slice(-5);
 }
 
 /**

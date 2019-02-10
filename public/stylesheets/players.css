@@ -136,7 +136,7 @@
 
 .playerEventMask {
     grid-area: event;
-    height: 3px; /* 100%; */
+    height: 5px; /* 100%; */
     position: relative;
     /* border-radius: 2px; */
     overflow: hidden;
