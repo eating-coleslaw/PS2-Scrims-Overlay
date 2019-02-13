@@ -174,7 +174,7 @@ function itsPlayerData(data) {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
             oneIvITwo(data, points, item);
-            console.log(painter.brightWhite('Kill: ') + painter.faction(name1 + ' => ', faction1) + painter.faction(teamTwoObject.members[data.character_id].name, faction2));
+            // console.log(painter.brightWhite('Kill: ') + painter.faction(name1 + ' => ', faction1) + painter.faction(teamTwoObject.members[data.character_id].name, faction2));
         }
         
         //One Suicide || One Max Suicide
@@ -188,7 +188,7 @@ function itsPlayerData(data) {
         else if (teamOneObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamOneTeamkill(data, points, item);
-            console.log(painter.brightWhite('Teamkill: ') + painter.faction(name1 + ' => ' + teamOneObject.members[data.character_id].name, faction1));
+            // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name1 + ' => ' + teamOneObject.members[data.character_id].name, faction1));
         }
     }
 
@@ -205,7 +205,7 @@ function itsPlayerData(data) {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
             twoIvIOne(data, points, item);
-            console.log(painter.brightWhite('Kill: ') + painter.faction(name2 + ' => ', faction2) + painter.faction(teamOneObject.members[data.character_id].name, faction1));
+            // console.log(painter.brightWhite('Kill: ') + painter.faction(name2 + ' => ', faction2) + painter.faction(teamOneObject.members[data.character_id].name, faction1));
         }
 
         // Two Suicide || Two Max Suicide
@@ -219,7 +219,7 @@ function itsPlayerData(data) {
         else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamTwoTeamkill(data, points, item);
-            console.log(painter.brightWhite('Teamkill: ') + painter.faction(name2 + ' => ' + teamTwoObject.members[data.character_id].name, faction2));
+            // console.log(painter.brightWhite('Teamkill: ') + painter.faction(name2 + ' => ' + teamTwoObject.members[data.character_id].name, faction2));
         }
     }
 

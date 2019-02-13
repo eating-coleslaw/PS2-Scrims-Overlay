@@ -1,3 +1,4 @@
+/* 
 .statsContainer {
     position: absolute;
     top: 25%;
@@ -14,8 +15,6 @@
     color: var(--faction-light-color, rgb(245, 245, 255));
 }
 
-
-
 .statsRow {
     display: grid;
     grid-template-rows: 25px;
@@ -23,4 +22,176 @@
     width: 100%;
     border-bottom: black;
 }
+*/
 
+.match-stats-container {
+    position: absolute;
+    top: 12%;
+    left: 25%;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-areas:
+        "team1"
+        "spacer"
+        "team2";
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.team-stats-container {
+    display: grid;
+    /* grid-auto-rows: 25px; */
+    grid-gap: 0px;
+    color: var(--faction-light-color, rgb(245, 245, 255));
+    margin: 8px;
+    padding: 5px;
+    border: 1px solid #0F1320;
+    background-color: #1F233090;
+}
+
+#T1Stats.team-stats-container {
+    grid-area: team1;
+    border-top-left-radius: 5px;
+    background: -moz-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(-10deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    box-shadow: -1px 1px 3px rgba(47, 47, 47, 0.75);
+}
+
+#T2Stats.team-stats-container {
+    grid-area: team2;
+    border-bottom-right-radius: 5px;
+    background: -moz-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    background: -webkit-linear-gradient(170deg, var(--faction-dark-trans-color) 0%, #1F2330E5 60%);
+    box-shadow: 2px 1px 3px rgba(47, 47, 47, 0.75);
+}
+
+.stats-row {
+    display: grid;
+    /* grid-template-rows: 25px; */
+    grid-template-columns: 1fr 55px 100px repeat(5, 90px);
+    grid-template-areas: "label score graph net kills deaths assists utils";
+    grid-gap: 5px;
+    text-align: left;
+}
+
+.stats-row.player {
+    border-top: 1px outset var(--faction-flavor-trans-color, rgba(35, 35, 35, 0.55));
+    padding: 4px 0px 4px 0px;
+    margin: 2px 0px 2px 0px;
+}
+
+.stats-row.player:nth-child(3) {
+    border-top: 0px solid transparent !important;
+}
+/* #T2Stats .stats-row.player:nth-child(3) {
+    border-top: 0px solid transparent !important;
+} */
+
+.stats-row-header {
+    display: grid;
+    /* grid-template-rows: 50px; */
+    grid-template-columns: 1fr 155px repeat(5, 90px);
+    grid-template-areas: "label score net kills deaths assists utils";
+    grid-gap: 5px;
+    /* border-bottom: 1px solid black; */
+    text-align: left;
+    margin-bottom: 2px;
+    margin-top: 5px;
+}
+
+.stats-row.outfit {
+    font-size: 24px;
+    color: var(--faction-flavor-color, #1F2330);
+    border-top: 2px solid var(--faction-primary-color, #1F2330);
+    border-left: 4px solid var(--faction-primary-color, #1F2330);
+    border-bottom: 4px solid transparent;
+    /* border-bottom: 1px dotted var(--faction-flavor-trans-color, #1F233056); */
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 5px 0px 0px 0px;
+}
+
+.stats-col-header {
+    margin-top: auto;
+    vertical-align: bottom;
+    padding-bottom: 2px;
+    box-sizing: border-box;
+    font-size: smaller;
+}
+
+.stats-col-header.score {
+    grid-area: score;
+    text-align: left;
+    /* padding-left: 55px; */
+}
+
+.stats-value {
+    padding: 0px;
+    margin: 0px;
+    grid-gap: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stats-row .label {
+    grid-area: label;
+    text-align: left;
+    border-left: 4px solid transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stats-row.player .label {
+    padding-left: 8px;
+}
+
+.stats-value.score {
+    grid-area: score;
+    text-align: right;
+}
+
+.stats-value.graph, .stats-col-header.graph {
+    grid-area: graph;
+}
+
+.stats-row .graph .graph-bar {
+    /* height: calc(100% - 8px); */
+    height: 18px;
+    margin: 3px 0px 3px 0px;
+    width: 75%;
+    background-color: var(--faction-primary-color);
+    opacity: 0.9;
+    box-sizing: border-box;
+    border: 1px solid var(--faction-dark-trans-color);
+    border-left: 2px solid var(--faction-dark-color);
+}
+
+.stats-value.net, .stats-col-header.net {
+    grid-area: net;
+}
+
+.stats-value.kills, .stats-col-header.kills {
+    grid-area: kills;
+}
+
+.stats-value.deaths, .stats-col-header.deaths {
+    grid-area: deaths;
+}
+
+.stats-value.hsr, .stats-col-header.hsr {
+    grid-area: hsr;
+}
+
+.stats-value.assists, .stats-col-header.assists {
+    grid-area: assists;
+}
+
+.stats-value.utils, .stats-col-header.utils {
+    grid-area: utils;
+}
