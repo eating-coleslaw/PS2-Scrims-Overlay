@@ -4,6 +4,24 @@
  */
 
 var socket = io();
+
+// Initialize to '' instead of 0 in case someone never scores :( 
+var points = {
+    match: {
+        min: '',
+        max: '',
+        total: ''
+    },
+    teamOne: {
+        min: '',
+        max: ''
+    },
+    teamTwo: {
+        min: '',
+        max: ''
+    }
+};
+
 const debugLogs = false;
 
 socket.on('connect', function() {
@@ -148,34 +166,54 @@ socket.on('connect', function() {
         console.log(event);
         $('#T1Score').empty().html(event.teamOne.points);
         $('#T2Score').empty().html(event.teamTwo.points);
+
+        points.match.total = event.teamOne.points + event.teamTwo.points;
         
         var m = event.teamOne.members;
         for (keys in m) {
             if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].teamKills > 0 || m[keys].dmgAssists > 0) {
-               if (m[keys].name === "") { return; }
+                if (m[keys].name === "") { return; }
 
-               // Player Status & Class Elements
-               var nameEl = document.getElementById(m[keys].name);
-               if (nameEl === null) {
+                // Player Status & Class Elements
+                var nameEl = document.getElementById(m[keys].name);
+                if (nameEl === null) {
                 //    console.log("Adding T1 player: " + m[keys].name);
                    $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T1Players'));
                    $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T1Players'));
-               }
-               else {
+                }
+                else {
                    var scoreEl = document.getElementById(m[keys].name + 'Score');
                    scoreEl.textContent = m[keys].netScore;
-               }
-               if (m[keys].name === event.loser) {
+                }
+                if (m[keys].name === event.loser) {
                    var loserName = m[keys].loser;
                    playRespawning(loserName);
-               }
+                }
+               
+                // Update running min and max point values. Need to do this before updating the stats table.
+                let pts = m[keys].points;
+                if (points.teamOne.min === '' || pts < points.teamOne.min) {
+                   points.teamOne.min = pts;
+                }
+                if (points.match.min === '' || pts < points.match.min) {
+                    points.match.min = pts;
+                }
+                if (points.teamOne.max === '' || pts > points.teamOne.max) {
+                    points.teamOne.max = pts;
+                }
+                if (points.match.max === '' || pts > points.match.max) {
+                    points.match.max = pts;
+                }
 
-               // Player Stats Row
-               statsRow = document.getElementById(m[keys].name + '-stats');
-               if (statsRow === null) {
-                   var statsRowHtml = '<div id="' + m[keys].name + '-stats" class="stats-row player">' + 
+                let ptGraphWidth = pts > 1 ? Math.ceil(90 * (pts / points.match.max)) : 4;
+
+                // Player Stats Row
+                statsRow = document.getElementById(m[keys].name + '-stats');
+                if (statsRow === null) {
+                    var statsRowHtml = '<div id="' + m[keys].name + '-stats" class="stats-row player">' + 
                                            '<div id="' + m[keys].name + '-label" class="label">' + m[keys].name + '</div>' +
                                            '<div id="' + m[keys].name + '-score" class="score stats-value">' + m[keys].points + '</div>' +
+                                           '<div id="' + m[keys].name + '-graph" class="graph"></div>' +
                                            '<div id="' + m[keys].name + '-net" class="net stats-value">' + m[keys].netScore + '</div>' +
                                            '<div id="' + m[keys].name + '-kills" class="kills stats-value">' + m[keys].kills + '</div>' + 
                                            '<div id="' + m[keys].name + '-deaths" class="deaths stats-value">' + m[keys].deaths + '</div>' +
@@ -183,15 +221,20 @@ socket.on('connect', function() {
                                            '<div id="' + m[keys].name + '-utils" class="utils stats-value">' + m[keys].utilAssists + '</div>' +
                                         '</div>';
                     $(statsRowHtml).appendTo('#T1Stats');
-               }
-               else {
+
+                    var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar" style="width: ' + ptGraphWidth + '%;"></div>';
+                    $(graphBarHtml).appendTo('#' + m[keys].name + '-graph');
+                }
+                else {
                    document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
                    document.getElementById(m[keys].name + '-net').textContent = m[keys].netScore;
                    document.getElementById(m[keys].name + '-kills').textContent = m[keys].kills;
                    document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
                    document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
                    document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
-               }
+
+                   document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
+                }
             }
             // Remove the player from the overlay if they haven't done anything
             else {
@@ -228,6 +271,23 @@ socket.on('connect', function() {
                     var loserName = m[keys].loser;
                     playRespawning(loserName);
                 }
+                
+                // Update running min and max point values. Need to do this before updating the stats table.
+                let pts = m[keys].points;
+                if (points.teamTwo.min === '' || pts < points.teamTwo.min) {
+                    points.teamTwo.min = pts;
+                }
+                if (points.teamTwo.min === '' || pts < points.teamTwo.min) {
+                    points.teamTwo.min = pts;
+                }
+                if (points.teamTwo.max === '' || pts > points.teamTwo.max) {
+                    points.teamTwo.max = pts;
+                }
+                if (points.match.max === '' || pts > points.match.max) {
+                    points.match.max = pts;
+                }
+
+                let ptGraphWidth = pts > 1 ? Math.ceil(75 * (pts / points.match.max)) : 4;
 
                 // Player Stats Row
                statsRow = document.getElementById(m[keys].name + '-stats');
@@ -235,6 +295,7 @@ socket.on('connect', function() {
                    var statsRowHtml = '<div id="' + m[keys].name + '-stats" class="stats-row player">' + 
                                            '<div id="' + m[keys].name + '-label" class="label">' + m[keys].name + '</div>' +
                                            '<div id="' + m[keys].name + '-score" class="score stats-value">' + m[keys].points + '</div>' +
+                                           '<div id="' + m[keys].name + '-graph" class="graph"></div>' +
                                            '<div id="' + m[keys].name + '-net" class="net stats-value">' + m[keys].netScore + '</div>' +
                                            '<div id="' + m[keys].name + '-kills" class="kills stats-value">' + m[keys].kills + '</div>' + 
                                            '<div id="' + m[keys].name + '-deaths" class="deaths stats-value">' + m[keys].deaths + '</div>' +
@@ -242,15 +303,20 @@ socket.on('connect', function() {
                                            '<div id="' + m[keys].name + '-utils" class="utils stats-value">' + m[keys].utilAssists + '</div>' +
                                         '</div>';
                     $(statsRowHtml).appendTo('#T2Stats');
+
+                    var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar" style="width: ' + ptGraphWidth + '%;"></div>';
+                    $(graphBarHtml).appendTo('#' + m[keys].name + '-graph');
                }
                else {
-                document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
-                document.getElementById(m[keys].name + '-net').textContent = m[keys].netScore;
-                document.getElementById(m[keys].name + '-kills').textContent = m[keys].kills;
-                document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
-                document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
-                document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
-            }
+                   document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
+                   document.getElementById(m[keys].name + '-net').textContent = m[keys].netScore;
+                   document.getElementById(m[keys].name + '-kills').textContent = m[keys].kills;
+                   document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
+                   document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
+                   document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
+
+                   document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
+                }
             }
             // Remove the player from the overlay if they haven't done anything
             else {
@@ -272,20 +338,20 @@ socket.on('connect', function() {
         updatePlayerScores(event);
 
         // Team 1 Stats
-        document.getElementById(data.teamOne.alias + '-score').textContent = data.teamOne.points;
-        document.getElementById(data.teamOne.alias + '-net').textContent = data.teamOne.netScore;
-        document.getElementById(data.teamOne.alias + '-kills').textContent = data.teamOne.kills;
-        document.getElementById(data.teamOne.alias + '-deaths').textContent = data.teamOne.deaths;
-        document.getElementById(data.teamOne.alias + '-assists').textContent = data.teamOne.dmgAssists;
-        document.getElementById(data.teamOne.alias + '-utils').textContent = data.teamOne.utilAssists;
+        document.getElementById(event.teamOne.alias + '-score').textContent = event.teamOne.points;
+        document.getElementById(event.teamOne.alias + '-net').textContent = event.teamOne.netScore;
+        document.getElementById(event.teamOne.alias + '-kills').textContent = event.teamOne.kills;
+        document.getElementById(event.teamOne.alias + '-deaths').textContent = event.teamOne.deaths;
+        document.getElementById(event.teamOne.alias + '-assists').textContent = event.teamOne.dmgAssists;
+        document.getElementById(event.teamOne.alias + '-utils').textContent = event.teamOne.utilAssists;
 
         // Team 2 Stats
-        document.getElementById(data.teamTwo.alias + '-score').textContent = data.teamTwo.points;
-        document.getElementById(data.teamTwo.alias + '-net').textContent = data.teamTwo.netScore;
-        document.getElementById(data.teamTwo.alias + '-kills').textContent = data.teamTwo.kills;
-        document.getElementById(data.teamTwo.alias + '-deaths').textContent = data.teamTwo.deaths;
-        document.getElementById(data.teamTwo.alias + '-assists').textContent = data.teamTwo.dmgAssists;
-        document.getElementById(data.teamTwo.alias + '-utils').textContent = data.teamTwo.utilAssists;
+        document.getElementById(event.teamTwo.alias + '-score').textContent = event.teamTwo.points;
+        document.getElementById(event.teamTwo.alias + '-net').textContent = event.teamTwo.netScore;
+        document.getElementById(event.teamTwo.alias + '-kills').textContent = event.teamTwo.kills;
+        document.getElementById(event.teamTwo.alias + '-deaths').textContent = event.teamTwo.deaths;
+        document.getElementById(event.teamTwo.alias + '-assists').textContent = event.teamTwo.dmgAssists;
+        document.getElementById(event.teamTwo.alias + '-utils').textContent = event.teamTwo.utilAssists;
     });
 });
 
