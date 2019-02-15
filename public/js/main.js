@@ -18,17 +18,21 @@ socket.on('connect', function() {
     socket.on('teams', function (data) {
         if (debugLogs === true) { console.log(data); }
         
-        if (data.teamOne.name !== "") {
-            var T1 = data.teamOne.alias
-            var T2 = data.teamTwo.alias
+        if (data.teamOne.name !== '' && data.teamTwo.name !== '') {
+            var T1Alias = data.teamOne.alias
+            var T2Alias = data.teamTwo.alias
 
-            $('#T1Players').empty(); $('#T2Players').empty();
+            /* --------------
+                Scoreboard
+            --------------- */
+            $('#T1Players').empty();
+            $('#T2Players').empty();
 
             $('#T1Board').addClass('faction' + data.teamOne.faction);
             $('#T2Board').addClass('faction' + data.teamTwo.faction);
 
-            $('#outfitT1').html(T1).addClass('outfitAlias');
-            $('#outfitT2').html(T2).addClass('outfitAlias');
+            $('#outfitT1').html(T1Alias).addClass('outfitAlias');
+            $('#outfitT2').html(T2Alias).addClass('outfitAlias');
             
             $('#T1Score').addClass('activeWhiteText');
             $('#T2Score').addClass('activeWhiteText');
@@ -54,6 +58,35 @@ socket.on('connect', function() {
 
             $('#killfeedContainer').removeClass('killfeedInactive');
             $('#killfeedContainer').addClass('killfeedActive');
+
+            /* --------------
+                Stats
+            --------------- */
+            $('#T1Stats').addClass('faction' + data.teamOne.faction);
+            $('#T2Stats').addClass('faction' + data.teamTwo.faction);
+
+            var T1Stats = '<div id="' + data.teamOne.alias + '-stats" class="stats-row stats-row outfit">' + 
+                                '<div id="' + data.teamOne.alias + '-label" class="label">' + data.teamOne.alias + '</div>' +
+                                '<div id="' + data.teamOne.alias + '-score" class="score stats-value">' + data.teamOne.points + '</div>' +
+                                '<div id="' + data.teamOne.alias + '-net" class="net stats-value">' + data.teamOne.netScore + '</div>' +
+                                '<div id="' + data.teamOne.alias + '-kills" class="kills stats-value">' + data.teamOne.kills + '</div>' + 
+                                '<div id="' + data.teamOne.alias + '-deaths" class="deaths stats-value">' + data.teamOne.deaths + '</div>' + 
+                                '<div id="' + data.teamOne.alias + '-assists" class="assists stats-value">' + data.teamOne.dmgAssists + '</div>' + 
+                                '<div id="' + data.teamOne.alias + '-utils" class="utils stats-value">' + data.teamOne.utilAssists + '</div>' +
+                            '</div>';
+            $(T1Stats).appendTo('#T1Stats');
+
+            var T2Stats = '<div id="' + data.teamTwo.alias + '-stats" class="stats-row stats-row outfit">' + 
+                                '<div id="' + data.teamTwo.alias + '-label" class="label">' + data.teamTwo.alias + '</div>' +
+                                '<div id="' + data.teamTwo.alias + '-score" class="score stats-value">' + data.teamTwo.points + '</div>' +
+                                '<div id="' + data.teamTwo.alias + '-net" class="net stats-value">' + data.teamTwo.netScore + '</div>' +
+                                '<div id="' + data.teamTwo.alias + '-kills" class="kills stats-value">' + data.teamTwo.kills + '</div>' + 
+                                '<div id="' + data.teamTwo.alias + '-deaths" class="deaths stats-value">' + data.teamTwo.deaths + '</div>' + 
+                                '<div id="' + data.teamTwo.alias + '-assists" class="assists stats-value">' + data.teamTwo.dmgAssists + '</div>' + 
+                                '<div id="' + data.teamTwo.alias + '-utils" class="utils stats-value">' + data.teamTwo.utilAssists + '</div>' +
+                            '</div>';
+            $(T2Stats).appendTo('#T2Stats');
+            
         }
         else {
             $('#outfitT1').html("--").addClass();
@@ -121,6 +154,7 @@ socket.on('connect', function() {
             if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].teamKills > 0 || m[keys].dmgAssists > 0) {
                if (m[keys].name === "") { return; }
 
+               // Player Status & Class Elements
                var nameEl = document.getElementById(m[keys].name);
                if (nameEl === null) {
                 //    console.log("Adding T1 player: " + m[keys].name);
@@ -135,6 +169,29 @@ socket.on('connect', function() {
                    var loserName = m[keys].loser;
                    playRespawning(loserName);
                }
+
+               // Player Stats Row
+               statsRow = document.getElementById(m[keys].name + '-stats');
+               if (statsRow === null) {
+                   var statsRowHtml = '<div id="' + m[keys].name + '-stats" class="stats-row player">' + 
+                                           '<div id="' + m[keys].name + '-label" class="label">' + m[keys].name + '</div>' +
+                                           '<div id="' + m[keys].name + '-score" class="score stats-value">' + m[keys].points + '</div>' +
+                                           '<div id="' + m[keys].name + '-net" class="net stats-value">' + m[keys].netScore + '</div>' +
+                                           '<div id="' + m[keys].name + '-kills" class="kills stats-value">' + m[keys].kills + '</div>' + 
+                                           '<div id="' + m[keys].name + '-deaths" class="deaths stats-value">' + m[keys].deaths + '</div>' +
+                                           '<div id="' + m[keys].name + '-assists" class="assists stats-value">' + m[keys].dmgAssists + '</div>' + 
+                                           '<div id="' + m[keys].name + '-utils" class="utils stats-value">' + m[keys].utilAssists + '</div>' +
+                                        '</div>';
+                    $(statsRowHtml).appendTo('#T1Stats');
+               }
+               else {
+                   document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
+                   document.getElementById(m[keys].name + '-net').textContent = m[keys].netScore;
+                   document.getElementById(m[keys].name + '-kills').textContent = m[keys].kills;
+                   document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
+                   document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
+                   document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
+               }
             }
             // Remove the player from the overlay if they haven't done anything
             else {
@@ -142,7 +199,11 @@ socket.on('connect', function() {
                 // console.log("Removing T1 player: " + m[keys].name);
                 if($('#' + m[keys].name, '#T1Players').length === 1) {
                     $('#' + m[keys].name + 'class').remove();
-                    $('#' + m[keys].name).remove(); 
+                    $('#' + m[keys].name).remove();
+                }
+
+                if($('#' + m[keys].name + '-stats', '#T1Players').length === 1) {
+                    $('#' + m[keys].name + '-stats').remove(); 
                 }
             }
         }
@@ -152,6 +213,7 @@ socket.on('connect', function() {
             if (m[keys].kills > 0 || m[keys].deaths > 0 || m[keys].teamKills > 0 || m[keys].dmgAssists > 0) {
                 if (m[keys].name === "") { return; }
                 
+                // Player Status & Class Elements
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
                     // console.log("Adding T2 player: " + m[keys].name);
@@ -166,6 +228,29 @@ socket.on('connect', function() {
                     var loserName = m[keys].loser;
                     playRespawning(loserName);
                 }
+
+                // Player Stats Row
+               statsRow = document.getElementById(m[keys].name + '-stats');
+               if (statsRow === null) {
+                   var statsRowHtml = '<div id="' + m[keys].name + '-stats" class="stats-row player">' + 
+                                           '<div id="' + m[keys].name + '-label" class="label">' + m[keys].name + '</div>' +
+                                           '<div id="' + m[keys].name + '-score" class="score stats-value">' + m[keys].points + '</div>' +
+                                           '<div id="' + m[keys].name + '-net" class="net stats-value">' + m[keys].netScore + '</div>' +
+                                           '<div id="' + m[keys].name + '-kills" class="kills stats-value">' + m[keys].kills + '</div>' + 
+                                           '<div id="' + m[keys].name + '-deaths" class="deaths stats-value">' + m[keys].deaths + '</div>' +
+                                           '<div id="' + m[keys].name + '-assists" class="assists stats-value">' + m[keys].dmgAssists + '</div>' + 
+                                           '<div id="' + m[keys].name + '-utils" class="utils stats-value">' + m[keys].utilAssists + '</div>' +
+                                        '</div>';
+                    $(statsRowHtml).appendTo('#T2Stats');
+               }
+               else {
+                document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
+                document.getElementById(m[keys].name + '-net').textContent = m[keys].netScore;
+                document.getElementById(m[keys].name + '-kills').textContent = m[keys].kills;
+                document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
+                document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
+                document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
+            }
             }
             // Remove the player from the overlay if they haven't done anything
             else {
@@ -175,12 +260,32 @@ socket.on('connect', function() {
                     $('#' + m[keys].name + 'class').remove();
                     $('#' + m[keys].name).remove(); 
                 }
+
+                if($('#' + m[keys].name + '-stats', '#T2Players').length === 1) {
+                    $('#' + m[keys].name + '-stats').remove();
+                }
                 // $('#' + m[keys].name + 'class').remove();
                 // $('#' + m[keys].name).remove(); 
             }
         }
         updatePlayerClasses(event);
         updatePlayerScores(event);
+
+        // Team 1 Stats
+        document.getElementById(data.teamOne.alias + '-score').textContent = data.teamOne.points;
+        document.getElementById(data.teamOne.alias + '-net').textContent = data.teamOne.netScore;
+        document.getElementById(data.teamOne.alias + '-kills').textContent = data.teamOne.kills;
+        document.getElementById(data.teamOne.alias + '-deaths').textContent = data.teamOne.deaths;
+        document.getElementById(data.teamOne.alias + '-assists').textContent = data.teamOne.dmgAssists;
+        document.getElementById(data.teamOne.alias + '-utils').textContent = data.teamOne.utilAssists;
+
+        // Team 2 Stats
+        document.getElementById(data.teamTwo.alias + '-score').textContent = data.teamTwo.points;
+        document.getElementById(data.teamTwo.alias + '-net').textContent = data.teamTwo.netScore;
+        document.getElementById(data.teamTwo.alias + '-kills').textContent = data.teamTwo.kills;
+        document.getElementById(data.teamTwo.alias + '-deaths').textContent = data.teamTwo.deaths;
+        document.getElementById(data.teamTwo.alias + '-assists').textContent = data.teamTwo.dmgAssists;
+        document.getElementById(data.teamTwo.alias + '-utils').textContent = data.teamTwo.utilAssists;
     });
 });
 
