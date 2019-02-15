@@ -168,6 +168,7 @@ socket.on('connect', function() {
         $('#T2Score').empty().html(event.teamTwo.points);
 
         points.match.total = event.teamOne.points + event.teamTwo.points;
+        var pointPlayers = [];
         
         var m = event.teamOne.members;
         for (keys in m) {
@@ -204,8 +205,11 @@ socket.on('connect', function() {
                 if (points.match.max === '' || pts > points.match.max) {
                     points.match.max = pts;
                 }
+                
+                pointPlayers[m[keys].name] = { points: pts};
 
-                let ptGraphWidth = pts > 1 ? Math.ceil(90 * (pts / points.match.max)) : 4;
+                // let ptGraphWidth = pts > 1 ? Math.ceil(90 * (pts / points.match.max)) : 4;
+                // console.log(m[keys].name + ' graph width: ' + ptGraphWidth);
 
                 // Player Stats Row
                 statsRow = document.getElementById(m[keys].name + '-stats');
@@ -222,8 +226,11 @@ socket.on('connect', function() {
                                         '</div>';
                     $(statsRowHtml).appendTo('#T1Stats');
 
-                    var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar" style="width: ' + ptGraphWidth + '%;"></div>';
+                    let ptGraphWidth = m[keys].points > 1 ? Math.ceil(90 * (m[keys].points / points.match.max)) : 4;
+                    var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar"></div>';
                     $(graphBarHtml).appendTo('#' + m[keys].name + '-graph');
+                    document.getElementById(m[keys].name + '-graph-bar').style.width = ptGraphWidth + '%';
+                    console.log('Set graph of ' + m[keys].name + ' to: ' + ptGraphWidth + '%');
                 }
                 else {
                    document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
@@ -233,7 +240,7 @@ socket.on('connect', function() {
                    document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
                    document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
 
-                   document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
+                //    document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
                 }
             }
             // Remove the player from the overlay if they haven't done anything
@@ -277,8 +284,8 @@ socket.on('connect', function() {
                 if (points.teamTwo.min === '' || pts < points.teamTwo.min) {
                     points.teamTwo.min = pts;
                 }
-                if (points.teamTwo.min === '' || pts < points.teamTwo.min) {
-                    points.teamTwo.min = pts;
+                if (points.match.min === '' || pts < points.match.min) {
+                    points.match.min = pts;
                 }
                 if (points.teamTwo.max === '' || pts > points.teamTwo.max) {
                     points.teamTwo.max = pts;
@@ -287,7 +294,8 @@ socket.on('connect', function() {
                     points.match.max = pts;
                 }
 
-                let ptGraphWidth = pts > 1 ? Math.ceil(75 * (pts / points.match.max)) : 4;
+                pointPlayers[m[keys].name] = { points: pts};
+                // let ptGraphWidth = pts > 1 ? Math.ceil(75 * (pts / points.match.max)) : 4;
 
                 // Player Stats Row
                statsRow = document.getElementById(m[keys].name + '-stats');
@@ -304,8 +312,11 @@ socket.on('connect', function() {
                                         '</div>';
                     $(statsRowHtml).appendTo('#T2Stats');
 
-                    var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar" style="width: ' + ptGraphWidth + '%;"></div>';
+                    let ptGraphWidth = m[keys].points > 1 ? Math.ceil(90 * (m[keys].points / points.match.max)) : 4;
+                    var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar"></div>';
                     $(graphBarHtml).appendTo('#' + m[keys].name + '-graph');
+                    document.getElementById(m[keys].name + '-graph-bar').style.width = ptGraphWidth + '%';
+                    console.log('Set graph of ' + m[keys].name + ' to: ' + ptGraphWidth + '%');
                }
                else {
                    document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
@@ -315,7 +326,7 @@ socket.on('connect', function() {
                    document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
                    document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
 
-                   document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
+                //    document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
                 }
             }
             // Remove the player from the overlay if they haven't done anything
@@ -337,21 +348,33 @@ socket.on('connect', function() {
         updatePlayerClasses(event);
         updatePlayerScores(event);
 
+        for (keys in pointPlayers) {
+            let pPts = pointPlayers[keys].points;
+            let ptGraphWidth = pPts > 1 ? Math.ceil(90 * (pPts / points.match.max)) : 4;
+            document.getElementById(keys + '-graph-bar').style.width = ptGraphWidth + '%';
+
+            console.log(keys + ' graph width: ' + ptGraphWidth + '%');
+        }
+
         // Team 1 Stats
-        document.getElementById(event.teamOne.alias + '-score').textContent = event.teamOne.points;
-        document.getElementById(event.teamOne.alias + '-net').textContent = event.teamOne.netScore;
-        document.getElementById(event.teamOne.alias + '-kills').textContent = event.teamOne.kills;
-        document.getElementById(event.teamOne.alias + '-deaths').textContent = event.teamOne.deaths;
-        document.getElementById(event.teamOne.alias + '-assists').textContent = event.teamOne.dmgAssists;
-        document.getElementById(event.teamOne.alias + '-utils').textContent = event.teamOne.utilAssists;
+        if (document.getElementById(event.teamOne.alias + '-score') !== null) {
+            document.getElementById(event.teamOne.alias + '-score').textContent = event.teamOne.points;
+            document.getElementById(event.teamOne.alias + '-net').textContent = event.teamOne.netScore;
+            document.getElementById(event.teamOne.alias + '-kills').textContent = event.teamOne.kills;
+            document.getElementById(event.teamOne.alias + '-deaths').textContent = event.teamOne.deaths;
+            document.getElementById(event.teamOne.alias + '-assists').textContent = event.teamOne.dmgAssists;
+            document.getElementById(event.teamOne.alias + '-utils').textContent = event.teamOne.utilAssists;
+        }
 
         // Team 2 Stats
-        document.getElementById(event.teamTwo.alias + '-score').textContent = event.teamTwo.points;
-        document.getElementById(event.teamTwo.alias + '-net').textContent = event.teamTwo.netScore;
-        document.getElementById(event.teamTwo.alias + '-kills').textContent = event.teamTwo.kills;
-        document.getElementById(event.teamTwo.alias + '-deaths').textContent = event.teamTwo.deaths;
-        document.getElementById(event.teamTwo.alias + '-assists').textContent = event.teamTwo.dmgAssists;
-        document.getElementById(event.teamTwo.alias + '-utils').textContent = event.teamTwo.utilAssists;
+        if ( document.getElementById(event.teamTwo.alias + '-score') !== null) {
+            document.getElementById(event.teamTwo.alias + '-score').textContent = event.teamTwo.points;
+            document.getElementById(event.teamTwo.alias + '-net').textContent = event.teamTwo.netScore;
+            document.getElementById(event.teamTwo.alias + '-kills').textContent = event.teamTwo.kills;
+            document.getElementById(event.teamTwo.alias + '-deaths').textContent = event.teamTwo.deaths;
+            document.getElementById(event.teamTwo.alias + '-assists').textContent = event.teamTwo.dmgAssists;
+            document.getElementById(event.teamTwo.alias + '-utils').textContent = event.teamTwo.utilAssists;
+        }
     });
 });
 

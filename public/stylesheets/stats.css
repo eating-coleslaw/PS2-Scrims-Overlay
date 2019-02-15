@@ -164,7 +164,7 @@
     /* height: calc(100% - 8px); */
     height: 18px;
     margin: 3px 0px 3px 0px;
-    width: 75%;
+    /* width: 75%; */
     background-color: var(--faction-primary-color);
     opacity: 0.9;
     box-sizing: border-box;
