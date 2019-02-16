@@ -421,7 +421,7 @@ function updatePlayerScores(event) {
     var loserID = event.loser + 'Score';
 
     if (event.winner_net_score !== undefined && !($('#' + winnerID).length === 0)) {
-        console.log(event.winner + ' Net: ' + event.winner_net_score + ' [loser]');
+        console.log(event.winner + ' Net: ' + event.winner_net_score + ' [winner]');
         winnerID.textContent = event.winner_net_score;
     }
  
