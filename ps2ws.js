@@ -175,50 +175,18 @@ function itsPlayerData(data) {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
             oneIvITwo(data, points, item);
-            
-            console.log(painter.faction(data.character_id + ': ' + JSON.stringify(teamTwoObject.members[data.character_id]), teamTwoObject.faction));
-
-            try {
-                var name3 = teamTwoObject.members[data.character_id].name;
-                console.log('name3: ' + name3);
-                console.log(painter.brightWhite('Kill: ') + painter.faction(name1 + ' => ', faction1) + painter.faction(teamTwoObject.members[data.character_id].name, faction2));
-            }
-            catch(err) {
-                console.log(painter.red('Error Logging Team 1 Kill: ' + err));
-                console.log(JSON.stringify(data));
-            }
         }
         
         //One Suicide || One Max Suicide
         else if (data.attacker_character_id === data.character_id) {
             points = killerIsMax ? pointMap['13'].points : pointMap['22'].points;
             teamOneSuicide(data, points, item);
-            
-            try {
-                console.log(painter.faction(name1 + ' killed themselves!', faction1));
-            }
-            catch(err) {
-                console.log(painter.red('Error Logging Team 1 Suicide: ' + err));
-                console.log(JSON.stringify(data));
-            }
         }
 
         // One TK || One TK Max
         else if (teamOneObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamOneTeamkill(data, points, item);
-            
-            console.log(painter.faction(data.character_id + ': ' + JSON.stringify(teamOneObject.members[data.character_id]), teamOneObject.faction));
-            
-            try {
-                var name4 = teamOneObject.members[data.character_id].name;
-                console.log('name4: ' + name4);
-                console.log(painter.brightWhite('Teamkill: ') + painter.faction(name1 + ' => ' + teamOneObject.members[data.character_id].name, faction1));
-            }
-            catch(err) {
-                console.log(painter.red('Error Logging Team 1 Teamkill: ' + err));
-                console.log(JSON.stringify(data));
-            }
         }
     }
 
@@ -235,51 +203,18 @@ function itsPlayerData(data) {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
             twoIvIOne(data, points, item);
-            
-            console.log(painter.faction(data.character_id + ': ' + JSON.stringify(teamOneObject.members[data.character_id]), teamOneObject.faction));
-
-            try {
-                var name5 = teamOneObject.members[data.character_id].name;
-                console.log('name5: ' + name5);
-                console.log(painter.brightWhite('Kill: ') + painter.faction(name2 + ' => ', faction2) + painter.faction(teamOneObject.members[data.character_id].name, faction1));
-            }
-            catch(err) {
-                console.log(painter.red('Error Logging Team 2 Kill: ' + err));
-                console.log(JSON.stringify(data));
-            }
         }
 
         // Two Suicide || Two Max Suicide
         else if (data.attacker_character_id === data.character_id) {
             points = killerIsMax ? pointMap['13'].points : pointMap['22'].points;
             teamTwoSuicide(data, points, item);
-            
-            try {
-                console.log(painter.faction(name2 + ' killed themselves!', faction2));
-            }
-            catch(err) {
-                console.log(painter.red('Error Logging Team 2 Suicide: ' + err));
-                console.log(JSON.stringify(data));
-            }
         }
         
         // Two TK || Two TK Max
         else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamTwoTeamkill(data, points, item);
-            
-            console.log(painter.faction(data.character_id + ': ' + JSON.stringify(teamTwoObject.members[data.character_id]), teamTwoObject.faction));
-            
-            try {
-                var name6 = teamTwoObject.members[data.character_id].name;
-                console.log('name6: ' + name6);
-                console.log(painter.faction('2TK Losers: ' + teamTwoObject.members[data.character_id].name));
-                console.log(painter.brightWhite('Teamkill: ') + painter.faction(name2 + ' => ' + teamTwoObject.members[data.character_id].name, faction2));
-            }
-            catch(err) {
-                console.log(painter.red('Error Logging Team 2 Teamkill: ' + err));
-                console.log(JSON.stringify(data));
-            }
         }
     }
 
