@@ -1,29 +1,3 @@
-/* 
-.statsContainer {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    height: auto;
-}
-
-.statsTable {
-    display: grid;
-    grid-auto-rows: 25px;
-    color: var(--faction-light-color, rgb(245, 245, 255));
-}
-
-.statsRow {
-    display: grid;
-    grid-template-rows: 25px;
-    grid-template-areas: "label score graph net kills deaths hsr assists utils";
-    width: 100%;
-    border-bottom: black;
-}
-*/
-
 .match-stats-container {
     position: absolute;
     top: 12%;
@@ -44,7 +18,6 @@
 
 .team-stats-container {
     display: grid;
-    /* grid-auto-rows: 25px; */
     grid-gap: 0px;
     color: var(--faction-light-color, rgb(245, 245, 255));
     margin: 8px;
@@ -73,7 +46,6 @@
 
 .stats-row {
     display: grid;
-    /* grid-template-rows: 25px; */
     grid-template-columns: 1fr 55px 100px repeat(5, 90px);
     grid-template-areas: "label score graph net kills deaths assists utils";
     grid-gap: 5px;
@@ -89,17 +61,12 @@
 .stats-row.player:nth-child(3) {
     border-top: 0px solid transparent !important;
 }
-/* #T2Stats .stats-row.player:nth-child(3) {
-    border-top: 0px solid transparent !important;
-} */
 
 .stats-row-header {
     display: grid;
-    /* grid-template-rows: 50px; */
     grid-template-columns: 1fr 155px repeat(5, 90px);
     grid-template-areas: "label score net kills deaths assists utils";
     grid-gap: 5px;
-    /* border-bottom: 1px solid black; */
     text-align: left;
     margin-bottom: 2px;
     margin-top: 5px;
@@ -111,7 +78,6 @@
     border-top: 2px solid var(--faction-primary-color, #1F2330);
     border-left: 4px solid var(--faction-primary-color, #1F2330);
     border-bottom: 4px solid transparent;
-    /* border-bottom: 1px dotted var(--faction-flavor-trans-color, #1F233056); */
     margin-bottom: 5px;
     margin-top: 5px;
     padding: 5px 0px 0px 0px;
@@ -128,7 +94,6 @@
 .stats-col-header.score {
     grid-area: score;
     text-align: left;
-    /* padding-left: 55px; */
 }
 
 .stats-value {
@@ -161,10 +126,8 @@
 }
 
 .stats-row .graph .graph-bar {
-    /* height: calc(100% - 8px); */
     height: 18px;
     margin: 3px 0px 3px 0px;
-    /* width: 75%; */
     background-color: var(--faction-primary-color);
     opacity: 0.9;
     box-sizing: border-box;
