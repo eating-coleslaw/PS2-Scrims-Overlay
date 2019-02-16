@@ -590,7 +590,6 @@ function subscribe(ws) {
     console.log(painter.white('Subscribing to DBG websocket...'));
 
     //team1 subscribing
-    //{"service":"event","action":"subscribe","characters":["5428010618035589553"],"eventNames":["Death"]}
     teamOneObject.memberArray.forEach(function (member) {
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":["Death"]}');
         ws.send('{"service":"event","action":"subscribe","characters":["' + member.character_id + '"],"eventNames":[' + xpGainString + ']}');
@@ -622,14 +621,12 @@ function unsubscribe(ws) {
 function startTimer(ws) {
     console.log('Timer started...');
     roundTracker++;
-    // foundRoundCapture = false;
     timeCounter = matchLength ? matchLength : 900;
     let time = setInterval(function () {
         if (timeCounter < 1) {
             clearInterval(time);
             unsubscribe(ws);
             logTeamStats();
-            // overlay.writeFinalStats(teamOneObject,teamTwoObject);
             socket.setRunning(false);
         }
         overlay.updateTime(timeCounter);
@@ -654,7 +651,6 @@ function endRoundEarly(newFactionId, outfitTag) {
     console.log(painter.faction('Base Capture: [' + outfitTag + ']', newFactionId, true));
     app.send('base captured');
     stopTheMatch();
-    //socket.setRunning(false);
 }
 
 function playRoundEndAudio() {
@@ -700,12 +696,6 @@ function logTeamStats() {
     console.log(painter.gray('_____'));
     console.log(painter.gray('==============================================================='));
     console.log(painter.white('                          ' + '   Pts   Net   Kll   Dth   Dmg   Utl'));
-    /*
-    ===============================================================
-    playerNameThatsReallyLong...  Pts   Net   Kll   Dth   Dmg   Utl
-    ---------------------------------------------------------------
-    '                             '
-    */
    
    var t1 = team.getT1();
    console.log(painter.faction('---------------------------------------------------------------', t1.faction));
