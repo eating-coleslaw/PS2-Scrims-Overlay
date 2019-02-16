@@ -845,6 +845,8 @@ const allXpIdsUtilAssists = [
     555,    // Flashbang Squad Assist (75xp)
     1393,   // Hardlight Cover - Blocking Exp (placeholder until code is done) (50xp)
     1394,   // Draw Fire Award (25xp)
+    36,     // Spot Kill (20xp)
+    54,     // Squad Spot Kill (30xp)
 ];
 
 const allXpIdsBannedTicks = [

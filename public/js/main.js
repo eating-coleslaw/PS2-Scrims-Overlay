@@ -83,27 +83,31 @@ socket.on('connect', function() {
             $('#T1Stats').addClass('faction' + data.teamOne.faction);
             $('#T2Stats').addClass('faction' + data.teamTwo.faction);
 
-            var T1Stats = '<div id="' + data.teamOne.alias + '-stats" class="stats-row stats-row outfit">' + 
-                                '<div id="' + data.teamOne.alias + '-label" class="label">' + data.teamOne.alias + '</div>' +
-                                '<div id="' + data.teamOne.alias + '-score" class="score stats-value">' + data.teamOne.points + '</div>' +
-                                '<div id="' + data.teamOne.alias + '-net" class="net stats-value">' + data.teamOne.netScore + '</div>' +
-                                '<div id="' + data.teamOne.alias + '-kills" class="kills stats-value">' + data.teamOne.kills + '</div>' + 
-                                '<div id="' + data.teamOne.alias + '-deaths" class="deaths stats-value">' + data.teamOne.deaths + '</div>' + 
-                                '<div id="' + data.teamOne.alias + '-assists" class="assists stats-value">' + data.teamOne.dmgAssists + '</div>' + 
-                                '<div id="' + data.teamOne.alias + '-utils" class="utils stats-value">' + data.teamOne.utilAssists + '</div>' +
-                            '</div>';
-            $(T1Stats).appendTo('#T1Stats');
+            if (document.getElementById(data.teamOne.alias + '-stats') === null) {
+                var T1Stats = '<div id="' + data.teamOne.alias + '-stats" class="stats-row stats-row outfit">' + 
+                                    '<div id="' + data.teamOne.alias + '-label" class="label">' + data.teamOne.alias + '</div>' +
+                                    '<div id="' + data.teamOne.alias + '-score" class="score stats-value">' + data.teamOne.points + '</div>' +
+                                    '<div id="' + data.teamOne.alias + '-net" class="net stats-value">' + data.teamOne.netScore + '</div>' +
+                                    '<div id="' + data.teamOne.alias + '-kills" class="kills stats-value">' + data.teamOne.kills + '</div>' + 
+                                    '<div id="' + data.teamOne.alias + '-deaths" class="deaths stats-value">' + data.teamOne.deaths + '</div>' + 
+                                    '<div id="' + data.teamOne.alias + '-assists" class="assists stats-value">' + data.teamOne.dmgAssists + '</div>' + 
+                                    '<div id="' + data.teamOne.alias + '-utils" class="utils stats-value">' + data.teamOne.utilAssists + '</div>' +
+                                '</div>';
+                $(T1Stats).appendTo('#T1Stats');
+            }
 
-            var T2Stats = '<div id="' + data.teamTwo.alias + '-stats" class="stats-row stats-row outfit">' + 
-                                '<div id="' + data.teamTwo.alias + '-label" class="label">' + data.teamTwo.alias + '</div>' +
-                                '<div id="' + data.teamTwo.alias + '-score" class="score stats-value">' + data.teamTwo.points + '</div>' +
-                                '<div id="' + data.teamTwo.alias + '-net" class="net stats-value">' + data.teamTwo.netScore + '</div>' +
-                                '<div id="' + data.teamTwo.alias + '-kills" class="kills stats-value">' + data.teamTwo.kills + '</div>' + 
-                                '<div id="' + data.teamTwo.alias + '-deaths" class="deaths stats-value">' + data.teamTwo.deaths + '</div>' + 
-                                '<div id="' + data.teamTwo.alias + '-assists" class="assists stats-value">' + data.teamTwo.dmgAssists + '</div>' + 
-                                '<div id="' + data.teamTwo.alias + '-utils" class="utils stats-value">' + data.teamTwo.utilAssists + '</div>' +
-                            '</div>';
-            $(T2Stats).appendTo('#T2Stats');
+            if (document.getElementById(data.teamTwo.alias + '-stats') === null) {
+                var T2Stats = '<div id="' + data.teamTwo.alias + '-stats" class="stats-row stats-row outfit">' + 
+                                    '<div id="' + data.teamTwo.alias + '-label" class="label">' + data.teamTwo.alias + '</div>' +
+                                    '<div id="' + data.teamTwo.alias + '-score" class="score stats-value">' + data.teamTwo.points + '</div>' +
+                                    '<div id="' + data.teamTwo.alias + '-net" class="net stats-value">' + data.teamTwo.netScore + '</div>' +
+                                    '<div id="' + data.teamTwo.alias + '-kills" class="kills stats-value">' + data.teamTwo.kills + '</div>' + 
+                                    '<div id="' + data.teamTwo.alias + '-deaths" class="deaths stats-value">' + data.teamTwo.deaths + '</div>' + 
+                                    '<div id="' + data.teamTwo.alias + '-assists" class="assists stats-value">' + data.teamTwo.dmgAssists + '</div>' + 
+                                    '<div id="' + data.teamTwo.alias + '-utils" class="utils stats-value">' + data.teamTwo.utilAssists + '</div>' +
+                                '</div>';
+                $(T2Stats).appendTo('#T2Stats');
+            }
             
         }
         else {
