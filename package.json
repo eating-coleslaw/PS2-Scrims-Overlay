@@ -1,6 +1,6 @@
 {
   "name": "ps2script",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www"
@@ -33,9 +33,9 @@
     "Planetside",
     "2"
   ],
-  "author": "DylanNZ, M0N0NZ, Dalordish, FCLM",
+  "author": "Chirtle, DylanNZ, M0N0NZ, Dalordish, FCLM",
   "bugs": {
-    "url": "https://github.com/FCLM/PS2-Scrims-Script/issues"
+    "url": "https://github.com/eating-coleslaw/PS2-Scrims-Overlay/issues"
   },
-  "homepage": "https://github.com/FCLM/PS2-Scrims-Script#readme"
+  "homepage": "https://github.com/eating-coleslaw/PS2-Scrims-Overlay#readme"
 }
