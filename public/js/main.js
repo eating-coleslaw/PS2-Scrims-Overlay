@@ -1,6 +1,6 @@
 /**
  * Created by Dylan on 15-Apr-16.
- * Updated by Chirtle in 2017-2018.
+ * Updated by Chirtle in 2017-2019.
  */
 
 var socket = io();
@@ -145,19 +145,14 @@ socket.on('connect', function() {
             var loserName = event.loser;
             addKillfeedRow(event);
             updatePlayerClasses(event);
-            // updatePlayerScores(event);
             playRevived(loserName);
         }
         else if (event.is_control === true && event.winner !== undefined) {
             var winnerName = event.winner;
             if (debugLogs === true) { addKillfeedRow(event);}
             updatePlayerClasses(event);
-            // updatePlayerScores(event);
             playContestingPoint(winnerName);
         }
-        // else {
-        //     updatePlayerScores(event);
-        // }
 
         truncateKillfeed();
     });
@@ -178,7 +173,6 @@ socket.on('connect', function() {
                 // Player Status & Class Elements
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
-                //    console.log("Adding T1 player: " + m[keys].name);
                    $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T1Players'));
                    $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T1Players'));
                 }
@@ -208,9 +202,6 @@ socket.on('connect', function() {
                 
                 pointPlayers[m[keys].name] = { points: pts};
 
-                // let ptGraphWidth = pts > 1 ? Math.ceil(90 * (pts / points.match.max)) : 4;
-                // console.log(m[keys].name + ' graph width: ' + ptGraphWidth);
-
                 // Player Stats Row
                 statsRow = document.getElementById(m[keys].name + '-stats');
                 if (statsRow === null) {
@@ -230,7 +221,6 @@ socket.on('connect', function() {
                     var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar"></div>';
                     $(graphBarHtml).appendTo('#' + m[keys].name + '-graph');
                     document.getElementById(m[keys].name + '-graph-bar').style.width = ptGraphWidth + '%';
-                    console.log('Set graph of ' + m[keys].name + ' to: ' + ptGraphWidth + '%');
                 }
                 else {
                    document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
@@ -239,14 +229,11 @@ socket.on('connect', function() {
                    document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
                    document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
                    document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
-
-                //    document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
                 }
             }
             // Remove the player from the overlay if they haven't done anything
             else {
                 //TODO: make each player row a grid row
-                // console.log("Removing T1 player: " + m[keys].name);
                 if($('#' + m[keys].name, '#T1Players').length === 1) {
                     $('#' + m[keys].name + 'class').remove();
                     $('#' + m[keys].name).remove();
@@ -266,7 +253,6 @@ socket.on('connect', function() {
                 // Player Status & Class Elements
                 var nameEl = document.getElementById(m[keys].name);
                 if (nameEl === null) {
-                    // console.log("Adding T2 player: " + m[keys].name);
                     $(getPlayerStatsHtml(m[keys].name, m[keys].netScore)).appendTo($('#T2Players'));
                     $(getPlayerClassHtml(m[keys].name, m[keys].ps2Class)).appendTo($('#T2Players'));
                 }
@@ -295,7 +281,6 @@ socket.on('connect', function() {
                 }
 
                 pointPlayers[m[keys].name] = { points: pts};
-                // let ptGraphWidth = pts > 1 ? Math.ceil(75 * (pts / points.match.max)) : 4;
 
                 // Player Stats Row
                statsRow = document.getElementById(m[keys].name + '-stats');
@@ -316,7 +301,6 @@ socket.on('connect', function() {
                     var graphBarHtml = '<div id="' + m[keys].name + '-graph-bar" class="graph-bar"></div>';
                     $(graphBarHtml).appendTo('#' + m[keys].name + '-graph');
                     document.getElementById(m[keys].name + '-graph-bar').style.width = ptGraphWidth + '%';
-                    console.log('Set graph of ' + m[keys].name + ' to: ' + ptGraphWidth + '%');
                }
                else {
                    document.getElementById(m[keys].name + '-score').textContent = m[keys].points;
@@ -325,14 +309,11 @@ socket.on('connect', function() {
                    document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
                    document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
                    document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
-
-                //    document.getElementById(m[keys].name + '-graph-bar').width = ptGraphWidth + '%';
                 }
             }
             // Remove the player from the overlay if they haven't done anything
             else {
                 //TODO: make each player row a grid row
-                // console.log("Removing T2 player: " + m[keys].name);
                 if($('#' + m[keys].name, '#T2Players').length === 1) {
                     $('#' + m[keys].name + 'class').remove();
                     $('#' + m[keys].name).remove(); 
@@ -341,19 +322,17 @@ socket.on('connect', function() {
                 if($('#' + m[keys].name + '-stats', '#T2Players').length === 1) {
                     $('#' + m[keys].name + '-stats').remove();
                 }
-                // $('#' + m[keys].name + 'class').remove();
-                // $('#' + m[keys].name).remove(); 
             }
         }
+
         updatePlayerClasses(event);
         updatePlayerScores(event);
 
+        // Update Player Graphs
         for (keys in pointPlayers) {
             let pPts = pointPlayers[keys].points;
             let ptGraphWidth = pPts > 1 ? Math.ceil(90 * (pPts / points.match.max)) : 4;
             document.getElementById(keys + '-graph-bar').style.width = ptGraphWidth + '%';
-
-            console.log(keys + ' graph width: ' + ptGraphWidth + '%');
         }
 
         // Team 1 Stats
@@ -429,33 +408,27 @@ function updatePlayerClasses(event) {
     var loserID = event.loser + "class";
    
    if (event.winner_class_id !== undefined && !($('#' + winnerID).length === 0)) {
-    //    console.log(event.winner + ' Class: ' + event.winner_class_id);
        document.getElementById(winnerID).className = "playerClass " + getClassFromLoadoutID(event.winner_class_id);
    }
 
    if (event.loser_class_id !== undefined && !($('#' + loserID).length === 0)) {
-    //    console.log(event.loser + ' Class: ' + event.loser_class_id);
        document.getElementById(loserID).className = "playerClass " + getClassFromLoadoutID(event.loser_class_id);
    }
 }
 
-// TODO: actually implement this
 function updatePlayerScores(event) {
     var winnerID = event.winner + 'Score';
     var loserID = event.loser + 'Score';
 
     if (event.winner_net_score !== undefined && !($('#' + winnerID).length === 0)) {
-        console.log(event.winner + ' Net: ' + event.winner_net_score);
+        console.log(event.winner + ' Net: ' + event.winner_net_score + ' [loser]');
         winnerID.textContent = event.winner_net_score;
-       // document.getElementById(winnerID).className = getEmojiFromNetEventScore(event.winner_net_score);
     }
  
-    if (event.loser_net_score !== undefined && !($('#' + loserID).length === 0) ) {
-        console.log(event.loser + ' Net: ' + event.loser_net_score);
+    if (event.loser_net_score !== undefined && !($('#' + loserID).length === 0)) {
+        console.log(event.loser + ' Net: ' + event.loser_net_score + ' [loser]');
         loserID.textContent = event.loser_net_score;
-        //document.getElementById(loserID).className = getEmojiFromNetEventScore(event.loser_net_score);
     }
-
 }
 
 function getFactionLabel(teamObject) {
@@ -468,38 +441,25 @@ function getFactionLabel(teamObject) {
 
 function playRespawning(eventLoserName) {
     var respawnID = '#' + eventLoserName + 'respawn';
-    // var classID = eventLoserName + 'class';
     var loserId = '#' + eventLoserName;
     var eventMaskId = '#' + eventLoserName +'EventMask';
    
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
-    
-    // var respawn = document.getElementById(loserID);
-    // respawn.className = "playerRespawningBase";
    
-    // $('#' + classID).removeClass('deadIconPlay');
     $(loserId).removeClass('deadTextPlay');
-
-    // $('#' + eventLoserName).removeClass('deadTextPlay');
 
     emptyPlayersEventMask(eventLoserName);
 
-    // var shrinkDirection = $('#T1Players #'+ eventLoserName) ? 'shrinkRight' : 'shrinkLeft';
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
             $(getRespawnBarHtml(eventLoserName)).appendTo($(eventMaskId));
-            // respawn.className = "playerRespawningBar playerRespawningPlay"; // " + shrinkDirection;
             player.className = "playerStatsContainer deadTextPlay";
-            // $('#' + classID).addClass('deadIconPlay');
 
             $(respawnID).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
                     emptyPlayersEventMask(eventLoserName);
-                    // player.className = "playerStatsContainer";
                     $(loserId).removeClass('revivedFlashPlay deadTextPlay');
-                    // $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
-
                 });
         });
     });
@@ -509,15 +469,12 @@ function getRespawnBarHtml(name) {
     return '<div id="' + name + 'respawn" class="playerRespawningBar playerRespawningPlay"></div>'
 }
 
-// TODO: actually implement this
 function playRevived(eventLoserName) {
-    var classID = eventLoserName + 'class';
     var playerId = '#' + eventLoserName;
     
     var player = document.getElementById(eventLoserName);
     player.className = "playerStatsContainer";
     
-    // $('#' + classID).removeClass('deadIconPlay');
     $(playerId).removeClass('deadTextPlay');
 
     emptyPlayersEventMask(eventLoserName);
@@ -525,20 +482,16 @@ function playRevived(eventLoserName) {
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
             player.className = 'playerStatsContainer revivedFlashPlay';
-            // $('#' + classID).addClass('revivedFlashPlay');
 
             $(playerId).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
                     emptyPlayersEventMask(eventLoserName);
                     $('#' + eventLoserName).removeClass('revivedFlashPlay deadTextPlay');
-                    // $('#' + classID).removeClass('revivedFlashPlay deadIconPlay');
-
                 });
         });
     });
 }
 
-// TODO: actually implement this
 function playContestingPoint(eventWinnerName) {
     var eventMaskId = '#' + eventWinnerName +'EventMask';
     
@@ -561,7 +514,6 @@ function getPointControlHtml() {
     return '<div class="stripe"></div><div class="stripe"></div>';
 }
 
-// TOD: actually implement this
 function emptyPlayersEventMask(eventPlayerName) {
     var eventMaskId = '#' + eventPlayerName + 'EventMask';
     $(eventMaskId).empty();
