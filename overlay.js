@@ -50,6 +50,7 @@ function lengthenStats(stat) {
 }
 
 function initialise() {
+    return;
     write(t1Score, '0');
     write(t2Score, '0');
     write(t1Players, '');
@@ -121,7 +122,7 @@ function updateTime(timeCounter) {
     };
 
     app.send('time', timerObj);
-    write(time, min + ' : ' + sec);
+    // write(time, min + ' : ' + sec);
 }
 
 function updateKillfeedPlayer(killObj) {
@@ -164,6 +165,7 @@ function writeFinalStats() {
 }
 
 function playerStats(team) {
+    return;
     let activePlayers = [];
     for (keys in team.members) {
         activePlayers.push(team.members[keys])
