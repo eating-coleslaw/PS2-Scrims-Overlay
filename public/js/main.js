@@ -449,7 +449,7 @@ function playRespawning(eventLoserName) {
     var eventMaskId = '#' + eventLoserName +'EventMask';
    
     var player = document.getElementById(eventLoserName);
-    player.className = "playerStatsContainer";
+    player.className = 'playerStatsContainer';
    
     $(loserId).removeClass('deadTextPlay');
 
@@ -477,7 +477,7 @@ function playRevived(eventLoserName) {
     var playerId = '#' + eventLoserName;
     
     var player = document.getElementById(eventLoserName);
-    player.className = "playerStatsContainer";
+    player.className = 'playerStatsContainer';
     
     $(playerId).removeClass('deadTextPlay');
 
@@ -490,17 +490,22 @@ function playRevived(eventLoserName) {
             $(playerId).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
                     emptyPlayersEventMask(eventLoserName);
-                    $('#' + eventLoserName).removeClass('revivedFlashPlay deadTextPlay');
+                    $(playerId).removeClass('revivedFlashPlay deadTextPlay');
                 });
         });
     });
 }
 
-function playContestingPoint(eventWinnerName) {
-    var eventMaskId = '#' + eventWinnerName +'EventMask';
+function playContestingPoint(eventPlayerName) {
+    var eventMaskId = '#' + eventPlayerName +'EventMask';
+    var playerId = '#' + eventPlayerName;
+
+    // Players can only capture points while alive
+    document.getElementById(eventPlayerName).className = 'playerStatsContainer';
+    $(playerId).removeClass('deadTextPlay');
     
     // Control Point events can only happen at a set interval, so don't worry about restting the animation gracefully
-    emptyPlayersEventMask(eventWinnerName);
+    emptyPlayersEventMask(eventPlayerName);
 
     window.requestAnimationFrame(function (time) {
         window.requestAnimationFrame(function (time) {
@@ -508,7 +513,7 @@ function playContestingPoint(eventWinnerName) {
 
             $(eventMaskId).one("webkitAnimationEnd oanimationend msAnimationEnd animationend",
                 function() {
-                    emptyPlayersEventMask(eventWinnerName);
+                    emptyPlayersEventMask(eventPlayerName);
                 });
         });
     });
