@@ -1,31 +1,37 @@
 # PS2 Scrims Script
 
 ![Overlay Example](https://i.imgur.com/qPJZbIN.png)
-_Disclaimer: 90% of this code was created by **Dylan C** (DylanNZ), **Jared H** (MonoNZ) and **Richard H** (Dalordish). I'm only responsible for the updated point rules and the streaming overlay._
+_Credit to to **Dylan C** (DylanNZ), **Jared H** (MonoNZ) and **Richard H** (Dalordish) for creating the initial versions of this script. I've reworked much of the business logic & UI, but their server backend's still going strong._
 
-## Running A Match
+## Getting Started
+
+### Requirements
+
+Make sure you have the latest [node.js](https://nodejs.org/en/) installed. This application requires at least Node 7.6.0 to run.
 
 ### Installation
 
-1. Make sure you have the latest [node.js](https://nodejs.org/en/) installed. This application requires at least Node 7.6.0 to run.
+1. Run `install.bat`. When prompted, enter a password. **Remember this password**, as you'll need it to run any matches.
 
-2. Run `install.bat`. When prompted, enter a password. **Remember this password**, as you'll need it to run any matches.
+   - If you have your own developer API key, feel free to use it, but the script doesn't make enough subsequent API calls for it to be necessary.
 
-   Alternatively navigate to the folder where the sccript's located, then
+   Alternatively, navigate to the folder where the script's located and run
 
    ```sh $
    npm install
    ```
 
-3. You will need to create 2 javascript files: ``api_key.js`` and ``password.js``. There are templates of both to show you what they should look like.
+Running install.bat will create create two javascript files: ``api_key.js`` and ``password.js``. If you later want to change your password or API key, update these files accordingly. 
 
-Unless you want to change your password, you only need to complete the above steps once.
+Unless using a new version of the script, you only need to install it once.
+
+## Running A Match
 
 ### Starting The Script
 
 **IMPORTANT:** You need to restart the script *BEFORE **EVERY** MATCH*, regardless of how the match ended or if the script terminated with an error. Failing to do so may result in subsequent matches being scored incorrectly and other undesirable effects.
 
-3. Run ``start.bat``. Alternatively, run the following from the command line: 
+1. Run ``start.bat``. Alternatively, run the following from the command line: 
 
    ```sh $
    node bin/www
