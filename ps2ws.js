@@ -157,7 +157,10 @@ function itsPlayerData(data) {
     let item = items.lookupItem(data.attacker_weapon_id);
     var faction1 = teamOneObject.faction;
     var faction2 = teamTwoObject.faction;
+    
     let points = items.lookupPointsfromCategory(item.category_id);
+    let isHeadshot = ( data.is_headshot === '1' ? true : false ); 
+
     let killerIsMax = isMaxLoadout(data.attacker_loadout_id);
     let victimIsMax = isMaxLoadout(data.character_id);
 
@@ -174,7 +177,7 @@ function itsPlayerData(data) {
             else {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
-            oneIvITwo(data, points, item);
+            oneIvITwo(data, points, item, isHeadshot);
         }
         
         //One Suicide || One Max Suicide
@@ -186,7 +189,7 @@ function itsPlayerData(data) {
         // One TK || One TK Max
         else if (teamOneObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
-            teamOneTeamkill(data, points, item);
+            teamOneTeamkill(data, points, item, isHeadshot);
         }
     }
 
@@ -202,7 +205,7 @@ function itsPlayerData(data) {
             else {
                 points = victimIsMax ? pointMap['23'].points : points;
             }
-            twoIvIOne(data, points, item);
+            twoIvIOne(data, points, item, isHeadshot);
         }
 
         // Two Suicide || Two Max Suicide
@@ -214,7 +217,7 @@ function itsPlayerData(data) {
         // Two TK || Two TK Max
         else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
-            teamTwoTeamkill(data, points, item);
+            teamTwoTeamkill(data, points, item, isHeadshot);
         }
     }
 
@@ -240,7 +243,7 @@ function isMaxLoadout(loadout) {
 
 //#region Discrete Player Event Handling
 
-function oneIvITwo (data, points, item) {
+function oneIvITwo (data, points, item, isHeadshot, isHeadshot) {
     team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
@@ -253,12 +256,13 @@ function oneIvITwo (data, points, item) {
         loser_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
-        is_kill: true
+        is_kill: true,
+        is_headshot: isHeadshot
     });
 }
 
-function twoIvIOne (data, points, item) {
-    team.twoIvIOne(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
+function twoIvIOne (data, points, item, isHeadshot) {
+    team.twoIvIOne(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, isHeadshot);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -270,7 +274,8 @@ function twoIvIOne (data, points, item) {
         loser_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
-        is_kill: true
+        is_kill: true,
+        is_headshot: isHeadshot
     });
 }
 
@@ -287,7 +292,8 @@ function teamOneSuicide (data, points, item) {
         loser_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
-        is_kill: true
+        is_kill: true,
+        is_headshot: false
     });
 }
 
@@ -304,12 +310,13 @@ function teamTwoSuicide (data, points, item) {
         loser_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
-        is_kill: true
+        is_kill: true,
+        is_headshot: false
     });
 }
 
-function teamOneTeamkill (data, points, item) {
-    team.oneTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
+function teamOneTeamkill (data, points, item, isHeadshot) {
+    team.oneTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, isHeadshot);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -321,12 +328,13 @@ function teamOneTeamkill (data, points, item) {
         loser_net_score: teamOneObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
-        is_kill: true
+        is_kill: true,
+        is_headshot: isHeadshot
     });
 }
 
-function teamTwoTeamkill (data, points, item) {
-    team.twoTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
+function teamTwoTeamkill (data, points, item, isHeadshot) {
+    team.twoTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, isHeadshot);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,
@@ -338,7 +346,8 @@ function teamTwoTeamkill (data, points, item) {
         loser_net_score: teamTwoObject.members[data.character_id].netScore,
         weapon: item.name,
         points: points,
-        is_kill: true
+        is_kill: true,
+        is_headshot: isHeadshot
     });
 }
 
@@ -398,7 +407,7 @@ function itsExperienceData(data) {
        let xpID = parseInt(data.experience_id);
        let characterName = teamOneObject.members[data.character_id].name;
        let faction = teamOneObject.faction;
-       
+
        // Team 1 Revive
         if (allXpIdsRevives.includes(xpID && teamOneObject.members.hasOwnProperty(data.other_id))) {
             teamOneRevive(data);
@@ -815,7 +824,7 @@ const allXpIdsRevives = [
 
 const allXpIdsSpawns = [
     56,     // Squad Spawn (10xp)
-    223,    // Sunderer Spawn Bonus (5xp) - DOESN'T RETURN WHO SPAWNED
+    223    // Sunderer Spawn Bonus (5xp) - DOESN'T RETURN WHO SPAWNED
 ]
 
 const allXpIdsPointControls = [
@@ -846,7 +855,7 @@ const allXpIdsUtilAssists = [
     1393,   // Hardlight Cover - Blocking Exp (placeholder until code is done) (50xp)
     1394,   // Draw Fire Award (25xp)
     36,     // Spot Kill (20xp)
-    54,     // Squad Spot Kill (30xp)
+    54      // Squad Spot Kill (30xp)
 ];
 
 const allXpIdsBannedTicks = [

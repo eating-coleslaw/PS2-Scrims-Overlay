@@ -15,6 +15,7 @@ let t1 = {
     pointAdjustments: {},
     kills : 0,
     deaths : 0,
+    headshots: 0,
     teamKills: 0,
     baseCaps: 0,
     members : {},
@@ -34,6 +35,7 @@ let t2 = {
     pointAdjustments: {},
     kills : 0,
     deaths : 0,
+    headshots: 0,
     teamKills: 0,
     baseCaps: 0,
     members : {},
@@ -65,6 +67,7 @@ function setTeams(one, two) {
             netScore: 0,
             kills: 0,
             deaths: 0,
+            headshots: 0,
             teamKills: 0,
             ps2Class: 0,
             revives: 0,
@@ -97,6 +100,7 @@ function setTeams(one, two) {
             netScore: 0,
             kills: 0,
             deaths: 0,
+            headshots: 0,
             teamKills: 0,
             ps2Class: 0,
             revives: 0,
@@ -115,24 +119,27 @@ function getT2() { return t2; }
 
 //#region Kill/Death Handling
 
-function oneIvITwo(killer, killed, killerClass, killedClass, points) {
+function oneIvITwo(killer, killed, killerClass, killedClass, points, isHeadshot) {
     t1.kills++;
     t1.points += points;
     t1.netScore += points;
 
     t1.members[killer].kills++;
     t1.members[killer].eventCount++;
-
     t1.members[killer].points += points;
     t1.members[killer].netScore += points;
     t1.members[killer].ps2Class = killerClass;
+
+    if ( isHeadshot === true ) {
+        t1.headshots += 1;
+        t1.members[killer].headshots += 1;
+    }
 
     t2.deaths++;
     t2.netScore -= points;
     
     t2.members[killed].deaths++;
     t2.members[killed].eventCount++;
-
     t2.members[killed].netScore -= points;
     t2.members[killed].ps2Class = killedClass;
 
@@ -141,7 +148,7 @@ function oneIvITwo(killer, killed, killerClass, killedClass, points) {
     logScore();
 }
 
-function twoIvIOne(killer, killed, killerClass, killedClass, points) {
+function twoIvIOne(killer, killed, killerClass, killedClass, points, isHeadshot) {
     t2.kills++;
     t2.points += points;
     t2.netScore += points;
@@ -151,6 +158,11 @@ function twoIvIOne(killer, killed, killerClass, killedClass, points) {
     t2.members[killer].points += points;
     t2.members[killer].netScore += points;
     t2.members[killer].ps2Class = killerClass;
+
+    if ( isHeadshot === true ) {
+        t2.headshots += 1;
+        t2.members[killer].headshots += 1;
+    }
 
     t1.deaths++;
     t1.netScore -= points;
@@ -197,7 +209,7 @@ function twoSuicide(two, twoClass, points) {
     logScore();
 }
 
-function oneTeamKill(killer, killed, killerClass, killedClass, points) {
+function oneTeamKill(killer, killed, killerClass, killedClass, points, isHeadshot) {
     t1.deaths++;
     t1.teamKills++;
     t1.points += points;
@@ -209,6 +221,11 @@ function oneTeamKill(killer, killed, killerClass, killedClass, points) {
     t1.members[killer].netScore += points;
     t1.members[killer].ps2Class = killerClass;
     
+    if ( isHeadshot === true ) {
+        t1.headshots += 1;
+        t1.members[killer].headshots += 1;
+    }
+
     t1.members[killed].deaths++;
     t1.members[killed].eventCount++;
     t1.members[killed].ps2Class = killedClass;
@@ -218,7 +235,7 @@ function oneTeamKill(killer, killed, killerClass, killedClass, points) {
     logScore();
 }
 
-function twoTeamKill(killer, killed, killerClass, killedClass, points) {
+function twoTeamKill(killer, killed, killerClass, killedClass, points, isHeadshot) {
     t2.deaths++;
     t2.teamKills++;
     t2.points += points;
@@ -229,6 +246,11 @@ function twoTeamKill(killer, killed, killerClass, killedClass, points) {
     t2.members[killer].points += points;
     t2.members[killer].netScore += points;
     t2.members[killer].ps2Class = killerClass;
+
+    if ( isHeadshot === true ) {
+        t2.headshots += 1;
+        t2.members[killer].headshots += 1;
+    }
 
     t2.members[killed].deaths++;
     t2.members[killed].eventCount++;
