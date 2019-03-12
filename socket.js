@@ -30,7 +30,7 @@ module.exports = {
                 if (event.auth === password.KEY) {
                     if ((event.hasOwnProperty('teamOne')) && (event.hasOwnProperty('teamTwo'))) {
                         if (running !== true) {
-                            app.start(event.teamOne, event.teamTwo, event.rndSecs, event.title).then(function () {
+                            app.start(event.teamOne, event.teamTwo, event.rndSecs, event.title, event.teamOneDisplay, event.teamTwoDisplay).then(function () {
                                 console.log('Event started: ' + event.title);
                                 console.log('Admin entered a start match command involving: ' + event.teamOne + ' ' + event.teamTwo);
                                 send('title', event.title);

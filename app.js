@@ -81,14 +81,14 @@ app.use(function(err, req, res) {
     });
 });
 
-async function start(one, two, secs, title) {
-    let oneObj = await teams.fetchTeamData(one).catch(function (err) {
+async function start(one, two, secs, title, oneDisplay, twoDisplay) {
+    let oneObj = await teams.fetchTeamData(one, oneDisplay).catch(function (err) {
         console.log("Error fetching data for team one: " + one);
         console.error(err);
         // Failure means match should not go ahead so return (exit function)
         return 0;
     });
-    let twoObj = await teams.fetchTeamData(two).catch(function (err) {
+    let twoObj = await teams.fetchTeamData(two, twoDisplay).catch(function (err) {
         console.log("Error fetching data for team two: " + two);
         console.error(err);
         // Failure means match should not go ahead so return (exit function)

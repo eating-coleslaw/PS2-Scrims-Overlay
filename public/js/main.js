@@ -49,8 +49,8 @@ socket.on('connect', function() {
             $('#T1Board').addClass('faction' + data.teamOne.faction);
             $('#T2Board').addClass('faction' + data.teamTwo.faction);
 
-            $('#outfitT1').html(T1Alias).addClass('outfitAlias');
-            $('#outfitT2').html(T2Alias).addClass('outfitAlias');
+            $('#outfitT1').html(data.teamOne.display_tag).addClass('outfitAlias');
+            $('#outfitT2').html(data.teamTwo.display_tag).addClass('outfitAlias');
             
             $('#T1Score').addClass('activeWhiteText');
             $('#T2Score').addClass('activeWhiteText');
@@ -82,14 +82,16 @@ socket.on('connect', function() {
             --------------- */
             $('#T1Stats').addClass('faction' + data.teamOne.faction);
             $('#T2Stats').addClass('faction' + data.teamTwo.faction);
-
+            
             if (document.getElementById(data.teamOne.alias + '-stats') === null) {
+                var T1hsr = getHsrDisplay(data.teamOne.kills, data.teamOne.headshots); 
                 var T1Stats = '<div id="' + data.teamOne.alias + '-stats" class="stats-row stats-row outfit">' + 
-                                    '<div id="' + data.teamOne.alias + '-label" class="label">' + data.teamOne.alias + '</div>' +
+                                    '<div id="' + data.teamOne.alias + '-label" class="label">' + data.teamOne.display_tag + '</div>' +
                                     '<div id="' + data.teamOne.alias + '-score" class="score stats-value">' + data.teamOne.points + '</div>' +
                                     '<div id="' + data.teamOne.alias + '-net" class="net stats-value">' + data.teamOne.netScore + '</div>' +
                                     '<div id="' + data.teamOne.alias + '-kills" class="kills stats-value">' + data.teamOne.kills + '</div>' + 
                                     '<div id="' + data.teamOne.alias + '-deaths" class="deaths stats-value">' + data.teamOne.deaths + '</div>' + 
+                                    '<div id="' + data.teamOne.alias + '-hsr" class="hsr stats-value">' + T1hsr + '</div>' + 
                                     '<div id="' + data.teamOne.alias + '-assists" class="assists stats-value">' + data.teamOne.dmgAssists + '</div>' + 
                                     '<div id="' + data.teamOne.alias + '-utils" class="utils stats-value">' + data.teamOne.utilAssists + '</div>' +
                                 '</div>';
@@ -97,12 +99,14 @@ socket.on('connect', function() {
             }
 
             if (document.getElementById(data.teamTwo.alias + '-stats') === null) {
+                var T2hsr = getHsrDisplay(data.teamTwo.kills, data.teamTwo.headshots); 
                 var T2Stats = '<div id="' + data.teamTwo.alias + '-stats" class="stats-row stats-row outfit">' + 
-                                    '<div id="' + data.teamTwo.alias + '-label" class="label">' + data.teamTwo.alias + '</div>' +
+                                    '<div id="' + data.teamTwo.alias + '-label" class="label">' + data.teamTwo.display_tag + '</div>' +
                                     '<div id="' + data.teamTwo.alias + '-score" class="score stats-value">' + data.teamTwo.points + '</div>' +
                                     '<div id="' + data.teamTwo.alias + '-net" class="net stats-value">' + data.teamTwo.netScore + '</div>' +
                                     '<div id="' + data.teamTwo.alias + '-kills" class="kills stats-value">' + data.teamTwo.kills + '</div>' + 
                                     '<div id="' + data.teamTwo.alias + '-deaths" class="deaths stats-value">' + data.teamTwo.deaths + '</div>' + 
+                                    '<div id="' + data.teamTwo.alias + '-hsr" class="hsr stats-value">' + T2hsr + '</div>' + 
                                     '<div id="' + data.teamTwo.alias + '-assists" class="assists stats-value">' + data.teamTwo.dmgAssists + '</div>' + 
                                     '<div id="' + data.teamTwo.alias + '-utils" class="utils stats-value">' + data.teamTwo.utilAssists + '</div>' +
                                 '</div>';
@@ -205,7 +209,7 @@ socket.on('connect', function() {
                 }
                 
                 pointPlayers[m[keys].name] = { points: pts};
-
+                
                 // Player Stats Row
                 statsRow = document.getElementById(m[keys].name + '-stats');
                 if (statsRow === null) {
@@ -216,6 +220,7 @@ socket.on('connect', function() {
                                            '<div id="' + m[keys].name + '-net" class="net stats-value">' + m[keys].netScore + '</div>' +
                                            '<div id="' + m[keys].name + '-kills" class="kills stats-value">' + m[keys].kills + '</div>' + 
                                            '<div id="' + m[keys].name + '-deaths" class="deaths stats-value">' + m[keys].deaths + '</div>' +
+                                           '<div id="' + m[keys].name + '-hsr" class="hsr stats-value">' + getHsrDisplay(m[keys].kills, m[keys].headshots) + '</div>' +
                                            '<div id="' + m[keys].name + '-assists" class="assists stats-value">' + m[keys].dmgAssists + '</div>' + 
                                            '<div id="' + m[keys].name + '-utils" class="utils stats-value">' + m[keys].utilAssists + '</div>' +
                                         '</div>';
@@ -231,6 +236,7 @@ socket.on('connect', function() {
                    document.getElementById(m[keys].name + '-net').textContent = m[keys].netScore;
                    document.getElementById(m[keys].name + '-kills').textContent = m[keys].kills;
                    document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
+                   document.getElementById(m[keys].name + '-hsr').textContent = getHsrDisplay(m[keys].kills, m[keys].headshots);
                    document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
                    document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
                 }
@@ -295,7 +301,8 @@ socket.on('connect', function() {
                                            '<div id="' + m[keys].name + '-graph" class="graph"></div>' +
                                            '<div id="' + m[keys].name + '-net" class="net stats-value">' + m[keys].netScore + '</div>' +
                                            '<div id="' + m[keys].name + '-kills" class="kills stats-value">' + m[keys].kills + '</div>' + 
-                                           '<div id="' + m[keys].name + '-deaths" class="deaths stats-value">' + m[keys].deaths + '</div>' +
+                                           '<div id="' + m[keys].name + '-deaths" class="deaths stats-value">' + m[keys].deaths + '</div>' + 
+                                           '<div id="' + m[keys].name + '-hsr" class="hsr stats-value">' + getHsrDisplay(m[keys].kills, m[keys].headshots) + '</div>' + 
                                            '<div id="' + m[keys].name + '-assists" class="assists stats-value">' + m[keys].dmgAssists + '</div>' + 
                                            '<div id="' + m[keys].name + '-utils" class="utils stats-value">' + m[keys].utilAssists + '</div>' +
                                         '</div>';
@@ -311,6 +318,7 @@ socket.on('connect', function() {
                    document.getElementById(m[keys].name + '-net').textContent = m[keys].netScore;
                    document.getElementById(m[keys].name + '-kills').textContent = m[keys].kills;
                    document.getElementById(m[keys].name + '-deaths').textContent = m[keys].deaths;
+                   document.getElementById(m[keys].name + '-hsr').textContent = getHsrDisplay(m[keys].kills, m[keys].headshots);
                    document.getElementById(m[keys].name + '-assists').textContent = m[keys].dmgAssists;
                    document.getElementById(m[keys].name + '-utils').textContent = m[keys].utilAssists;
                 }
@@ -345,6 +353,7 @@ socket.on('connect', function() {
             document.getElementById(event.teamOne.alias + '-net').textContent = event.teamOne.netScore;
             document.getElementById(event.teamOne.alias + '-kills').textContent = event.teamOne.kills;
             document.getElementById(event.teamOne.alias + '-deaths').textContent = event.teamOne.deaths;
+            document.getElementById(event.teamOne.alias + '-hsr').textContent = getHsrDisplay(event.teamOne.kills, event.teamOne.headshots);
             document.getElementById(event.teamOne.alias + '-assists').textContent = event.teamOne.dmgAssists;
             document.getElementById(event.teamOne.alias + '-utils').textContent = event.teamOne.utilAssists;
         }
@@ -355,6 +364,7 @@ socket.on('connect', function() {
             document.getElementById(event.teamTwo.alias + '-net').textContent = event.teamTwo.netScore;
             document.getElementById(event.teamTwo.alias + '-kills').textContent = event.teamTwo.kills;
             document.getElementById(event.teamTwo.alias + '-deaths').textContent = event.teamTwo.deaths;
+            document.getElementById(event.teamTwo.alias + '-hsr').textContent = getHsrDisplay(event.teamTwo.kills, event.teamTwo.headshots);
             document.getElementById(event.teamTwo.alias + '-assists').textContent = event.teamTwo.dmgAssists;
             document.getElementById(event.teamTwo.alias + '-utils').textContent = event.teamTwo.utilAssists;
         }
@@ -374,7 +384,7 @@ function addKillfeedRow(event) {
         pointsString = '0';
     }
     
-    $(getKillfeedRowHtml(event.winner, event.winner_faction, event.loser, event.loser_faction, pointsString, event.weapon)).prependTo($('#killfeed'));
+    $(getKillfeedRowHtml(event.winner, event.winner_faction, event.loser, event.loser_faction, pointsString, event.weapon, event.is_headshot)).prependTo($('#killfeed'));
 }
 
 /* Remove the last row of the killfeed */
@@ -396,9 +406,11 @@ function getPlayerClassHtml(name, ps2Class) {
     return '<div class="playerClass ' + getClassFromLoadoutID(ps2Class) + '" id="' + name + 'class"></div>'
 }
 
-function getKillfeedRowHtml(winner, winnerFaction, loser, loserFaction, points, weapon) {
+function getKillfeedRowHtml(winner, winnerFaction, loser, loserFaction, points, weapon, isHeadshot) {
+    let headshotClass = ( isHeadshot === true ) ? 'headshot' : '';
     return '<tr>' +
                 '<td class="killfeedRowContainer">' + 
+                    '<div class="killfeedHeadshot killfeedCell ' + headshotClass + ' faction' + winnerFaction + '"></div>' +
                     '<div class="killfeedWinner killfeedPlayer killfeedCell faction' + winnerFaction + '">' + winner + '</div>' +
                     '<div class="killfeedPoints killfeedCell ">' + points + '</div>' +
                     '<div class="killfeedWeapon killfeedCell">' + weapon + '</div>' +
@@ -435,6 +447,14 @@ function updatePlayerScores(event) {
     }
 }
 
+function getHsrDisplay(kills, headshots) {
+    if ( kills === 0 || kills === '' || kills === undefined ) {
+        return '0%';
+    }
+    let hsr = Math.round( ( headshots / kills ) * 100 )
+    return hsr + '%'; 
+}
+
 function getFactionLabel(teamObject) {
    var factions = new Array();
    factions[1] = "V<BR>S";
@@ -444,6 +464,9 @@ function getFactionLabel(teamObject) {
 };
 
 function playRespawning(eventLoserName) {
+    if (eventLoserName === undefined || ($('#' + eventLoserName).length === 0)) { return; }
+    console.log('playRespawning: ' + eventLoserName);
+    
     var respawnID = '#' + eventLoserName + 'respawn';
     var loserId = '#' + eventLoserName;
     var eventMaskId = '#' + eventLoserName +'EventMask';
@@ -474,6 +497,9 @@ function getRespawnBarHtml(name) {
 }
 
 function playRevived(eventLoserName) {
+    if (eventLoserName === undefined || ($('#' + eventLoserName).length === 0)) { return; }
+    console.log('playRevive: ' + eventLoserName);
+
     var playerId = '#' + eventLoserName;
     
     var player = document.getElementById(eventLoserName);
@@ -497,6 +523,9 @@ function playRevived(eventLoserName) {
 }
 
 function playContestingPoint(eventPlayerName) {
+    if (eventPlayerName === undefined || ($('#' + eventPlayerName).length === 0)) { return; }
+    console.log('playContestingPoint: ' + eventPlayerName);
+    
     var eventMaskId = '#' + eventPlayerName +'EventMask';
     var playerId = '#' + eventPlayerName;
 

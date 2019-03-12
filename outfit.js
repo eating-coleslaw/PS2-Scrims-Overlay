@@ -37,7 +37,7 @@ let alias = {
     }
 };
 
-async function fetchTeamData(teamTag) {
+async function fetchTeamData(teamTag, displayTag) {
     return new Promise((resolve, reject) => {
         teamTag = teamTag.toLowerCase();
         const url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created,time_created_date';
@@ -60,9 +60,11 @@ async function fetchTeamData(teamTag) {
                         console.error('ERROR: ' + teamTag + ' has a character that does not have a name (has been deleted): ' + result.character_id);
                     }
                 });
+                if (displayTag === undefined || displayTag === '') { displayTag = teamTag; }
                 let obj = {
                     alias : body.outfit_list[0].alias,
                     outfit_id : body.outfit_list[0].outfit_id,
+                    display_tag : displayTag,
                     name : body.outfit_list[0].name,
                     faction : body.outfit_list[0].leader.faction_id,
                     members : teamPlayers

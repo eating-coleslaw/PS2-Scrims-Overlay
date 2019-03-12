@@ -9,13 +9,17 @@ function submitForm (button)
         var track = $('#start');
         track.prop('disabled', true);
         var tagOne = $("#T1Tag").val();
+        var displayOne = $("#T1TagDisplay").val();
         var tagTwo = $("#T2Tag").val();
+        var displayTwo = $("#T2TagDisplay").val();
         var rndSecs = getRoundLength();
         var title = $("#Title").val();
         var pw = $('#pwStart').val();
         var obj = {
             teamOne : tagOne,
+            teamOneDisplay: displayOne,
             teamTwo : tagTwo,
+            teamTwoDisplay: displayTwo,
             rndSecs : rndSecs,
             title : title,
             auth: pw

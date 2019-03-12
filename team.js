@@ -9,6 +9,7 @@ let t1 = {
     alias : '',
     outfit_id : '',
     name : '',
+    display_tag: '',
     faction : '',
     points : 0,
     netScore : 0,
@@ -29,6 +30,7 @@ let t2 = {
     alias : '',
     outfit_id : '',
     name : '',
+    display_tag: '',
     faction : '',
     points : 0,
     netScore : 0,
@@ -50,6 +52,7 @@ function setTeams(one, two) {
     t1.outfit_id = one.outfit_id;
     t1.name = one.name;
     t1.faction = one.faction;
+    t1.display_tag = one.display_tag;
     t1.points = 0;
     t1.netScore = 0;
     t1.kills = 0;
@@ -82,6 +85,7 @@ function setTeams(one, two) {
     t2.alias = two.alias;
     t2.outfit_id = two.outfit_id;
     t2.name = two.name;
+    t2.display_tag = two.display_tag;
     t2.faction = two.faction;
     t2.points = 0;
     t2.netScore = 0;
