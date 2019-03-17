@@ -10,15 +10,21 @@ var points = {
     match: {
         min: '',
         max: '',
-        total: ''
+        total: '',
+        minNet: '',
+        maxNet: ''
     },
     teamOne: {
         min: '',
-        max: ''
+        max: '',
+        minNet: '',
+        maxNet: ''
     },
     teamTwo: {
         min: '',
-        max: ''
+        max: '',
+        minNet: '',
+        maxNet: ''
     }
 };
 
@@ -195,8 +201,9 @@ socket.on('connect', function() {
                
                 // Update running min and max point values. Need to do this before updating the stats table.
                 let pts = m[keys].points;
+                
                 if (points.teamOne.min === '' || pts < points.teamOne.min) {
-                   points.teamOne.min = pts;
+                    points.teamOne.min = pts;
                 }
                 if (points.match.min === '' || pts < points.match.min) {
                     points.match.min = pts;
@@ -208,7 +215,22 @@ socket.on('connect', function() {
                     points.match.max = pts;
                 }
                 
-                pointPlayers[m[keys].name] = { points: pts};
+                let net = m[keys].netScore;
+                if (points.teamOne.minNet === '' || net < points.teamOne.minNet) {
+                   points.teamOne.minNet = net;
+                }
+                if (points.match.minNet === '' || net < points.match.minNet) {
+                    points.match.minNet = net;
+                }
+                if (points.teamOne.maxNet === '' || net > points.teamOne.maxNet) {
+                    points.teamOne.maxNet = net;
+                }
+                if (points.match.maxNet === '' || net > points.match.maxNet) {
+                    points.match.maxNet = net;
+                }
+                
+                pointPlayers[m[keys].name] = { points: pts,
+                                               netScore: net };
                 
                 // Player Stats Row
                 statsRow = document.getElementById(m[keys].name + '-stats');
@@ -290,7 +312,22 @@ socket.on('connect', function() {
                     points.match.max = pts;
                 }
 
-                pointPlayers[m[keys].name] = { points: pts};
+                let net = m[keys].netScore;
+                if (points.teamTwo.minNet === '' || net < points.teamTwo.minNet) {
+                   points.teamTwo.minNet = net;
+                }
+                if (points.match.minNet === '' || net < points.match.minNet) {
+                    points.match.minNet = net;
+                }
+                if (points.teamTwo.maxNet === '' || net > points.teamTwo.maxNet) {
+                    points.teamTwo.maxNet = net;
+                }
+                if (points.match.maxNet === '' || net > points.match.maxNet) {
+                    points.match.maxNet = net;
+                }
+
+                pointPlayers[m[keys].name] = { points: pts,
+                                               netScore: net };
 
                 // Player Stats Row
                statsRow = document.getElementById(m[keys].name + '-stats');
@@ -341,9 +378,20 @@ socket.on('connect', function() {
         updatePlayerScores(event);
 
         // Update Player Graphs
+        let baseline = points.match.max + Math.abs(points.match.maxNet) + Math.abs(points.match.minNet);
+        // if (!(baseline > 0)) { baseline = 1; }
         for (keys in pointPlayers) {
+            // raw score method
+            // let pPts = pointPlayers[keys].points;
+            // let ptGraphWidth = pPts > 1 ? Math.ceil(90 * (pPts / points.match.max)) : 4;
+            
+            // net score + points + net offset method
+            let pNet = pointPlayers[keys].netScore;
             let pPts = pointPlayers[keys].points;
-            let ptGraphWidth = pPts > 1 ? Math.ceil(90 * (pPts / points.match.max)) : 4;
+            let numerator = pPts + pNet + Math.abs(points.match.minNet);
+            let ptGraphWidth =  Math.ceil(((numerator / baseline) * 90));
+            if ( ptGraphWidth < 4 ) { ptGraphWidth = 4; } 
+
             document.getElementById(keys + '-graph-bar').style.width = ptGraphWidth + '%';
         }
 

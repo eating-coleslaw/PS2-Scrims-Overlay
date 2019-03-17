@@ -243,8 +243,8 @@ function isMaxLoadout(loadout) {
 
 //#region Discrete Player Event Handling
 
-function oneIvITwo (data, points, item, isHeadshot, isHeadshot) {
-    team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points);
+function oneIvITwo (data, points, item, isHeadshot) {
+    team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, isHeadshot);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -316,7 +316,7 @@ function teamTwoSuicide (data, points, item) {
 }
 
 function teamOneTeamkill (data, points, item, isHeadshot) {
-    team.oneTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, isHeadshot);
+    team.oneTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, false);
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -334,7 +334,7 @@ function teamOneTeamkill (data, points, item, isHeadshot) {
 }
 
 function teamTwoTeamkill (data, points, item, isHeadshot) {
-    team.twoTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, isHeadshot);
+    team.twoTeamKill(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, false);
     killfeedPlayer({
         winner: teamTwoObject.members[data.attacker_character_id].name,
         winner_faction: teamTwoObject.faction,

@@ -8,10 +8,15 @@ function submitForm (button)
     if (button.value === "Track") {
         var track = $('#start');
         track.prop('disabled', true);
+        
         var tagOne = $("#T1Tag").val();
         var displayOne = $("#T1TagDisplay").val();
+        if (displayOne.length === 0) { displayOne = tagOne; }
+        
         var tagTwo = $("#T2Tag").val();
         var displayTwo = $("#T2TagDisplay").val();
+        if (displayTwo.length === 0) { displayTwo = tagTwo; }
+        
         var rndSecs = getRoundLength();
         var title = $("#Title").val();
         var pw = $('#pwStart').val();

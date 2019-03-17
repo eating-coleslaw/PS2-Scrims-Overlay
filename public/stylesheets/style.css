@@ -17,6 +17,11 @@
   display: inline;
 }
 
+#T1Tag, #T1TagDisplay, #T2Tag, #T2TagDisplay {
+  font-family: "Roboto Mono", "Input Mono", Consolas, monospace;
+  font-size: 13px;
+}
+
 .pad {
   padding-right: 20px;
   padding-bottom: 5px;
