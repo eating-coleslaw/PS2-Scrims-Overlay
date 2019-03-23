@@ -162,7 +162,7 @@ function itsPlayerData(data) {
     let isHeadshot = ( data.is_headshot === '1' ? true : false ); 
 
     let killerIsMax = isMaxLoadout(data.attacker_loadout_id);
-    let victimIsMax = isMaxLoadout(data.character_id);
+    let victimIsMax = isMaxLoadout(data.character_loadout_id);
 
 
     // Team 1 Killer
