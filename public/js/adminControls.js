@@ -18,7 +18,10 @@ function submitForm (button)
         if (displayTwo.length === 0) { displayTwo = tagTwo; }
         
         var rndSecs = getRoundLength();
+        
         var title = $("#Title").val();
+        if (title.length === 0) { title = '#BanNetcode'; }
+        
         var pw = $('#pwStart').val();
         var obj = {
             teamOne : tagOne,

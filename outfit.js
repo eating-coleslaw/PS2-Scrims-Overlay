@@ -41,8 +41,10 @@ async function fetchTeamData(teamTag, displayTag) {
     return new Promise((resolve, reject) => {
         teamTag = teamTag.toLowerCase();
         const url = 'https://census.daybreakgames.com/s:' + api_key.KEY + '/get/ps2/outfit/?alias_lower='+ teamTag + '&c:resolve=leader(faction_id),member_character(name)&c:hide=time_created,time_created_date';
+        console.log(url);
         prequest(url).then(function (body) {
             if (body.returned !== 0) {
+                console.log(body);
                 let teamPlayers = [];
                 body.outfit_list[0].members.forEach(function(result) {
                     if ((result.hasOwnProperty('name')) && (result.name.hasOwnProperty('first')))  {

@@ -8,7 +8,7 @@ const api_key   = require('./api_key.js'),
       team        = require('./team.js'),
       socket      = require('./socket.js');
       painter     = require('./painter.js');
-      
+
 // Variables
 let  teamOneObject,
      teamTwoObject,
@@ -18,7 +18,7 @@ let  teamOneObject,
      matchLength = 900,
      eventTitle;
 
-const debugLogs = false;
+const debugLogs = true;
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -93,6 +93,49 @@ function killfeedPlayer(obj) {
     app.send('killfeed', obj);
     teamOneObject = team.getT1();
     teamTwoObject = team.getT1();
+
+    if (obj.is_kill === true && obj.loser !== undefined){
+        try {
+            logKillfeedPlayerEvent(obj);
+        }
+        catch(err) {
+            console.log(err);
+            if (debugLogs === true) { console.log(JSON.toString(obj)); }
+        }
+    }
+}
+
+function logKillfeedPlayerEvent(obj) {
+    let winner = painter.faction(obj.winner, obj.winner_faction);
+    let winnerClass = painter.gray('(' + getClassFromLoadoutID(obj.winner_class_id) + ')');
+    
+    let loser = painter.faction(obj.loser, obj.loser_faction);
+    let loserClass = painter.gray('(' + getClassFromLoadoutID(obj.loser_class_id) + ')');
+    
+    let headshot = obj.is_headshot === true ? painter.gray('{*}') : painter.gray('|.|');
+    let points = painter.white(getPointsDisplayString(obj.points));
+    let weapon = painter.white(obj.weapon);
+
+    let logText = headshot + pad(winner) + pad(winnerClass) + pad(points) + pad(weapon) + pad(loser) + pad(loserClass);
+
+    console.log(logText);
+
+}
+
+function pad(string) {
+    return ' ' + string;
+}
+
+function getPointsDisplayString(points) {
+    if (Number(points) > 0) { 
+        return '+' + points;
+    }
+    else if (Number(points) < 0) { 
+        return points;
+    }
+    else {
+        return '0';
+    }
 }
 
 function killfeedFacilityT1(points) {
@@ -191,6 +234,14 @@ function itsPlayerData(data) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamOneTeamkill(data, points, item, isHeadshot);
         }
+
+        // One of the team players killed someone who isn't involved in the match
+        else {
+            console.log(painter.gray('    ' + '   ~~~ Possible Match Interruption!!!'));
+            console.log(painter.gray('    ' + '         winner: ' + name1));
+            console.log(painter.gray('    ' + '         loser:  ' + data.character_id));
+            return;
+        }
     }
 
     // Team 2 Killer
@@ -219,15 +270,34 @@ function itsPlayerData(data) {
             points = victimIsMax ? pointMap['24'].points : pointMap['21'].points;
             teamTwoTeamkill(data, points, item, isHeadshot);
         }
+
+        // One of the team players killed someone who isn't involved in the match
+        else {
+            console.log(painter.gray('    ' + '   ~~~ Possible Match Interruption!!!'));
+            console.log(painter.gray('    ' + '         winner: ' + name2));
+            console.log(painter.gray('    ' + '         loser:  ' + data.character_id));
+            return;
+        }
     }
 
-    // One of the players isn't involved in the match
+    // A player who isn't involved in the match killed a player who is
     else {
-        if (debugLogs === true) {
-            console.log(painter.gray('   !!! Possible Match Interruption !!!'));
-            console.log(painter.gray('         winner: ' + data.attacker_character_id));
-            console.log(painter.gray('         loser:  ' + data.character_id));
+        let name = '';
+        if (teamOneObject.members.hasOwnProperty(data.character_id)) {
+            name = teamOneObject.members[data.character_id].name;
         }
+        else if (teamTwoObject.members.hasOwnProperty(data.character_id)) {
+            name = teamTwoObject.members[data.character_id].name;
+        }
+        else {
+            name = data.character_id
+        }
+
+        // if (debugLogs === true) {
+        console.log(painter.gray('    ' + '   ~~~ Possible Match Interruption!!!'));
+        console.log(painter.gray('    ' + '         winner: ' + data.attacker_character_id));
+        console.log(painter.gray('    ' + '         loser:  ' + name));
+        // }
         return;
     }
 
@@ -245,6 +315,7 @@ function isMaxLoadout(loadout) {
 
 function oneIvITwo (data, points, item, isHeadshot) {
     team.oneIvITwo(data.attacker_character_id, data.character_id, data.attacker_loadout_id, data.character_loadout_id, points, isHeadshot);
+    
     killfeedPlayer({
         winner: teamOneObject.members[data.attacker_character_id].name,
         winner_faction: teamOneObject.faction,
@@ -360,11 +431,11 @@ function itsPlayerFacilityData(data) {
 
     // Team 1 Captured or Defended the base
     if (t1.members.hasOwnProperty(char_id)) {
-        console.log(painter.faction('Team 1 Player Facility Capture', t1.faction));
+        console.log('    ' + painter.faction('Team 1 Player Facility Capture', t1.faction));
         foundRoundCapture = true;
     }
     else if (t2.members.hasOwnProperty(char_id)) {
-        console.log(painter.faction('Team 2 Player Facility Capture', t2.faction));
+        console.log('    ' + painter.faction('Team 2 Player Facility Capture', t2.faction));
         foundRoundCapture = true;
     }
 
@@ -403,33 +474,36 @@ function itsFacilityData(data) {
 }
 
 function itsExperienceData(data) {
+    
     if (teamOneObject.members.hasOwnProperty(data.character_id)) {
        let xpID = parseInt(data.experience_id);
        let characterName = teamOneObject.members[data.character_id].name;
        let faction = teamOneObject.faction;
 
+    //    console.log('T1 XP Test: ' + xpID);
+       
        // Team 1 Revive
-        if (allXpIdsRevives.includes(xpID && teamOneObject.members.hasOwnProperty(data.other_id))) {
+        if (allXpIdsRevives.includes(xpID) && teamOneObject.members.hasOwnProperty(data.other_id)) {
             teamOneRevive(data);
-            console.log(painter.lightGreen('Team 1 Revive: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.lightGreen('Team 1 Revive: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
         
         // Team 1 Damage Assist
         else if (allXpIdsDmgAssists.includes(xpID)) {
             teamOneDmgAssist(data);
-            console.log(painter.lightPurple('Team 1 Dmg Assist: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.lightPurple('Team 1 Dmg Assist: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
 
         // Team 1 Utility Assist
         else if (allXpIdsUtilAssists.includes(xpID)) {
             teamOneUtilAssist(data);
-            console.log(painter.lightYellow('Team 1 Util Assist: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.lightYellow('Team 1 Util Assist: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
 
         // Team 1 Point Control Tick
         else if (allXpIdsPointControls.includes(xpID)) {
             teamOnePointControl(data);
-            console.log(painter.yellow('Team 1 Point Control: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.yellow('Team 1 Point Control: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
     }
 
@@ -438,25 +512,27 @@ function itsExperienceData(data) {
         let characterName = teamTwoObject.members[data.character_id].name;
         let faction = teamTwoObject.faction;
         
+        // console.log('T2 XP Test: ' + xpID);
+
         // Team 2 Revive
         if (allXpIdsRevives.includes(xpID) && teamTwoObject.members.hasOwnProperty(data.other_id)) {
             teamTwoRevive(data);
-            console.log(painter.lightGreen('Team 2 Revive: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.lightGreen('Team 2 Revive: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
 
         else if (allXpIdsDmgAssists.includes(xpID)) {
             teamTwoDmgAssist(data);
-            console.log(painter.lightPurple('Team 2 Dmg Assist: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.lightPurple('Team 2 Dmg Assist: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
 
         else if (allXpIdsUtilAssists.includes(xpID)) {
             teamTwoUtilAssist(data);
-            console.log(painter.lightYellow('Team 2 Util Assist: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.lightYellow('Team 2 Util Assist: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
 
         else if (allXpIdsPointControls.includes(xpID)) {
             teamTwoPointControl(data);
-            console.log(painter.yellow('Team 2 Point Control: ') + painter.faction(characterName, faction));
+            console.log('    ' + painter.yellow('Team 2 Point Control: ') + painter.faction(characterName, faction) + painter.gray(' [' + xpID + ']'));
         }
     }
 
@@ -682,7 +758,7 @@ function startUp(oneObj, twoObj, secsInt, title) {
         console.log('Match Started: ' + painter.cyan(eventTitle));
         socket.setRunning(true);
     }).catch(function (err) {
-        console.error(painter.red('Items did not initialise!!'));
+        console.error(painter.red('Items or teams did not initialise!! Verify that all outfits and players are being reported by the daybreak API.'));
         console.error(painter.red(err));
     });
 }
@@ -699,6 +775,8 @@ function newRound() {
 
 function getTitle() {
     return eventTitle;
+    // if (eventTitle !== '' && eventTitle !== undefined) { eventTitle; }
+    // else { return '#BanNetcode'; }
 }
 
 function logTeamStats() {
@@ -881,6 +959,22 @@ function makeXpIdString(xpID) {
     return '"GainExperience_experience_id_' + xpID + '"'; 
 }
 
+function getLoadoutIdMappings(loadoutID) {
+    var classMap = [];
+    classMap[0] = 'unknown';
+    classMap[1] ='infil'; classMap[8] = 'infil'; classMap[15] = 'infil';
+    classMap[3] = 'la'; classMap[10] = 'la'; classMap[17] = 'la';
+    classMap[4] = 'medic'; classMap[11] = 'medic'; classMap[18] = 'medic';
+    classMap[5] = 'engy'; classMap[12] = 'engy'; classMap[19] ='engy';
+    classMap[6] = 'heavy'; classMap[13] = 'heavy'; classMap[20] = 'heavy';
+    classMap[7] = 'max'; classMap[14] = 'max'; classMap[21] = 'max';
+    return classMap[loadoutID];
+}
+
+function getClassFromLoadoutID(loadoutID) {
+    return getLoadoutIdMappings(loadoutID);
+}
+
 exports.getPointMaps          = getPointMaps;
 exports.updatePointMap        = updatePointMap;
 exports.individualPointUpdate = individualPointUpdate;
@@ -889,3 +983,5 @@ exports.stopTheMatch          = stopTheMatch;
 exports.startUp               = startUp;
 exports.newRound              = newRound;
 exports.getTitle              = getTitle;
+exports.getLoadoutIdMappings    = getLoadoutIdMappings;
+exports.getClassFromLoadoutID   = getClassFromLoadoutID; 

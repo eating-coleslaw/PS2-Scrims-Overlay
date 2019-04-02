@@ -193,7 +193,7 @@ function oneSuicide(one, oneClass, points) {
     t1.members[one].ps2Class = oneClass;
 
     // logging
-    console.log(t1.members[one].name + ' killed themselves ' + points);
+    // console.log(t1.members[one].name + ' killed themselves ' + points);
     logScore();
 }
 
@@ -209,7 +209,7 @@ function twoSuicide(two, twoClass, points) {
     t2.members[two].ps2Class = twoClass;
 
     //logging
-    console.log(t2.members[two].name + ' killed themselves ' + points);
+    // console.log(t2.members[two].name + ' killed themselves ' + points);
     logScore();
 }
 
@@ -235,7 +235,7 @@ function oneTeamKill(killer, killed, killerClass, killedClass, points, isHeadsho
     t1.members[killed].ps2Class = killedClass;
 
     // logging
-    console.log(t1.members[killer].name + ' team killed ' + t1.members[killed].name + ' ' + points);
+    // console.log(t1.members[killer].name + ' team killed ' + t1.members[killed].name + ' ' + points);
     logScore();
 }
 
@@ -261,7 +261,7 @@ function twoTeamKill(killer, killed, killerClass, killedClass, points, isHeadsho
     t2.members[killed].ps2Class = killedClass;
 
     // logging
-    console.log(t2.members[killer].name + ' team killed ' + t2.members[killed].name + ' ' + points);
+    // console.log(t2.members[killer].name + ' team killed ' + t2.members[killed].name + ' ' + points);
     logScore();
 }
 
@@ -276,7 +276,7 @@ function oneRevive(medic, revived, medicClass) {
     t1.members[medic].ps2Class = medicClass;
     
     if (t1.members.hasOwnProperty(revived)) {
-        console.log(painter.faction(t1.members[revived].name, t1.faction) + painter.lightGreen(' took a revive!'));
+        console.log('    ' + painter.faction(t1.members[revived].name, t1.faction) + painter.lightGreen(' took a revive!'));
         t1.members[revived].revivesTaken++;
         t1.members[revived].eventCount++;
     }
@@ -290,7 +290,7 @@ function twoRevive(medic, revived, medicClass) {
     t2.members[medic].ps2Class = medicClass;
 
     if (t2.members.hasOwnProperty(revived)) {
-        console.log(painter.faction(t2.members[revived].name, t2.faction) + painter.green(' took a revive!'));
+        console.log('    ' + painter.faction(t2.members[revived].name, t2.faction) + painter.green(' took a revive!'));
         t2.members[revived].revivesTaken++;
         t2.members[revived].eventCount++;
     }
@@ -354,7 +354,7 @@ function oneBaseCap(points) {
     t2.netScore -= points;
 
     // logging
-    console.log(t1.name + ' captured the base +' + points);
+    console.log('    ' + t1.name + ' captured the base +' + points);
     logScore();
 }
 
@@ -365,7 +365,7 @@ function twoBaseCap(points) {
     t1.netScore -= points;
 
     // logging
-    console.log(t2.name + ' captured the base +' + points);
+    console.log('    ' + t2.name + ' captured the base +' + points);
     logScore();
 }
 
