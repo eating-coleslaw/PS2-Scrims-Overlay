@@ -153,6 +153,11 @@ module.exports = {
                     send('redirect', '');
                 }
             });
+
+            sock.on('disconnect', function(data) {
+                console.log('Socket disconnected..?')
+                console.log(data);
+            });
         });
 
         function send(name, obj) {

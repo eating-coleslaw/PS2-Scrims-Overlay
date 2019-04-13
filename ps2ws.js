@@ -18,7 +18,7 @@ let  teamOneObject,
      matchLength = 900,
      eventTitle;
 
-const debugLogs = true;
+const debugLogs = false;
 
 const pointNumbers = ['0','1','11','12','13','21','22','23'];
 
@@ -165,8 +165,14 @@ function killfeedFacilityT2(points) {
 }
 
 function dealWithTheData(raw) {
+    if (socket.getRunning() !== true) { return; }
     raw = raw.replace(': :', ':');
     const data = JSON.parse(raw).payload;
+    
+    if (debugLogs === true) {
+        console.log(painter.gray(raw));
+    }
+
     switch(data.event_name) {
         case "Death":
             itsPlayerData(data);
@@ -655,15 +661,27 @@ function teamTwoPointControl(data) {
 
 //#endregion
 
+var subAttempt = 0;
+var unsubAttempt = 0;
+
 function createStream() {
     const ws = new WebSocket('wss://push.planetside2.com/streaming?environment=ps2&service-id=s:' + api_key.KEY);
     ws.on('open', function open() {
-        console.log('Stream opened...');
+        subAttempt += 1;
+        console.log('Stream opened... [' + subAttempt + ']');
         subscribe(ws);
     });
     ws.on('message', function (data) {
         if (data.indexOf("payload") === 2) {
             dealWithTheData(data);
+        }
+    });
+    ws.on('close', function (data) {
+        console.log('Stream closed...');
+        console.log(data);
+        if (socket.getRunning() === true && timeCounter !== 0) {
+            ws.close();
+            createStream(ws);
         }
     });
     captures = 0;
@@ -691,16 +709,30 @@ function subscribe(ws) {
     //facility Subscribing - subscribes to all capture data
     ws.send('{"service":"event","action":"subscribe","worlds":["1","10","13","17","19","25"],"eventNames":["FacilityControl"]}');
     
-    //start timer
-    startTimer(ws);
-
     console.log('Subscribed to facility and kill/death events between ' + painter.faction(' ' + teamOneObject.alias + ' ', teamOneObject.faction, true) + ' and ' + painter.faction(' ' + teamTwoObject.alias + ' ', teamTwoObject.faction, true));
+    
+    //start timer
+    if (timeCounter === 0) { 
+        startTimer(ws);
+    }
+
 }
 
 function unsubscribe(ws) {
     // unsubscribes from all events
-    ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
-    console.log('Unsubscribed from facility and kill/death events between ' + painter.faction(' ' + teamOneObject.alias + ' ', teamOneObject.faction, true) + ' and ' + painter.faction(' ' + teamTwoObject.alias + ' ', teamTwoObject.faction, true));
+    unsubAttempt += 1;
+    try {
+        ws.send('{"service":"event","action":"clearSubscribe","all":"true"}');
+        // ws.close();
+        console.log('Unsubscribed from facility and kill/death events between ' + painter.faction(' ' + teamOneObject.alias + ' ', teamOneObject.faction, true) + ' and ' + painter.faction(' ' + teamTwoObject.alias + ' ', teamTwoObject.faction, true));
+    }
+    catch(err) {
+        console.log('Unsubscribe failed... [' + unsubAttempt + ']');
+        console.log(err);
+        if (socket.getRunning() === true && timeCounter === 0) {
+            unsubscribe(ws);
+        }
+    }
 }
 
 function startTimer(ws) {
@@ -709,13 +741,16 @@ function startTimer(ws) {
     timeCounter = matchLength ? matchLength : 900;
     let time = setInterval(function () {
         if (timeCounter < 1) {
-            clearInterval(time);
-            unsubscribe(ws);
-            logTeamStats();
             socket.setRunning(false);
+            unsubscribe(ws);
+            clearInterval(time);
+            logTeamStats();
         }
         overlay.updateTime(timeCounter);
-        if (socket.getRunning() === true) timeCounter--;
+        if (socket.getRunning() === true) {
+            timeCounter--;
+            console.log(timeCounter);
+        }
     }, 1000);
 }
 
@@ -765,6 +800,8 @@ function startUp(oneObj, twoObj, secsInt, title) {
 
 function newRound() {
     console.log(painter.gray('====================================================================================================================================='));
+    subAttempt = 0;
+    unsubAttempt = 0;
     teamOneObject = team.getT1();
     teamTwoObject = team.getT2();
     createStream();
