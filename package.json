@@ -19,7 +19,7 @@
     "pip": "0.0.1",
     "prequest": "^1.0.0",
     "serve-favicon": "~2.5.0",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.5.0",
     "ws": "^6.0.0"
   },
   "description": "A farmers league inspired PS2 scrim tracker in Node.js",
